@@ -1,14 +1,13 @@
 {
   "name": "fs2",
   "version": "0.1.0",
-  "description": "fs (file system) extensions",
+  "description": "fs (file system package) extensions",
   "keywords": [
     "addons",
     "extensions",
     "extras",
     "fs",
     "filesystem",
-    "file-system",
     "mkdir",
     "readdir",
     "files",
