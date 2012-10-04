@@ -1,4 +1,4 @@
-# fs2 - Node's fs package extensions
+# fs2 - Node.js fs package extensions
 
 Functions that extend and complement Node.js fs package
 
