@@ -1,2 +1,8 @@
+v0.1.1  --  2011.10.04
+* Fixed few race condition cases
+* Better lock logic in _watch
+* Fix readdir test for Windows
+* Better error message in readFile
+
 v0.1.0  --  2011.10.04
 Initial version (derived from next package)
