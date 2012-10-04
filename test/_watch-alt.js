@@ -35,7 +35,7 @@ module.exports = function (t, a, d) {
 		dirWatch.on('end', function () { ++ondirend; });
 	}, DELAY))(delay(function () {
 		return writeFile(filePath, 'raz');
-	}, DELAY))(delay(function () {
+	}, DELAYWAIT))(delay(function () {
 		var fileWatch;
 		a(ondirchange, 1, "Dir change: File created");
 		a(ondirend, 0, "Dir end: File created");
