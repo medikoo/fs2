@@ -8,11 +8,12 @@ _Originally derived from [node-ext](https://github.com/medikoo/node-ext) package
 
 	$ npm install fs2
 
-## copy(src, dest[, cb])
+## API
+### copy(src, dest[, cb])
 
 Copy file, returns promise but accepts as well regular callback
 
-## descriptorsHandler()
+### descriptorsHandler()
 
 Initializes _EMFILE_ errors prevention.  
 How it works? If limit of descriptors is reached it holds the calls to native functions and releases them when taken descriptors are freed.
@@ -24,7 +25,7 @@ Internally it provides same solution as [fs-graceful](https://github.com/isaacs/
 3. Covers readdir calls (which also happen to throw _EMFILE_ errors)
 4. More bulletproof (I assume) error handling logic
 
-## isIgnored(mode, path[, options][, cb])
+### isIgnored(mode, path[, options][, cb])
 
 Whether file is ignored up to predefined rules. Returns promise but regular callback is also supported.
 
