@@ -481,7 +481,7 @@ module.exports = function (t) {
 
 			npaths = paths.filter(function (path) {
 				return (path !== 'one') && (path.indexOf(sep + 'one') === -1) &&
-					!startsWith.call(path, 'dthree/dthree');
+					!startsWith.call(path, 'dthree' + sep + 'dthree');
 			});
 
 			deferred(mkdir(gitPath), writeFile(ignoreFile, 'dtwo'))(delay(
