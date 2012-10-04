@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - 0.8
+  - 0.9
+
+before_script:
+  - ln -s ../ node_modules/fs2
+
+notifications:
+  email:
+    - medikoo+fs2@medikoo.com

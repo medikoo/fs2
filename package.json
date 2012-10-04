@@ -1,0 +1,46 @@
+{
+  "name": "fs2",
+  "version": "0.1.0",
+  "description": "fs (file system) extensions",
+  "keywords": [
+    "addons",
+    "extensions",
+    "extras",
+    "fs",
+    "filesystem",
+    "file-system",
+    "mkdir",
+    "readdir",
+    "files",
+    "dirs",
+    "directories",
+    "git"
+  ],
+  "author": "Mariusz Nowak <medikoo+fs2@medikoo.com> (http://www.medikoo.com/)",
+  "main": "lib/index",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/medikoo/fs2.git"
+  },
+  "bugs": {
+    "email": "medikoo+fs2@medikoo.com",
+    "url": "https://github.com/medikoo/fs2/issues"
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
+  "dependencies": {
+    "deferred": "0.6.x",
+    "es5-ext": "0.9.x",
+    "event-emitter": "~0.2.1",
+    "memoizee": "~0.2.2",
+    "minimatch": "0.2.x"
+  },
+  "scripts": {
+    "test": "node ./node_modules/tad/bin/tad lib"
+  },
+  "devDependencies": {
+    "tad": "~0.1.11"
+  },
+  "optionalDependencies": {}
+}
