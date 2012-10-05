@@ -61,8 +61,8 @@ Suported options:
 * __pattern__ `regexp`- Filter returned files by specific pattern. Pattern should be regular expression that would be matched against full path.
 * __watch__ `bool` - Watch directory for changes. Changes are emitted with `data` events, listeners are called with _event_ object which states which files were added (`event.added`) and which were removed (`event.removed`), ___Starting from next release (v0.4) this functionality will be provided as valid Node.js [stream](http://nodejs.org/api/all.html#all_stream)___
 * __stream__ `bool` - Whether to provide data continuously. Currently it's not provided as [stream](http://nodejs.org/api/all.html#all_stream) per se (it would be starting from next release, v0.4). Currently data is emited as `data` events with _event_ objects described under _watch_ option
-* __ignoreRules__ `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#fsisignoredmode-path-options-cb)_ for more information
-* __globalRules__ `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#fsisignoredmode-path-options-cb)_ for more information.
+* __ignoreRules__ `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information
+* __globalRules__ `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information.
 
 ### typeByStats(stats)
 
