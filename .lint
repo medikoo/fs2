@@ -30,3 +30,6 @@ jshint.global module, require, exports, process, setTimeout, Buffer, global, __d
 jshint.smarttabs
 jshint.eqnull
 jshint.expr
+
+./test/lchmod.js
+jslint_medikoo.bitwise
