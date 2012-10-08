@@ -76,6 +76,10 @@ Suported options:
 
 Returns type of file according to provided [stats](http://nodejs.org/api/all.html#all_class_fs_stats) object.
 
+### unlink(path[, cb])
+
+Same as [fs.unlink](http://nodejs.org/api/all.html#all_fs_unlink_path_callback). Returns promise.
+
 ### watchPath(path)
 
 Watch specific path for changes. It's about observing specific file path (not directory content). `change` events are emitted with event object where `event.type` says wether file was created, modified or removed.
