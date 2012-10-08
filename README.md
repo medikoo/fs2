@@ -48,6 +48,7 @@ Same as [fs.lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback). R
 
 Extended version of native _mkdir_. Returns promise
 
+Supported options:
 * __mode__ - Reflects _mode_ in [native version](http://nodejs.org/api/all.html#all_fs_mkdir_path_mode_callback)
 * __intermediate__ - Whether to create directories recursively (if parent is not created), reflects `mkir -p`, internal implementation inspired by [Substack's node-mkdirp](https://github.com/substack/node-mkdirp/)
 
@@ -71,6 +72,14 @@ Suported options:
 * __stream__ `bool` - Whether to provide data continuously. Currently it's not provided as [stream](http://nodejs.org/api/all.html#all_stream) per se (it would be starting from next release, v0.4). Currently data is emited as `data` events with _event_ objects described under _watch_ option
 * __ignoreRules__ `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information
 * __globalRules__ `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information.
+
+### rmdir(path[, options][, cb])
+
+Extended version of native _rmdir_. Returns promise
+
+Supported options:
+* __recursive__ - Attempt to remove directory with subdirectories recursively.
+* __force__ - Attempt to remove other files within directory as well.
 
 ### typeByStats(stats)
 
