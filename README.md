@@ -36,6 +36,10 @@ Supported options:
 * __globalRules__ `string|array` - additional global rules. They will be matched as if placed in filesystem root directory, it means that any rules found in existing ignore files may override them.
 * __watch__ `bool` - whether to watch for changes. If ignore state would change, returned promise would emit `change` event with new value (_true_/_false_)
 
+### lstat(path[, cb])
+
+Same as [fs.lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback). Returns promise.
+
 ### mkdir(path[, options|mode][, cb])
 
 Extended version of native _mkdir_. Returns promise
