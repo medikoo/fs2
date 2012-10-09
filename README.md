@@ -9,6 +9,12 @@ _Originally derived from [node-ext](https://github.com/medikoo/node-ext) package
 	$ npm install fs2
 
 ## API
+### chmod(path, mode[, cb])
+
+Same as [fs.chmod](http://nodejs.org/api/all.html#all_fs_lchmod_path_mode_callback). Returns promise.
+
+Not available on Windows.
+
 ### copy(src, dest[, cb])
 
 Copy file, returns promise but accepts as well regular callback
@@ -39,6 +45,8 @@ Supported options:
 ### lchmod(path, mode[, cb])
 
 Same as [fs.lchmod](http://nodejs.org/api/all.html#all_fs_lchmod_path_mode_callback). Returns promise.
+
+Only available on Mac OS X.
 
 ### lstat(path[, cb])
 
