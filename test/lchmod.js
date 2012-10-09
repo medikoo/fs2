@@ -5,6 +5,11 @@ var lstat = require('../lib/lstat')
   , testFile = require('path').resolve(__dirname, '__playground/lchmod/test');
 
 module.exports = function (t, a, d) {
+	if (process.platform === 'win32') {
+		a(t, null);
+		d();
+		return;
+	}
 	lstat(testFile)(function (stats) {
 		var org = stats.mode;
 		return t(testFile, 511)(function () {
