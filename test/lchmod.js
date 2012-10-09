@@ -5,7 +5,7 @@ var lstat = require('../lib/lstat')
   , testFile = require('path').resolve(__dirname, '__playground/lchmod/test');
 
 module.exports = function (t, a, d) {
-	if (process.platform === 'win32') {
+	if (!require('fs').lchmod) {
 		a(t, null);
 		d();
 		return;
