@@ -103,8 +103,9 @@ Watch specific path for changes. It's about observing specific file path (not di
 
 ### watch(path)
 
-Watch file for changes. It's [fs.watch](http://nodejs.org/api/all.html#all_fs_watch_filename_options_listener) wrapper that works same way on every OS, and always in _persistent: false_ mode.
-It's also aware of open file descriptors limitations, if it approaches _EMFILE_ error it is switching to alternative mode that pings file stats (see [fs.watchFile](http://nodejs.org/api/all.html#all_fs_watchfile_filename_options_listener) alternative)
+Watch file for changes.  
+[fs.watch](http://nodejs.org/api/all.html#all_fs_watch_filename_options_listener) wrapper that works same way on every platform, always configured in _persistent: false_ mode.
+It's aware of open file descriptors limitations, if _EMFILE_ error is approach, switch to alternative mode that pings file stats (see [fs.watchFile](http://nodejs.org/api/all.html#all_fs_watchfile_filename_options_listener) is made.
 
 
 ### writeFile(filename, data[, encoding][, callback])
