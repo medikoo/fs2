@@ -33,3 +33,6 @@ jshint.expr
 
 ./test/lchmod.js
 jslint_medikoo.bitwise
+
+./test/chmod.js
+jslint_medikoo.bitwise
