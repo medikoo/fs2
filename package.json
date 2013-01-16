@@ -1,6 +1,6 @@
 {
   "name": "fs2",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "fs (file system package) extensions",
   "keywords": [
     "addons",
@@ -29,8 +29,8 @@
     "node": ">=0.8"
   },
   "dependencies": {
-    "deferred": "0.6.x",
-    "es5-ext": "0.9.x",
+    "deferred": "~0.6.1",
+    "es5-ext": "~0.9.1",
     "event-emitter": "~0.2.1",
     "memoizee": "~0.2.3",
     "minimatch": "0.2.x"

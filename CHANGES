@@ -1,3 +1,9 @@
+v0.1.2  --  2012.01.16
+* Promise version of rmdir with recursive and force options
+* Promise versions of lstat, chmod, lchmod, unlink
+* Fix global and relative rules matching in isIgnored
+* Use primitive memoization for isIgnored map
+
 v0.1.1  --  2011.10.04
 * Fixed few race condition cases
 * Better lock logic in _watch
