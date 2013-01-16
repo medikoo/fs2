@@ -112,6 +112,6 @@ It's aware of open file descriptors limitations, if _EMFILE_ error is approach, 
 
 Same as native [fs.writeFile](http://nodejs.org/api/all.html#all_fs_writefile_filename_data_encoding_callback) but safe for simultaneous calls of write to same file (in such case current write will be abandonded, and new would be started).
 
-## Tests [![Build Status](https://secure.travis-ci.org/medikoo/fs2.png?branch=master)](https://secure.travis-ci.org/medikoo/fs2)
+## Tests [![Build Status](https://travis-ci.org/medikoo/fs2.png?branch=master)](https://travis-ci.org/medikoo/fs2)
 
 	$ npm test
