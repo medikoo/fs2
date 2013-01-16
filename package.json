@@ -41,5 +41,5 @@
   "devDependencies": {
     "tad": "~0.1.13"
   },
-  "optionalDependencies": {}
+  "licence": "MIT"
 }
