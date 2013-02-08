@@ -15,9 +15,10 @@ Same as [fs.chmod](http://nodejs.org/api/all.html#all_fs_lchmod_path_mode_callba
 
 Not available on Windows.
 
-### copy(src, dest[, cb])
+### copy(src, dest[, options, cb])
 
-Copy file, returns promise but accepts as well regular callback
+Copy file, returns promise but accepts as well regular callback.
+Eventual options are passed to underlying [fs.createWriteStream](http://nodejs.org/api/all.html#all_fs_createwritestream_path_options)
 
 ### descriptorsHandler()
 
