@@ -836,6 +836,17 @@ module.exports = function (t) {
 				reader.close();
 				return deferred(rmdir(gitPath), unlink(ignoreFile))(false);
 			}, DELAY)).end(d, d);
+		},
+		"cb": function (a, d) {
+			t(pgPath, function (err, result) {
+				if (err) {
+					d(err);
+					return;
+				}
+				a.deep(result.sort(),
+						['done', 'dthree', 'dtwo', 'one', 'three', 'two']);
+				d();
+			});
 		}
 	};
 };
