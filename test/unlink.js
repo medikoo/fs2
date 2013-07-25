@@ -11,6 +11,7 @@ module.exports = function (t, a, d) {
 			return t(testFile)(function () {
 				return lstat(testFile)(a.never, function (err) {
 					a(err.code, 'ENOENT');
+					return t(testFile + 'bla', { loose: true }).catch(a.never);
 				});
 			});
 		});
