@@ -15,7 +15,7 @@ var fs        = require('fs')
   , pgPath = resolve(__dirname, './__playground/_get-conf-file-map');
 
 module.exports = function (t, a, d) {
-	var data, invoked = false, listener
+	var data, invoked = false
 	  , DELAY = 100
 	  , gitRoot = resolve(pgPath, '.git')
 	  , rootFile = resolve(pgPath, '.gitignore')
@@ -30,7 +30,7 @@ module.exports = function (t, a, d) {
 		return mkdir(twoPath);
 	}))(delay(function () {
 		watcher = t(twoPath, mode, true);
-		watcher.on('change', listener = function (arg) {
+		watcher.on('change', function (arg) {
 			a(invoked, false, "Invoked once");
 			invoked = arg;
 		});

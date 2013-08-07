@@ -15,7 +15,7 @@ var fs        = require('fs')
   , pgPath = resolve(__dirname, './__playground/is-ignored');
 
 module.exports = function (t, a, d) {
-	var invoked = null, listener, testIsRoot
+	var invoked = null, testIsRoot
 	  , DELAY = 100
 	  , gitRoot = resolve(pgPath, '.git')
 	  , rootFile = resolve(pgPath, '.gitignore')
@@ -45,7 +45,7 @@ module.exports = function (t, a, d) {
 			a(value, true, "Ignore gitrepo file");
 		}).end();
 		watcher = t('git', twoFooPath, { watch: true });
-		watcher.on('change', listener = function (arg) {
+		watcher.on('change', function (arg) {
 			a(invoked, null, "Invoked once");
 			invoked = arg;
 		});
@@ -128,7 +128,7 @@ module.exports = function (t, a, d) {
 		invoked = null;
 
 		watcher = t(['git', 'test'], twoFooPath, { watch: true });
-		watcher.on('change', listener = function (arg) {
+		watcher.on('change', function (arg) {
 			a(invoked, null, "Invoked once");
 			invoked = arg;
 		});

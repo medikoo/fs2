@@ -1,38 +1,17 @@
 @root
 
-jslint_medikoo.indent 2
-jslint_medikoo.maxlen 80
-es5
+module
+node
 
-jslint_medikoo.tabs
-jslint_medikoo.module
-jslint_medikoo.nomen
-jslint_medikoo.plusplus
-jslint_medikoo.predef process, setTimeout, Buffer, global, __dirname, __filename
+indent 2
+maxlen 80
+tabs
 
-jshint.laxcomma
-jshint.camelcase
-jshint.eqeqeq
-jshint.forin
-jshint.immed
-jshint.latedef
-jshint.newcap
-jshint.noarg
-jshint.noempty
-jshint.nonew
-jshint.regexp
-jshint.undef
-jshint.unused
-jshint.strict
-jshint.trailing
-jshint.globalstrict
-jshint.global module, require, exports, process, setTimeout, Buffer, global, __dirname, __filename
-jshint.smarttabs
-jshint.eqnull
-jshint.expr
+ass
+nomen
+plusplus
+stupid
 
 ./test/lchmod.js
-jslint_medikoo.bitwise
-
 ./test/chmod.js
-jslint_medikoo.bitwise
+bitwise
