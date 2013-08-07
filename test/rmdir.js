@@ -36,6 +36,10 @@ module.exports = function (t, a, d) {
 				});
 			});
 		})(function () {
+			return t(nested, { loose: true })(function (res) {
+				a(res, null, "Loose option");
+			}, a.never);
+		})(function () {
 			return t(root, { recursive: true, force: true })(function () {
 				return lstat(root)(a.never, function (err) {
 					a(err.code, 'ENOENT', "Recursive and forced");
