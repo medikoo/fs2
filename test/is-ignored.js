@@ -2,7 +2,7 @@
 
 var fs        = require('fs')
   , resolve   = require('path').resolve
-  , noop      = require('es5-ext/lib/Function/noop')
+  , noop      = require('es5-ext/function/noop')
   , deferred  = require('deferred')
   , delay     = deferred.delay
   , promisify = deferred.promisify

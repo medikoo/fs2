@@ -2,7 +2,7 @@
 
 var fs        = require('fs')
   , resolve   = require('path').resolve
-  , omap      = require('es5-ext/lib/Object/map')
+  , omap      = require('es5-ext/object/map')
   , deferred  = require('deferred')
   , delay     = deferred.delay
   , promisify = deferred.promisify

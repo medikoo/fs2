@@ -3,9 +3,9 @@
 var push       = Array.prototype.push
   , fs         = require('fs')
   , path       = require('path')
-  , copy       = require('es5-ext/lib/Array/prototype/copy')
-  , diff       = require('es5-ext/lib/Array/prototype/diff')
-  , startsWith = require('es5-ext/lib/String/prototype/starts-with')
+  , copy       = require('es5-ext/array/#/copy')
+  , diff       = require('es5-ext/array/#/diff')
+  , startsWith = require('es5-ext/string/#/starts-with')
   , deferred   = require('deferred')
   , delay      = deferred.delay
   , promisify  = deferred.promisify
