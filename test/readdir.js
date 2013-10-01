@@ -3,7 +3,7 @@
 var push       = Array.prototype.push
   , fs         = require('fs')
   , path       = require('path')
-  , copy       = require('es5-ext/array/#/copy')
+  , aFrom      = require('es5-ext/array/from')
   , diff       = require('es5-ext/array/#/diff')
   , startsWith = require('es5-ext/string/#/starts-with')
   , deferred   = require('deferred')
@@ -71,13 +71,13 @@ module.exports = function (t) {
 					a.deep(invoked.added, [testName], "Created: added");
 					invoked = false;
 					reader(function (data) {
-						var npaths = copy.call(paths);
+						var npaths = aFrom(paths);
 						npaths.push(testName);
 						a.deep(data.sort(), npaths.sort(), "Created: data");
 					}).end();
 					return t(pgPath);
 				}, DELAY))(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Not watched");
 					return rmdir(testPath);
@@ -110,13 +110,13 @@ module.exports = function (t) {
 					a.deep(invoked.added, [testName], "Created: added");
 					invoked = false;
 					reader(function (data) {
-						var npaths = copy.call(paths);
+						var npaths = aFrom(paths);
 						npaths.push(testName);
 						a.deep(data.sort(), npaths.sort(), "Created: data");
 					}).end();
 					return t(pgPath, { depth: 2 });
 				}, DELAY))(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Not watched");
 					return rmdir(testPath);
@@ -149,13 +149,13 @@ module.exports = function (t) {
 					a.deep(invoked.added, [testName], "Created: added");
 					invoked = false;
 					reader(function (data) {
-						var npaths = copy.call(paths);
+						var npaths = aFrom(paths);
 						npaths.push(testName);
 						a.deep(data.sort(), npaths.sort(), "Created: data");
 					}).end();
 					return t(pgPath, { depth: Infinity });
 				}, DELAY))(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Not watched");
 					return unlink(testPath);
@@ -221,13 +221,13 @@ module.exports = function (t) {
 				a.deep(invoked.added, [testName], "Created: added");
 				invoked = false;
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, type: { file: true } });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return unlink(testPath);
@@ -260,13 +260,13 @@ module.exports = function (t) {
 				a.deep(invoked.added, [testName], "Created: added");
 				invoked = false;
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, type: { file: true, directory: true } });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return rmdir(testPath);
@@ -317,13 +317,13 @@ module.exports = function (t) {
 				a.deep(invoked.added, [testName], "Created: added");
 				invoked = false;
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, pattern: pattern });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return rmdir(testPath);
@@ -375,13 +375,13 @@ module.exports = function (t) {
 				a.deep(invoked.added, [testName], "Created: added");
 				invoked = false;
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, globalRules: rules });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return rmdir(testPath);
@@ -430,13 +430,13 @@ module.exports = function (t) {
 				a.deep(invoked.added, [testName], "Created: added");
 				invoked = false;
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, type: { file: true }, pattern: pattern });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return unlink(testPath);
@@ -515,13 +515,13 @@ module.exports = function (t) {
 				a.deep(invoked.removed, [], "Created: removed");
 				a.deep(invoked.added, [testName], "Created: added");
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, ignoreRules: 'git' });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return rmdir(testPath);
@@ -616,14 +616,14 @@ module.exports = function (t) {
 				a.deep(invoked.removed, [], "Created: removed");
 				a.deep(invoked.added, [testName], "Created: added");
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, type: { file: true },
 					ignoreRules: 'git' });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return unlink(testPath);
@@ -709,14 +709,14 @@ module.exports = function (t) {
 				a.deep(invoked.removed, [], "Created: removed");
 				a.deep(invoked.added, [testName], "Created: added");
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, pattern: pattern,
 					ignoreRules: 'git' });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return rmdir(testPath);
@@ -802,14 +802,14 @@ module.exports = function (t) {
 				a.deep(invoked.removed, [], "Created: removed");
 				a.deep(invoked.added, [testName], "Created: added");
 				reader(function (data) {
-					var npaths = copy.call(paths);
+					var npaths = aFrom(paths);
 					npaths.push(testName);
 					a.deep(data.sort(), npaths.sort(), "Created: data");
 				}).end();
 				return t(pgPath, { depth: 2, type: { file: true },
 					pattern: pattern, ignoreRules: 'git' });
 			}, DELAY))(function (data) {
-				var npaths = copy.call(paths);
+				var npaths = aFrom(paths);
 				npaths.push(testName);
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return unlink(testPath);
