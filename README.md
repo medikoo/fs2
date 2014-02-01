@@ -109,9 +109,13 @@ Watch file for changes.
 It's aware of open file descriptors limitations, if _EMFILE_ error is approach, switch to alternative mode that pings file stats (see [fs.watchFile](http://nodejs.org/api/all.html#all_fs_watchfile_filename_options_listener)) is made.
 
 
-### writeFile(filename, data[, encoding][, callback])
+### writeFile(filename, data[, options|encoding][, callback])
 
 Same as native [fs.writeFile](http://nodejs.org/api/all.html#all_fs_writefile_filename_data_encoding_callback) but safe for simultaneous calls of write to same file (in such case current write will be abandonded, and new would be started).
+
+Supported options:
+* __encoding__ - Reflects _encoding_ in [native version](http://nodejs.org/api/all.html#all_fs_writefile_filename_data_options_callback)
+* __intermediate__ - In case directory doesn't exist, whether to create full directory path
 
 ## Tests [![Build Status](https://travis-ci.org/medikoo/fs2.png?branch=master)](https://travis-ci.org/medikoo/fs2)
 
