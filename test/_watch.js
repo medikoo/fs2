@@ -81,5 +81,5 @@ module.exports = function (t, a, d) {
 		a(ondirend, 1, "Dir end: Dir removed");
 		a(onfilechange, 0, "File change: Dir removed");
 		a(onfileend, 0, "File end: Dir removed");
-	}, DELAY)).end(d, d);
+	}, DELAY)).done(d, d);
 };

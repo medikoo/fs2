@@ -22,29 +22,29 @@ module.exports = function (t) {
 			"Doesn't exist": function (a, d) {
 				t(resolve(pgPath, 'fake'))(a.never, function (err) {
 					a(err.code, 'ENOENT');
-				}).end(d, d);
+				}).done(d, d);
 			},
 			"Exists": function (a, d) {
 				t(resolve(pgPath, 'test'))(function (data) {
 					a(isBuffer(data), true, "Buffer returned");
 					a(String(data), 'raz\ndwa', "Content");
-				}, a.never).end(d, d);
+				}, a.never).done(d, d);
 			},
 			"Encoding": function (a, d) {
 				t(resolve(pgPath, 'test'), 'utf8')(function (data) {
 					a(data, 'raz\ndwa');
-				}, a.never).end(d, d);
+				}, a.never).done(d, d);
 			},
 			"Loose": {
 				"Doesn't exist": function (a, d) {
 					t(resolve(pgPath, 'fake'), { loose: true })(function (data) {
 						a(data, null);
-					}, a.never).end(d, d);
+					}, a.never).done(d, d);
 				},
 				"Exists": function (a, d) {
 					t(resolve(pgPath, 'test'), { loose: true })(function (data) {
 						a(String(data), 'raz\ndwa');
-					}, a.never).end(d, d);
+					}, a.never).done(d, d);
 				}
 			}
 		},
@@ -53,7 +53,7 @@ module.exports = function (t) {
 				"Doesn't exist": function (a, d) {
 					t(resolve(pgPath, 'fake'), { watch: true })(a.never, function (err) {
 						a(err.code, 'ENOENT');
-					}).end(d, d);
+					}).done(d, d);
 				},
 				"Exists": function (a, d) {
 					var path = resolve(pgPath, 'watch-test'), invoked, ended, watcher;
@@ -94,7 +94,7 @@ module.exports = function (t) {
 						return unlink(path);
 					}, DELAY))(delay(function () {
 						a(ended, true, "Watcher ended");
-					}, DELAY)).end(d, d);
+					}, DELAY)).done(d, d);
 				}
 			},
 			"Loose": function (a, d) {
@@ -146,7 +146,7 @@ module.exports = function (t) {
 					a(String(invoked), 'foo\nagain', "Emitted Content");
 					watcher.close();
 					return unlink(path);
-				}, DELAY)).end(d, d);
+				}, DELAY)).done(d, d);
 			}
 		}
 	};

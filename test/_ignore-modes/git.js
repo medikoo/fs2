@@ -153,5 +153,5 @@ module.exports = function (t, a, d) {
 		w2.close();
 		w3.close();
 		return rmdir(gitRoot);
-	}).end(d, d);
+	}).done(d, d);
 };

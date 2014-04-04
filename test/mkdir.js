@@ -21,17 +21,17 @@ module.exports = function (t) {
 						a(stats.isDirectory(), true);
 						return rmdir(regular);
 					});
-				}).end(d, d);
+				}).done(d, d);
 			},
 			"Error": function (a, d) {
 				t(deep)(a.never, function () {
 					a.ok(true, "");
-				}).end(d, d);
+				}).done(d, d);
 			},
 			"Existing": function (a, d) {
 				t(existing)(a.never, function () {
 					a.ok(true, "");
-				}).end(d, d);
+				}).done(d, d);
 			}
 		},
 		"Intermediate": {
@@ -43,12 +43,12 @@ module.exports = function (t) {
 							return rmdir(dirname(deep));
 						});
 					});
-				}).end(d, d);
+				}).done(d, d);
 			},
 			"Existing": function (a, d) {
 				t(existing, { intermediate: true })(function () {
 					a.ok(true, "");
-				}).end(d, d);
+				}).done(d, d);
 			}
 		}
 	};

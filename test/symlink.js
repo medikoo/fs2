@@ -21,12 +21,12 @@ module.exports = function (t) {
 						a(stats.isSymbolicLink(), true);
 						return unlink(regular);
 					});
-				}).end(d, d);
+				}).done(d, d);
 			},
 			"Error": function (a, d) {
 				t(base, deep)(a.never, function () {
 					a.ok(true, "");
-				}).end(d, d);
+				}).done(d, d);
 			}
 		}
 	};

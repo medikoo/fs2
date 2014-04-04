@@ -6,5 +6,5 @@ module.exports = function (t, a, d) {
 		return t(__filename + 'n/a')(a.never, function (err) {
 			a(err.code, 'ENOENT', "Error");
 		});
-	}, a.never).end(d, d);
+	}, a.never).done(d, d);
 };

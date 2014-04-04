@@ -43,13 +43,13 @@ module.exports = function (t, a, d) {
 	}))(delay(function () {
 		t('git', resolve(gitRoot, 'foo/bar'))(function (value) {
 			a(value, true, "Ignore gitrepo file");
-		}).end();
+		}).done();
 		watcher = t('git', twoFooPath, { watch: true });
 		watcher.on('change', function (arg) {
 			a(invoked, null, "Invoked once");
 			invoked = arg;
 		});
-		watcher.end();
+		watcher.done();
 		return t('git', twoFooPath);
 	}, DELAY))(delay(function (value) {
 		a(value, false, "#1");
@@ -132,7 +132,7 @@ module.exports = function (t, a, d) {
 			a(invoked, null, "Invoked once");
 			invoked = arg;
 		});
-		watcher.end();
+		watcher.done();
 		return t('git', twoFooPath);
 	}, DELAY))(function (value) {
 		a(value, false, "Both #1");
@@ -210,5 +210,5 @@ module.exports = function (t, a, d) {
 		return deferred(rmdir(gitRoot), rmdir(twoPath)(function () {
 			return rmdir(onePath);
 		}))(false);
-	}, DELAY)).end(d, d);
+	}, DELAY)).done(d, d);
 };

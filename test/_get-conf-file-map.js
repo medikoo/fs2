@@ -120,5 +120,5 @@ module.exports = function (t, a, d) {
 		return deferred(rmdir(gitRoot), rmdir(twoPath)(function () {
 			return rmdir(onePath);
 		}))(false);
-	}, DELAY)).end(d, d);
+	}, DELAY)).done(d, d);
 };

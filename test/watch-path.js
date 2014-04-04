@@ -102,5 +102,5 @@ module.exports = function (t, a, d) {
 		a(String(onfilechange), '', "File: Dir removed #2");
 		watch1.close();
 		watch2.close();
-	}, DELAY)).end(d, d);
+	}, DELAY)).done(d, d);
 };

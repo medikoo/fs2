@@ -87,5 +87,5 @@ module.exports = function (t, a, d) {
 		w2.close();
 		w3.close();
 		w4.close();
-	}, DELAY)).end(d, d);
+	}, DELAY)).done(d, d);
 };

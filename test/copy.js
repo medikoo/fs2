@@ -44,7 +44,7 @@ module.exports = {
 		});
 	},
 	"Wrong path": function (t, a, d) {
-		t(pg + '/sample.js', pg + '/:;\\//wrong-filename').end(a.never,
+		t(pg + '/sample.js', pg + '/:;\\//wrong-filename').done(a.never,
 			function (e) { a(e.code, 'ENOENT', "Path error"); d(); });
 	}
 };

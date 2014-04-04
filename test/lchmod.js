@@ -18,5 +18,5 @@ module.exports = function (t, a, d) {
 				return t(testFile, org);
 			});
 		});
-	}, a.never).end(d, d);
+	}, a.never).done(d, d);
 };
