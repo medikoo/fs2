@@ -1,3 +1,6 @@
+v0.2.1  --  2014.04.27
+* Update package.json to use latest 'tad' engine (fixes tests evaluation in v0.8)
+
 v0.2.0  --  2014.04.27
 * Move out main modules out of lib folder
 * 'loose' option for rmdir
