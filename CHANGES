@@ -1,3 +1,16 @@
+v0.2.0  --  2014.04.27
+* Move out main modules out of lib folder
+* 'loose' option for rmdir
+* 'loose' option for unlink
+* 'intermediate' option for writeFile
+* Fix race condition issues in readdir
+* Fix `unwatch` call in watchAlt
+* Add fs.rename
+* Add fs.symlink
+* Update internals to use latest versions of dependencies
+* Remove Makefile, it's cross environment package
+* Update documentation
+
 v0.1.5  --  2013.04.10
 * Improve stream and error handling in `copy`
 * Promise version of fs.stat
