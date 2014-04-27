@@ -16,7 +16,6 @@
     "directories",
     "git"
   ],
-  "main": "lib/index",
   "repository": {
     "type": "git",
     "url": "git://github.com/medikoo/fs2.git"
@@ -33,7 +32,7 @@
     "tad": "~0.1.21"
   },
   "scripts": {
-    "test": "node ./node_modules/tad/bin/tad lib"
+    "test": "node ./node_modules/tad/bin/tad"
   },
   "engines": {
     "node": ">=0.8"

@@ -2,7 +2,7 @@
 
 var fs      = require('fs')
   , resolve = require('path').resolve
-  , rmdir   = require('../lib/rmdir')
+  , rmdir   = require('../rmdir')
 
   , readFile = fs.readFile, unlink = fs.unlink
 

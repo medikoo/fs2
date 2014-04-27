@@ -9,7 +9,7 @@ var fs        = require('fs')
   , rmdir     = promisify(fs.rmdir)
 
   , isArray = Array.isArray
-  , rootPath = resolve(__dirname, '../__playground/_ignore-modes/git');
+  , rootPath = resolve(__dirname, '../../__playground/lib/ignore-modes/git');
 
 module.exports = function (t, a, d) {
 	var gitRoot = resolve(rootPath, '.git')

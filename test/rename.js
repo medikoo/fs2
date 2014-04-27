@@ -2,9 +2,9 @@
 
 var deferred  = require('deferred')
   , resolve   = require('path').resolve
-  , lstat     = require('../lib/lstat')
-  , unlink    = require('../lib/unlink')
-  , writeFile = require('../lib/write-file')
+  , lstat     = require('../lstat')
+  , unlink    = require('../unlink')
+  , writeFile = require('../write-file')
 
   , root = resolve(__dirname, '__playground/rename')
   , name1 = resolve(root, 'file1'), name2 = resolve(root, 'file2');

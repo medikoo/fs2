@@ -10,9 +10,9 @@ var fs        = require('fs')
   , writeFile = promisify(fs.writeFile)
   , unlink    = promisify(fs.unlink)
   , rmdir     = promisify(fs.rmdir)
-  , mode      = require('../lib/_ignore-modes/git')
+  , mode      = require('../../lib/ignore-modes/git')
 
-  , pgPath = resolve(__dirname, './__playground/_get-conf-file-map');
+  , pgPath = resolve(__dirname, '../__playground/lib/get-conf-file-map');
 
 module.exports = function (t, a, d) {
 	var data, invoked = false

@@ -10,7 +10,7 @@ var fs        = require('fs')
   , writeFile = promisify(fs.writeFile)
   , unlink    = promisify(fs.unlink)
   , rmdir     = promisify(fs.rmdir)
-  , modes     = require('../lib/_ignore-modes')
+  , modes     = require('../lib/ignore-modes')
 
   , pgPath = resolve(__dirname, './__playground/is-ignored');
 

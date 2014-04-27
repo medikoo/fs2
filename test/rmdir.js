@@ -1,9 +1,9 @@
 'use strict';
 
 var resolve   = require('path').resolve
-  , lstat     = require('../lib/lstat')
-  , mkdir     = require('../lib/mkdir')
-  , writeFile = require('../lib/write-file')
+  , lstat     = require('../lstat')
+  , mkdir     = require('../mkdir')
+  , writeFile = require('../write-file')
 
   , pg = resolve(__dirname, '__playground')
 

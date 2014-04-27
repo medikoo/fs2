@@ -1,7 +1,7 @@
 'use strict';
 
-var lstat     = require('../lib/lstat')
-  , writeFile = require('../lib/write-file')
+var lstat     = require('../lstat')
+  , writeFile = require('../write-file')
 
   , testFile = require('path').resolve(__dirname, '__playground/unlink');
 

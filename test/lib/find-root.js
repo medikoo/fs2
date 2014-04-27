@@ -7,9 +7,9 @@ var fs        = require('fs')
   , delay     = deferred.delay
   , mkdir     = promisify(fs.mkdir)
   , rmdir     = promisify(fs.rmdir)
-  , gitMode   = require('../lib/_ignore-modes/git')
+  , gitMode   = require('../../lib/ignore-modes/git')
 
-  , rootPath = resolve(__dirname, './__playground/_find-root');
+  , rootPath = resolve(__dirname, '../__playground/lib/find-root');
 
 module.exports = function (t, a, d) {
 	var gitRoot = resolve(rootPath, '.git')

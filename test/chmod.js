@@ -1,6 +1,6 @@
 'use strict';
 
-var lstat = require('../lib/lstat')
+var lstat = require('../lstat')
 
   , testFile = require('path').resolve(__dirname, '__playground/chmod/test');
 
