@@ -2,6 +2,7 @@
   "name": "fs2",
   "version": "0.1.5",
   "description": "fs (file system package) extensions",
+  "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
     "addons",
     "extensions",
@@ -15,18 +16,10 @@
     "directories",
     "git"
   ],
-  "author": "Mariusz Nowak <medikoo+fs2@medikoo.com> (http://www.medikoo.com/)",
   "main": "lib/index",
   "repository": {
     "type": "git",
     "url": "git://github.com/medikoo/fs2.git"
-  },
-  "bugs": {
-    "email": "medikoo+fs2@medikoo.com",
-    "url": "https://github.com/medikoo/fs2/issues"
-  },
-  "engines": {
-    "node": ">=0.8"
   },
   "dependencies": {
     "d": "git://github.com/medikoo/d.git",
@@ -36,11 +29,14 @@
     "memoizee": "~0.2.4",
     "minimatch": "~0.2.11"
   },
+  "devDependencies": {
+    "tad": "~0.1.15"
+  },
   "scripts": {
     "test": "node ./node_modules/tad/bin/tad lib"
   },
-  "devDependencies": {
-    "tad": "~0.1.15"
+  "engines": {
+    "node": ">=0.8"
   },
   "licence": "MIT"
 }
