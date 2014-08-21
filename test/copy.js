@@ -5,7 +5,7 @@ var path = require('path')
   , pg   = path.resolve(__dirname, './__playground/copy');
 
 module.exports = {
-	"Success": function (t, a, d) {
+	Success: function (t, a, d) {
 		var src = pg + '/sample.js'
 		  , dst = pg + '/sample.copy.js';
 		t(src, dst, function (err) {

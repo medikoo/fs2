@@ -14,8 +14,8 @@ var promisify = require('deferred').promisify
 
 module.exports = function (t) {
 	return {
-		"Regular": {
-			"Success": function (a, d) {
+		Regular: {
+			Success: function (a, d) {
 				t(base, regular)(function () {
 					return lstat(regular)(function (stats) {
 						a(stats.isSymbolicLink(), true);
@@ -23,7 +23,7 @@ module.exports = function (t) {
 					});
 				}).done(d, d);
 			},
-			"Error": function (a, d) {
+			Error: function (a, d) {
 				t(base, deep)(a.never, function () {
 					a.ok(true, "");
 				}).done(d, d);

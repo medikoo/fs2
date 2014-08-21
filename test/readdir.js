@@ -189,7 +189,7 @@ module.exports = function (t) {
 				a.deep(result.sort(), data.sort(), "Result");
 			}).done(d, d);
 		},
-		"Type": function (a, d) {
+		Type: function (a, d) {
 			var reader = t(pgPath, { depth: 2, type: { file: true }, watch: true })
 			  , testName = replaceSep('dtwo/test')
 			  , testPath = resolve(pgPath, testName)
@@ -241,7 +241,7 @@ module.exports = function (t) {
 				reader.close();
 			}, DELAY)).done(d, d);
 		},
-		"Types": function (a, d) {
+		Types: function (a, d) {
 			var reader = t(pgPath, { depth: 2,
 				type: { file: true, directory: true }, watch: true })
 			  , testName = replaceSep('dtwo/foo')
@@ -280,7 +280,7 @@ module.exports = function (t) {
 				reader.close();
 			}, DELAY)).done(d, d);
 		},
-		"Pattern": function (a, d) {
+		Pattern: function (a, d) {
 			var pattern = /one$/
 			  , reader = t(pgPath, { depth: 2, pattern: pattern, watch: true })
 			  , otherName = replaceSep('dtwo/test')
@@ -450,7 +450,7 @@ module.exports = function (t) {
 				reader.close();
 			}, DELAY)).done(d, d);
 		},
-		"Ignored": function (a, d) {
+		Ignored: function (a, d) {
 			var gitPath = resolve(pgPath, '.git')
 			  , ignoreFile = resolve(pgPath, '.gitignore')
 			  , otherName = replaceSep('dtwo/test')
@@ -837,7 +837,7 @@ module.exports = function (t) {
 				return deferred(rmdir(gitPath), unlink(ignoreFile))(false);
 			}, DELAY)).done(d, d);
 		},
-		"cb": function (a, d) {
+		cb: function (a, d) {
 			t(pgPath, function (err, result) {
 				if (err) {
 					d(err);

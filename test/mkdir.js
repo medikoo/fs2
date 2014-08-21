@@ -14,8 +14,8 @@ var promisify = require('deferred').promisify
 
 module.exports = function (t) {
 	return {
-		"Regular": {
-			"Success": function (a, d) {
+		Regular: {
+			Success: function (a, d) {
 				t(regular)(function () {
 					return lstat(regular)(function (stats) {
 						a(stats.isDirectory(), true);
@@ -23,18 +23,18 @@ module.exports = function (t) {
 					});
 				}).done(d, d);
 			},
-			"Error": function (a, d) {
+			Error: function (a, d) {
 				t(deep)(a.never, function () {
 					a.ok(true, "");
 				}).done(d, d);
 			},
-			"Existing": function (a, d) {
+			Existing: function (a, d) {
 				t(existing)(a.never, function () {
 					a.ok(true, "");
 				}).done(d, d);
 			}
 		},
-		"Intermediate": {
+		Intermediate: {
 			"": function (a, d) {
 				t(deep, { intermediate: true })(function () {
 					return lstat(deep)(function (stats) {
@@ -45,7 +45,7 @@ module.exports = function (t) {
 					});
 				}).done(d, d);
 			},
-			"Existing": function (a, d) {
+			Existing: function (a, d) {
 				t(existing, { intermediate: true })(function () {
 					a.ok(true, "");
 				}).done(d, d);
