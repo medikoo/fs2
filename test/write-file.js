@@ -12,7 +12,7 @@ var fs      = require('fs')
   , intermediatePath = resolve(intermediateDirPath, 'intermediate/test');
 
 module.exports = {
-	"Overwrite": function (t, a, d) {
+	Overwrite: function (t, a, d) {
 		t(overwritePath, 'raz', function (err) {
 			a(err, null, '#1');
 		});
@@ -27,7 +27,7 @@ module.exports = {
 			});
 		});
 	},
-	"Intermediate": function (t, a, d) {
+	Intermediate: function (t, a, d) {
 		t(intermediatePath, 'elo', { intermediate: true }, function (err) {
 			if (err) {
 				d(err);
