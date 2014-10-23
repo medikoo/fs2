@@ -28,7 +28,7 @@ wrap = function (asyncFn) {
 	callable(asyncFn);
 	return (self = defineLength(function () {
 		var openCount, args = arguments, context, cb = last.call(args);
-		if (typeof cb !== 'function') return asyncFn.apply(this, arguments);
+		if (!exports.initialized || (typeof cb !== 'function')) return asyncFn.apply(this, arguments);
 		if (count >= limit) {
 			queue.push({ fn: self, context: this, args: arguments });
 			return;
@@ -53,6 +53,8 @@ wrap = function (asyncFn) {
 
 module.exports = exports = memoize(function () {
 	var open = fs.open, openSync = fs.openSync, close = fs.close, closeSync = fs.closeSync;
+
+	if (exports.initialized) return;
 
 	fs.open = function (path, flags, mode, cb) {
 		var openCount, args;
