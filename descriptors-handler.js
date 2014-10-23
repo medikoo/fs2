@@ -7,7 +7,7 @@ var last         = require('es5-ext/array/#/last')
   , memoize      = require('memoizee')
   , fs           = require('fs')
 
-  , max = Math.max
+  , max = Math.max, slice = Array.prototype.slice
   , limit = Infinity, count = 0, queue = [], release
   , wrap;
 
@@ -26,9 +26,8 @@ release = function () {
 wrap = function (asyncFn) {
 	var self;
 	callable(asyncFn);
-	return self = defineLength(function () {
-		var openCount, args = arguments, context;
-		cb = last.call(args);
+	return (self = defineLength(function () {
+		var openCount, args = arguments, context, cb = last.call(args);
 		if (typeof cb !== 'function') return asyncFn.apply(this, arguments);
 		if (count >= limit) {
 			queue.push({ fn: self, context: this, args: arguments });
@@ -49,7 +48,7 @@ wrap = function (asyncFn) {
 			if (typeof cb === 'function') cb.apply(this, arguments);
 		});
 		return asyncFn.apply(this, args);
-	}, asyncFn.length);
+	}, asyncFn.length));
 };
 
 module.exports = exports = memoize(function () {
