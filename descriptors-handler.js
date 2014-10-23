@@ -15,15 +15,13 @@ module.exports = exports = memoize(function () {
 	  , queue = [];
 
 	release = function () {
-		var name, args, cb;
-		while ((count < limit) && (name = queue.shift())) {
+		var data, cb;
+		while ((count < limit) && (data = queue.shift())) {
 			try {
-				fs[name].apply(fs, args = queue.shift());
+				data.fn.apply(data.context, data.args);
 			} catch (e) {
-				cb = last.call(args);
-				if (typeof cb === 'function') {
-					cb(e);
-				}
+				cb = last.call(data.args);
+				if (typeof cb === 'function') cb(e);
 			}
 		}
 	};
@@ -31,7 +29,7 @@ module.exports = exports = memoize(function () {
 	fs.open = function (path, flags, mode, cb) {
 		var openCount, args;
 		if (count >= limit) {
-			queue.push('open', arguments);
+			queue.push({ fn: fs.open, context: this, args: arguments });
 			return;
 		}
 		openCount = count++;
@@ -44,7 +42,7 @@ module.exports = exports = memoize(function () {
 					if (limit > openCount) {
 						limit = openCount;
 					}
-					queue.push('open', args);
+					queue.push({ fn: fs.open, context: this, args: args });
 					release();
 					return;
 				}
@@ -83,7 +81,7 @@ module.exports = exports = memoize(function () {
 	fs.readdir = function (path, callback) {
 		var openCount, args;
 		if (count >= limit) {
-			queue.push('readdir', arguments);
+			queue.push({ fn: fs.readdir, context: this, args: arguments });
 			return;
 		}
 		openCount = count++;
@@ -94,7 +92,7 @@ module.exports = exports = memoize(function () {
 				if (limit > openCount) {
 					limit = openCount;
 				}
-				queue.push('readdir', args);
+				queue.push({ fn: fs.readdir, context: this, args: args });
 				release();
 				return;
 			}
