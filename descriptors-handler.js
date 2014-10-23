@@ -39,9 +39,7 @@ module.exports = exports = memoize(function () {
 			if (err) {
 				--count;
 				if (err.code === 'EMFILE') {
-					if (limit > openCount) {
-						limit = openCount;
-					}
+					if (limit > openCount) limit = openCount;
 					queue.push({ fn: fs.open, context: this, args: args });
 					release();
 					return;
@@ -64,9 +62,7 @@ module.exports = exports = memoize(function () {
 				--count;
 				release();
 			}
-			if (typeof cb === 'function') {
-				cb(err);
-			}
+			if (typeof cb === 'function') cb(err);
 		});
 	};
 
@@ -89,9 +85,7 @@ module.exports = exports = memoize(function () {
 		readdir(path, function (err, result) {
 			--count;
 			if (err && err.code === 'EMFILE') {
-				if (limit > openCount) {
-					limit = openCount;
-				}
+				if (limit > openCount) limit = openCount;
 				queue.push({ fn: fs.readdir, context: this, args: args });
 				release();
 				return;
@@ -103,22 +97,12 @@ module.exports = exports = memoize(function () {
 });
 
 Object.defineProperties(exports, {
-	limit: d.gs(function () {
-		return limit;
-	}, function (nLimit) {
-		if (limit >= nLimit) {
-			limit = max(nLimit, 5);
-		}
+	limit: d.gs(function () { return limit; }, function (nLimit) {
+		if (limit >= nLimit) limit = max(nLimit, 5);
 	}),
-	available: d.gs(function () {
-		return max(limit - count, 0);
-	}),
-	taken: d.gs(function () {
-		return count;
-	}),
-	open: d(function () {
-		++count;
-	}),
+	available: d.gs(function () { return max(limit - count, 0); }),
+	taken: d.gs(function () { return count; }),
+	open: d(function () { ++count; }),
 	close: d(function () {
 		--count;
 		if (release) release();
