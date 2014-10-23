@@ -104,9 +104,12 @@ module.exports = exports = memoize(function () {
 	};
 
 	fs.readdir = wrap(fs.readdir);
+
+	Object.defineProperty(exports, 'initialized', d('e', true));
 });
 
 Object.defineProperties(exports, {
+	initialized: d('ce', false),
 	limit: d.gs(function () { return limit; }, function (nLimit) {
 		if (limit >= nLimit) limit = max(nLimit, 5);
 	}),
