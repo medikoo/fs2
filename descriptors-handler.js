@@ -1,30 +1,59 @@
 'use strict';
 
-var last    = require('es5-ext/array/#/last')
-  , d       = require('d')
-  , memoize = require('memoizee')
-  , fs      = require('fs')
+var last         = require('es5-ext/array/#/last')
+  , defineLength = require('es5-ext/function/_define-length')
+  , callable     = require('es5-ext/object/valid-callable')
+  , d            = require('d')
+  , memoize      = require('memoizee')
+  , fs           = require('fs')
 
   , max = Math.max
-  , limit = Infinity, count = 0, release;
+  , limit = Infinity, count = 0, queue = [], release
+  , wrap;
+
+release = function () {
+	var data, cb;
+	while ((count < limit) && (data = queue.shift())) {
+		try {
+			data.fn.apply(data.context, data.args);
+		} catch (e) {
+			cb = last.call(data.args);
+			if (typeof cb === 'function') cb(e);
+		}
+	}
+};
+
+wrap = function (asyncFn) {
+	var self;
+	callable(asyncFn);
+	return self = defineLength(function () {
+		var openCount, args = arguments, context;
+		cb = last.call(args);
+		if (typeof cb !== 'function') return asyncFn.apply(this, arguments);
+		if (count >= limit) {
+			queue.push({ fn: self, context: this, args: arguments });
+			return;
+		}
+		openCount = count++;
+		context = this;
+		args = slice.call(args, 0, -1);
+		args.push(function (err, result) {
+			--count;
+			if (err && (err.code === 'EMFILE')) {
+				if (limit > openCount) limit = openCount;
+				queue.push({ fn: self, context: context, args: args });
+				release();
+				return;
+			}
+			release();
+			if (typeof cb === 'function') cb.apply(this, arguments);
+		});
+		return asyncFn.apply(this, args);
+	}, asyncFn.length);
+};
 
 module.exports = exports = memoize(function () {
-	var open = fs.open, openSync = fs.openSync, close = fs.close
-	  , closeSync = fs.closeSync, readdir = fs.readdir
-
-	  , queue = [];
-
-	release = function () {
-		var data, cb;
-		while ((count < limit) && (data = queue.shift())) {
-			try {
-				data.fn.apply(data.context, data.args);
-			} catch (e) {
-				cb = last.call(data.args);
-				if (typeof cb === 'function') cb(e);
-			}
-		}
-	};
+	var open = fs.open, openSync = fs.openSync, close = fs.close, closeSync = fs.closeSync;
 
 	fs.open = function (path, flags, mode, cb) {
 		var openCount, args;
@@ -74,26 +103,7 @@ module.exports = exports = memoize(function () {
 		return result;
 	};
 
-	fs.readdir = function (path, callback) {
-		var openCount, args;
-		if (count >= limit) {
-			queue.push({ fn: fs.readdir, context: this, args: arguments });
-			return;
-		}
-		openCount = count++;
-		args = arguments;
-		readdir(path, function (err, result) {
-			--count;
-			if (err && err.code === 'EMFILE') {
-				if (limit > openCount) limit = openCount;
-				queue.push({ fn: fs.readdir, context: this, args: args });
-				release();
-				return;
-			}
-			release();
-			if (typeof callback === 'function') callback(err, result);
-		});
-	};
+	fs.readdir = wrap(fs.readdir);
 });
 
 Object.defineProperties(exports, {
@@ -106,5 +116,6 @@ Object.defineProperties(exports, {
 	close: d(function () {
 		--count;
 		if (release) release();
-	})
+	}),
+	wrap: d(wrap)
 });
