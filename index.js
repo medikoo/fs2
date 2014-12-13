@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+	appendFile:         require('./append-file'),
 	chmod:              require('./chmod'),
 	copy:               require('./copy'),
 	descriptorsHandler: require('./descriptors-handler'),

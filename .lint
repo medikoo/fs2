@@ -11,6 +11,7 @@ ass
 nomen
 plusplus
 stupid
+vars
 
 ./test/lchmod.js
 ./test/chmod.js

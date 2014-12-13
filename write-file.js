@@ -13,7 +13,7 @@ var isCallable = require('es5-ext/object/is-callable')
   , dirname = path.dirname, resolve = path.resolve
   , next, writeAll, cache = {}, _writeFile, writeFile;
 
-next = function (path, err, content, encoding) {
+next = function (path, err, content, encoding, flag) {
 	var data = cache[path];
 	if (err) {
 		if (!cache[path].intermediate || (err.code !== 'ENOENT')) {
@@ -27,14 +27,14 @@ next = function (path, err, content, encoding) {
 				next(path, err);
 				return;
 			}
-			_writeFile(path, content, encoding);
+			_writeFile(path, content, encoding, flag);
 		});
 		return;
 	}
 	if (data.data) {
 		data = data.data;
 		delete cache[path].data;
-		_writeFile(path, data.data, data.encoding);
+		_writeFile(path, data.data, data.encoding, data.flag);
 	} else {
 		delete cache[path];
 		data.def.resolve();
@@ -59,13 +59,14 @@ writeAll = function (path, fd, buffer, offset, length) {
 	});
 };
 
-_writeFile = function (path, data, encoding) {
+_writeFile = function (path, data, encoding, flag) {
 	if (!encoding) {
 		encoding = 'utf8';
 	}
-	fs.open(path, 'w', 438, function (openErr, fd) {
+	console.log(flag);
+	fs.open(path, flag || 'w', 438, function (openErr, fd) {
 		if (openErr) {
-			next(path, openErr, data, encoding);
+			next(path, openErr, data, encoding, flag);
 		} else if (!cache[path].data) {
 			var buffer = Buffer.isBuffer(data) ? data : new Buffer(String(data),
 				encoding);
@@ -84,12 +85,12 @@ writeFile = function (path, data, options) {
 		if (!cache[path].intermediate && options.intermediate) {
 			cache[path].intermediate = true;
 		}
-		cache[path].data = { data: data, encoding: encoding };
+		cache[path].data = { data: data, encoding: encoding, flag: options.flag };
 		def = cache[path].def;
 	} else {
 		def = deferred();
 		cache[path] = { def: def, intermediate: options.intermediate };
-		_writeFile(path, data, encoding);
+		_writeFile(path, data, encoding, options.flag);
 	}
 
 	return def.promise;
