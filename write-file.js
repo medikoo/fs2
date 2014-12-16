@@ -63,7 +63,6 @@ _writeFile = function (path, data, encoding, flag) {
 	if (!encoding) {
 		encoding = 'utf8';
 	}
-	console.log(flag);
 	fs.open(path, flag || 'w', 438, function (openErr, fd) {
 		if (openErr) {
 			next(path, openErr, data, encoding, flag);
