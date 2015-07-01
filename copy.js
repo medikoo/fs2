@@ -4,10 +4,14 @@
 
 'use strict';
 
-var isCallable = require('es5-ext/object/is-callable')
-  , deferred   = require('deferred')
-  , fs         = require('fs')
+var isCallable       = require('es5-ext/object/is-callable')
+  , normalizeOptions = require('es5-ext/object/normalize-options')
+  , deferred         = require('deferred')
+  , fs               = require('fs')
+  , path             = require('path')
+  , mkdir            = require('./mkdir')
 
+  , dirname = path.dirname, resolve = path.resolve
   , createReadStream = fs.createReadStream
   , createWriteStream = fs.createWriteStream
 
@@ -16,6 +20,7 @@ var isCallable = require('es5-ext/object/is-callable')
 copy = function (source, dest, options) {
 	var def = deferred(), read, write;
 
+	console.log(source, dest);
 	try {
 		read = createReadStream(source);
 	} catch (e) {
@@ -34,6 +39,14 @@ copy = function (source, dest, options) {
 	});
 	write.on('error', function (e) {
 		read.destroy();
+		if ((e.code === 'ENOENT') && options.intermediate) {
+			def.resolve(mkdir(dirname(resolve(dest)), { intermediate: true })(function () {
+				options = normalizeOptions(options);
+				delete options.intermediate;
+				return copy(source, dest, options);
+			}));
+			return;
+		}
 		def.reject(e);
 	});
 	read.pipe(write);

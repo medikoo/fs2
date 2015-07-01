@@ -43,6 +43,26 @@ module.exports = {
 			});
 		});
 	},
+	Deep: function (t, a, d) {
+		var src = pg + '/sample.js'
+		  , dst = pg + '/deep/path/sample.copy.js';
+		return t(src, dst, { intermediate: true }).done(function () {
+			fs.readFile(src, 'utf8', function (err, srcContent) {
+				if (err) {
+					d(err);
+					return;
+				}
+				fs.readFile(dst, 'utf8', function (err, dstContent) {
+					if (err) {
+						d(err);
+						return;
+					}
+					a(dstContent, srcContent, "Content");
+					fs.unlink(dst, d);
+				});
+			});
+		}, d);
+	},
 	"Wrong path": function (t, a, d) {
 		t(pg + '/sample.js', pg + '/:;\\//wrong-filename').done(a.never,
 			function (e) { a(e.code, 'ENOENT', "Path error"); d(); });
