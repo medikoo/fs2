@@ -20,7 +20,6 @@ var isCallable       = require('es5-ext/object/is-callable')
 copy = function (source, dest, options) {
 	var def = deferred(), read, write;
 
-	console.log(source, dest);
 	try {
 		read = createReadStream(source);
 	} catch (e) {
