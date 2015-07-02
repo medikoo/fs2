@@ -6,13 +6,20 @@
 
 var isCallable       = require('es5-ext/object/is-callable')
   , normalizeOptions = require('es5-ext/object/normalize-options')
+  , d                = require('d')
   , deferred         = require('deferred')
   , fs               = require('fs')
   , path             = require('path')
   , mkdir            = require('./mkdir')
 
+  , hasOwnProperty = Object.prototype.hasOwnProperty, defineProperty = Object.defineProperty
   , dirname = path.dirname, resolve = path.resolve
   , createReadStream = fs.createReadStream, createWriteStream = fs.createWriteStream;
+
+var fixOptions = function (options) {
+	if (options.hasOwnProperty) return options;
+	return defineProperty(options, 'hasOwnProperty', d(hasOwnProperty));
+};
 
 var copy = function (source, dest, options) {
 	var def = deferred(), read, write;
@@ -23,7 +30,7 @@ var copy = function (source, dest, options) {
 		return def.reject(e);
 	}
 	try {
-		write = createWriteStream(dest, options);
+		write = createWriteStream(dest, fixOptions(options));
 	} catch (e1) {
 		read.destroy();
 		return def.reject(e1);
