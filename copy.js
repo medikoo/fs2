@@ -12,12 +12,9 @@ var isCallable       = require('es5-ext/object/is-callable')
   , mkdir            = require('./mkdir')
 
   , dirname = path.dirname, resolve = path.resolve
-  , createReadStream = fs.createReadStream
-  , createWriteStream = fs.createWriteStream
+  , createReadStream = fs.createReadStream, createWriteStream = fs.createWriteStream;
 
-  , copy;
-
-copy = function (source, dest, options) {
+var copy = function (source, dest, options) {
 	var def = deferred(), read, write;
 
 	try {
