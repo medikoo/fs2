@@ -45,11 +45,11 @@ var copyWithMode = function (def, source, dest, options) {
 	write.on('error', function (e) {
 		read.destroy();
 		if ((e.code === 'ENOENT') && options.intermediate) {
-			def.resolve(mkdir(dirname(resolve(dest)), { intermediate: true })(function () {
+			mkdir(dirname(resolve(dest)), { intermediate: true }).done(function () {
 				options = normalizeOptions(options);
 				delete options.intermediate;
 				return copyWithMode(def, source, dest, options);
-			}));
+			}, def.reject);
 			return;
 		}
 		def.reject(e);
