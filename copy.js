@@ -29,6 +29,11 @@ var copy = function (source, dest, options) {
 	} catch (e) {
 		return def.reject(e);
 	}
+	read.on('error', function (e) {
+		write.destroy();
+		def.reject(e);
+	});
+
 	try {
 		write = createWriteStream(dest, fixOptions(options));
 	} catch (e1) {
@@ -36,10 +41,6 @@ var copy = function (source, dest, options) {
 		return def.reject(e1);
 	}
 
-	read.on('error', function (e) {
-		write.destroy();
-		def.reject(e);
-	});
 	write.on('error', function (e) {
 		read.destroy();
 		if ((e.code === 'ENOENT') && options.intermediate) {
