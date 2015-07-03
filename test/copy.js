@@ -35,7 +35,7 @@ module.exports = {
 								d(err);
 								return;
 							}
-							a(srcStats.mode, dstStats.mode);
+							a(dstStats.mode, srcStats.mode);
 							fs.unlink(dst, d);
 						});
 					});
