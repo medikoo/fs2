@@ -71,9 +71,7 @@ Readdir.prototype = {
 		(function self(data, root, depth) {
 			var getPath, files;
 			this.readers[root] = { files: data.files };
-			if (data.dirs && (data.dirs !== data.files)) {
-				this.readers[root].dirs = data.dirs;
-			}
+			if (data.dirs && (data.dirs !== data.files)) this.readers[root].dirs = data.dirs;
 			if (root) {
 				getPath = function (path) { return root + path; };
 				files = data.files.aside(function (files) {
@@ -81,8 +79,7 @@ Readdir.prototype = {
 						files = files.map(getPath);
 						push.apply(result, files);
 						if (promise.resolved || stream) {
-							promise.emit('change',
-								{ data: result, removed: [], added: files });
+							promise.emit('change', { data: result, removed: [], added: files });
 						}
 					}
 					return files;
@@ -92,8 +89,7 @@ Readdir.prototype = {
 					if (files.length) {
 						push.apply(result, files);
 						if (promise.resolved || stream) {
-							promise.emit('change',
-								{ data: result, removed: [], added: files });
+							promise.emit('change', { data: result, removed: [], added: files });
 						}
 					}
 					return files;
@@ -107,8 +103,7 @@ Readdir.prototype = {
 							files = files.map(getPath);
 							remove.apply(result, files);
 							if (promise.resolved || stream) {
-								promise.emit('change',
-									{ data: result, removed: files, added: [] });
+								promise.emit('change', { data: result, removed: files, added: [] });
 							}
 						}
 					}.bind(this));
@@ -120,8 +115,7 @@ Readdir.prototype = {
 					remove.apply(result, removed);
 					push.apply(result, added);
 					if (promise.resolved || stream) {
-						promise.emit('change',
-							{ data: result, removed: removed, added: added });
+						promise.emit('change', { data: result, removed: removed, added: added });
 					}
 				});
 			}
@@ -160,8 +154,7 @@ Readdir.prototype = {
 					}, this));
 			}
 			return files;
-		}.call(this, data, '', this.depth))
-			.done(this.resolve.bind(this, result), this.reject);
+		}.call(this, data, '', this.depth)).done(this.resolve.bind(this, result), this.reject);
 
 		return this.promise;
 	},
@@ -211,8 +204,7 @@ Readdir.prototype = {
 			result.files = paths;
 		}
 		if (getDirs) {
-			if (this.type && isCopy(this.type, { directory: true }) &&
-					!this.pattern) {
+			if (this.type && isCopy(this.type, { directory: true }) && !this.pattern) {
 				dirs = files;
 				result.dirs = result.files;
 				getDirs = false;
@@ -310,8 +302,7 @@ Readdir.prototype = {
 						if (removed.length || (nFiles && nFiles.length)) {
 							remove.apply(files, removed);
 							if (nFiles) push.apply(files, nFiles);
-							result.files.emit('change',
-								{ data: files, removed: removed, added: nFiles || [] });
+							result.files.emit('change', { data: files, removed: removed, added: nFiles || [] });
 						}
 					}
 					if (getDirs) {
@@ -319,8 +310,7 @@ Readdir.prototype = {
 						if (removed.length || (nDirs && nDirs.length)) {
 							remove.apply(dirs, removed);
 							if (nDirs) push.apply(dirs, nDirs);
-							result.dirs.emit('change',
-								{ data: dirs, removed: removed, added: nDirs || [] });
+							result.dirs.emit('change', { data: dirs, removed: removed, added: nDirs || [] });
 						}
 					}
 				});
@@ -367,9 +357,7 @@ Readdir.prototype = {
 				(!rules || !applyGlobalRules(fullPath, rules)));
 		};
 
-		promise = paths(function (data) {
-			return (result = data.filter(filter));
-		});
+		promise = paths(function (data) { return (result = data.filter(filter)); });
 		promise.root = root;
 		if (this.watch) {
 			paths.on('change', function (data) {
@@ -379,13 +367,10 @@ Readdir.prototype = {
 				if (removed.length || added.length) {
 					remove.apply(result, removed);
 					push.apply(result, added);
-					promise.emit('change',
-						{ data: result, removed: removed, added: added });
+					promise.emit('change', { data: result, removed: removed, added: added });
 				}
 			});
-			paths.on('end', function (data, err) {
-				promise.emit('end', result, err);
-			});
+			paths.on('end', function (data, err) { promise.emit('end', result, err); });
 			promise.close = function () { paths.close(); };
 		}
 		return promise;
@@ -401,12 +386,10 @@ Readdir.prototype = {
 				status.on('change', function (value) {
 					if (value) {
 						remove.call(result, path);
-						promise.emit('change',
-							{ data: result, removed: [path], added: [] });
+						promise.emit('change', { data: result, removed: [path], added: [] });
 					} else {
 						result.push(path);
-						promise.emit('change',
-							{ data: result, removed: [], added: [path] });
+						promise.emit('change', { data: result, removed: [], added: [path] });
 					}
 				});
 			}
@@ -427,8 +410,7 @@ Readdir.prototype = {
 					if (removed.length || added.length) {
 						remove.apply(result, removed);
 						push.apply(result, added);
-						promise.emit('change',
-							{ data: result, removed: removed, added: added });
+						promise.emit('change', { data: result, removed: removed, added: added });
 					}
 				};
 				if (!waiting) {
@@ -507,8 +489,7 @@ Readdir.prototype = {
 					if (removed.length || added.length) {
 						remove.apply(files, removed);
 						push.apply(files, added);
-						promise.emit('change',
-							{ data: files, removed: removed, added: added });
+						promise.emit('change', { data: files, removed: removed, added: added });
 					}
 				});
 			});
@@ -535,14 +516,13 @@ readdir = function (path, options) {
 	readdir.path = path;
 	readdir.depth = isNaN(options.depth) ? 0 : toPosInt(options.depth);
 	readdir.type = (options.type != null) ? Object(options.type) : null;
-	readdir.pattern = (options.pattern != null) ?
-			new RegExp(options.pattern) : null;
+	readdir.pattern = (options.pattern != null) ? new RegExp(options.pattern) : null;
 	readdir.watch = options.watch;
 	readdir.stream = Boolean(options.stream);
 
 	if (options.globalRules) {
-		globalRules = isArray(options.globalRules) ? options.globalRules :
-				String(options.globalRules).split(eolRe);
+		globalRules = isArray(options.globalRules)
+			? options.globalRules : String(options.globalRules).split(eolRe);
 	}
 	if (options.ignoreRules) {
 		assign(readdir, getIsIgnored(isArray(options.ignoreRules) ?
