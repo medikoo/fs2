@@ -257,7 +257,9 @@ Readdir.prototype = {
 								(!this.pattern || !getDirs || this.pattern.test(fullPath))) {
 							files.push(path);
 						}
-						if (getDirs && (type === 'directory')) dirs.push(path);
+						if (getDirs && (type === 'directory')) {
+							if (!this.dirFilter || this.dirFilter(fullPath)) dirs.push(path);
+						}
 					} else if (err.code !== 'ENOENT') {
 						resolve(err);
 						return;
@@ -517,6 +519,10 @@ readdir = function (path, options) {
 	readdir.depth = isNaN(options.depth) ? 0 : toPosInt(options.depth);
 	readdir.type = (options.type != null) ? Object(options.type) : null;
 	readdir.pattern = (options.pattern != null) ? new RegExp(options.pattern) : null;
+	if (options.dirFilter != null) {
+		if (typeof options.dirFilter === 'function') readdir.dirFilter = options.dirFilter;
+		else readdir.dirFilter = RegExp.prototype.test.bind(new RegExp(options.dirFilter));
+	}
 	readdir.watch = options.watch;
 	readdir.stream = Boolean(options.stream);
 
