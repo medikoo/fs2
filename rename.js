@@ -1,12 +1,14 @@
 'use strict';
 
-var deferred = require('deferred')
-  , resolve  = require('path').resolve
-  , original = require('fs').rename
+var isCallable = require('es5-ext/object/is-callable')
+  , deferred   = require('deferred')
+  , path       = require('path')
+  , original   = require('fs').rename
+  , mkdir      = require('./mkdir')
 
-  , rename;
+  , dirname = path.dirname, resolve = path.resolve;
 
-rename = function (oldPath, newPath) {
+var rename = function (oldPath, newPath) {
 	var def = deferred();
 	original(oldPath, newPath, function (err) {
 		if (err) def.reject(err);
@@ -16,9 +18,20 @@ rename = function (oldPath, newPath) {
 };
 rename.returnsPromise = true;
 
-module.exports = exports = function (oldPath, newPath/*, callback*/) {
-	return rename(resolve(String(oldPath)),
-		resolve(String(newPath))).cb(arguments[2]);
+module.exports = exports = function (oldPath, newPath/*, options, cb*/) {
+	var options = Object(arguments[2]), cb = arguments[3];
+	if ((cb == null) && isCallable(options)) {
+		cb = options;
+		options = {};
+	}
+	oldPath = resolve(String(oldPath));
+	if (options.intermediate) {
+		return mkdir(dirname(oldPath), { intermediate: true })(function () {
+			return rename(oldPath, resolve(String(newPath)));
+		}).cb(arguments[2]);
+	}
+
+	return rename(oldPath, resolve(String(newPath))).cb(arguments[2]);
 };
 exports.returnsPromise = true;
 exports.rename = rename;
