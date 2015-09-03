@@ -28,10 +28,10 @@ module.exports = exports = function (oldPath, newPath/*, options, cb*/) {
 	if (options.intermediate) {
 		return mkdir(dirname(oldPath), { intermediate: true })(function () {
 			return rename(oldPath, resolve(String(newPath)));
-		}).cb(arguments[2]);
+		}).cb(cb);
 	}
 
-	return rename(oldPath, resolve(String(newPath))).cb(arguments[2]);
+	return rename(oldPath, resolve(String(newPath))).cb(cb);
 };
 exports.returnsPromise = true;
 exports.rename = rename;
