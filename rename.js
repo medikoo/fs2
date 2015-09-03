@@ -25,9 +25,10 @@ module.exports = exports = function (oldPath, newPath/*, options, cb*/) {
 		options = {};
 	}
 	oldPath = resolve(String(oldPath));
+	newPath = resolve(String(newPath));
 	if (options.intermediate) {
-		return mkdir(dirname(oldPath), { intermediate: true })(function () {
-			return rename(oldPath, resolve(String(newPath)));
+		return mkdir(dirname(newPath), { intermediate: true })(function () {
+			return rename(oldPath, newPath);
 		}).cb(cb);
 	}
 
