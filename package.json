@@ -1,6 +1,6 @@
 {
   "name": "fs2",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "fs (file system package) extensions",
   "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
@@ -22,16 +22,16 @@
   },
   "dependencies": {
     "d": "~0.1.1",
-    "deferred": "0.7.x",
-    "es5-ext": "~0.10.2",
-    "event-emitter": "~0.3.1",
-    "memoizee": "0.3.x",
-    "minimatch": "~0.2.14"
+    "deferred": "~0.7.3",
+    "es5-ext": "~0.10.7",
+    "event-emitter": "~0.3.3",
+    "memoizee": "~0.3.9",
+    "minimatch": "~2.0.10"
   },
   "devDependencies": {
-    "tad": "0.2.x",
-    "xlint": "~0.2.1",
-    "xlint-jslint-medikoo": "0.1.x"
+    "tad": "~0.2.3",
+    "xlint": "~0.2.2",
+    "xlint-jslint-medikoo": "~0.1.4"
   },
   "scripts": {
     "lint": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --no-cache --no-stream",

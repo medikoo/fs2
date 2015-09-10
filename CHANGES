@@ -1,3 +1,14 @@
+v0.2.2  --  2015.09.10
+* Add `appendFile`
+* Implement `intermediate` option support for `copy`
+* Implement `dirFilter` option support for `readdir`
+* Implement `intermediate` option support for `rename`
+* Assure that on files copy mode is preserved
+* Fix writeFile so override of mode is supported
+* Improve and generalise descriptors handler logic
+* Fix spelling of LICENSE
+* Configure lint scripts
+
 v0.2.1  --  2014.04.27
 * Update package.json to use latest 'tad' engine (fixes tests evaluation in v0.8)
 
