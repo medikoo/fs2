@@ -28,7 +28,7 @@ rmcontent = function (path, options) {
 					});
 				}
 				if (options.force) {
-					return unlink(filename)(null, function () {
+					return unlink(filename)(null, function (err) {
 						if (err.code === 'ENOENT') return;
 						aborted = true;
 						throw err;
