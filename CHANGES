@@ -1,3 +1,6 @@
+v0.2.3  --  2015.09.14
+* Fix error handling in rmdir
+
 v0.2.2  --  2015.09.10
 * Add `appendFile`
 * Implement `intermediate` option support for `copy`
