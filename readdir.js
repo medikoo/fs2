@@ -428,6 +428,7 @@ Readdir.prototype = {
 			});
 
 			paths.on('end', function (data, err) {
+				if (!promises) return;
 				forEach(promises, invoke('close'));
 				promises = null;
 				if (!def.resolved) {
