@@ -36,6 +36,14 @@ _mkdir = function (path, options, resolve, reject) {
 			}, reject);
 		} else {
 			stat(path, function (statErr, stats) {
+				if (statErr) {
+					if (statErr.code !== 'ENOENT') {
+						reject(err);
+						return;
+					}
+					_mkdir(path, options, resolve, reject);
+					return;
+				}
 				if (statErr || !stats.isDirectory()) reject(err);
 				else resolve(null);
 			});
