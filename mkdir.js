@@ -44,7 +44,7 @@ _mkdir = function (path, options, resolve, reject) {
 					_mkdir(path, options, resolve, reject);
 					return;
 				}
-				if (statErr || !stats.isDirectory()) reject(err);
+				if (!stats.isDirectory()) reject(err);
 				else resolve(null);
 			});
 		}
