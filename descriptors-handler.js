@@ -105,6 +105,7 @@ module.exports = exports = memoize(function () {
 	};
 
 	fs.readdir = wrap(fs.readdir);
+	fs.readFile = wrap(fs.readFile); // Needed for Node >=1.2 because of commit e65308053c
 
 	Object.defineProperty(exports, 'initialized', d('e', true));
 });
