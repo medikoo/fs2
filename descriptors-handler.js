@@ -38,7 +38,7 @@ wrap = function (asyncFn) {
 		args = slice.call(args, 0, -1);
 		args.push(function (err, result) {
 			--count;
-			if (err && (err.code === 'EMFILE')) {
+			if (err && ((err.code === 'EMFILE') || (err.code === 'ENFILE'))) {
 				if (limit > openCount) limit = openCount;
 				queue.push({ fn: self, context: context, args: args });
 				release();
@@ -68,7 +68,7 @@ module.exports = exports = memoize(function () {
 		open(path, flags, mode, function (err, fd) {
 			if (err) {
 				--count;
-				if (err.code === 'EMFILE') {
+				if ((err.code === 'EMFILE') || (err.code === 'ENFILE')) {
 					if (limit > openCount) limit = openCount;
 					queue.push({ fn: fs.open, context: this, args: args });
 					release();
