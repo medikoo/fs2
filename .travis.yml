@@ -6,9 +6,6 @@ node_js:
   - 5
   - 6
 
-before_install:
-  - mkdir node_modules; ln -s ../ node_modules/fs2
-
 notifications:
   email:
     - medikoo+fs2@medikoo.com
