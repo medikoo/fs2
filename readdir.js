@@ -337,7 +337,7 @@ Readdir.prototype = {
 				if (defDirs && !defDirs.resolved) {
 					defDirs.reject(new Error("Readdir operation cancelled"));
 				}
-				paths.close();
+				if (paths.close) paths.close();
 			};
 
 			if (defFiles) {
