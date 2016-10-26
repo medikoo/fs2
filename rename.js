@@ -5,14 +5,27 @@ var isCallable = require('es5-ext/object/is-callable')
   , path       = require('path')
   , original   = require('fs').rename
   , mkdir      = require('./mkdir')
+  , copy       = require('./copy')
+  , unlink     = require('./unlink')
 
   , dirname = path.dirname, resolve = path.resolve;
+
+var crossDeviceRename = function (oldPath, newPath) {
+	return copy(oldPath, newPath)(function () { return unlink(oldPath); });
+};
 
 var rename = function (oldPath, newPath) {
 	var def = deferred();
 	original(oldPath, newPath, function (err) {
-		if (err) def.reject(err);
-		else def.resolve();
+		if (err) {
+			if (err.code === 'EXDEV') {
+				def.resolve(crossDeviceRename(oldPath, newPath));
+				return;
+			}
+			def.reject(err);
+		} else {
+			def.resolve();
+		}
 	});
 	return def.promise;
 };
