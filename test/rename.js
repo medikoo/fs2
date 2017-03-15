@@ -16,6 +16,9 @@ module.exports = function (t, a, d) {
 				return deferred(lstat(name1)(a.never, function () {
 					a.ok(true, "No first file");
 				}), lstat(name2)(function (stats2) {
+					// Do not compare eventual birthtime
+					delete stats1.birthtime;
+					delete stats2.birthtime;
 					a.deep(stats1, stats2, "Same");
 					return unlink(name2);
 				}))(false);
