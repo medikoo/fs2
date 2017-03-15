@@ -9,6 +9,8 @@ var deferred  = require('deferred')
   , root = resolve(__dirname, '__playground/rename')
   , name1 = resolve(root, 'file1'), name2 = resolve(root, 'file2');
 
+var isDeepEqual = require('./_is-deep-equal');
+
 module.exports = function (t, a, d) {
 	writeFile(name1, 'fooraz')(function () {
 		return lstat(name1)(function (stats1) {
@@ -17,6 +19,7 @@ module.exports = function (t, a, d) {
 					a.ok(true, "No first file");
 				}), lstat(name2)(function (stats2) {
 					a.deep(stats1, stats2, "Same");
+					isDeepEqual(stats1, stats2);
 					return unlink(name2);
 				}))(false);
 			});
