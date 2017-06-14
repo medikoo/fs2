@@ -16,9 +16,12 @@ module.exports = function (t, a, d) {
 				return deferred(lstat(name1)(a.never, function () {
 					a.ok(true, "No first file");
 				}), lstat(name2)(function (stats2) {
-					// Do not compare eventual birthtime
+					// Do not compare eventual birthtime and ctime
+					// as in some envs they may not reflect value of source file
 					delete stats1.birthtime;
 					delete stats2.birthtime;
+					delete stats1.ctime;
+					delete stats2.ctime;
 					a.deep(stats1, stats2, "Same");
 					return unlink(name2);
 				}))(false);
