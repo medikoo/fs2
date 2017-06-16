@@ -12,6 +12,7 @@ var isCallable        = require("es5-ext/object/is-callable")
   , fs                = require("fs")
   , path              = require("path")
   , mkdir             = require("./mkdir")
+  , unlink            = require("./unlink")
   , objHasOwnProperty = Object.prototype.hasOwnProperty
   , defineProperty    = Object.defineProperty
   , dirname           = path.dirname
@@ -35,7 +36,8 @@ var copyWithMode = function (def, source, dest, options) {
 	}
 	read.on("error", function (e) {
 		write.destroy();
-		def.reject(e);
+		if (options.loose && e.code === "ENOENT") def.resolve(unlink(dest, { loose: true })(false));
+		else def.reject(e);
 	});
 
 	try {
@@ -71,6 +73,10 @@ var copy = function (source, dest, options) {
 	}
 	stat(source, function (e, stats) {
 		if (e) {
+			if (options.loose && e.code === "ENOENT") {
+				def.resolve(false);
+				return;
+			}
 			def.reject(e);
 			return;
 		}

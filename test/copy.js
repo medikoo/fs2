@@ -66,5 +66,22 @@ module.exports = {
 			a(e.code, "ENOENT", "Path error");
 			d();
 		});
+	},
+	"Loose": function (t, a, d) {
+		t(pg + "/:;\\//wrong-filename", pg + "/sample-test.js", { loose: true }).done(function (
+			result
+		) {
+			a(result, false);
+			d();
+		}, d);
+	},
+	"Loose with mode": function (t, a, d) {
+		t(pg + "/:;\\//wrong-filename", pg + "/sample-test2.js", {
+			loose: true,
+			mode: 33188
+		}).done(function (result) {
+			a(result, false);
+			d();
+		}, d);
 	}
 };
