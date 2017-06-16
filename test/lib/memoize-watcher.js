@@ -1,36 +1,40 @@
 "use strict";
 
 module.exports = function (t, a) {
-	var fn, invoked, mfn, x, y, z;
-	fn = function (path) {
-		return { emit: function () {},
-close: function () {
- invoked = true;
-} };
+	var fn, invoked, mfn, fnX, fnY, fnZ;
+	fn = function (pathIgnored) {
+		return {
+			emit: function () {
+				return true;
+			},
+			close: function () {
+				invoked = true;
+			}
+		};
 	};
 	invoked = false;
 
 	mfn = t(fn);
-	x = mfn("foo");
-	y = mfn("foo");
-	z = mfn("bar");
+	fnX = mfn("foo");
+	fnY = mfn("foo");
+	fnZ = mfn("bar");
 	a(invoked, false, "Pre calls");
 
-	z.close();
+	fnZ.close();
 	a(invoked, true, "After single call");
 	invoked = false;
 
-	z.close();
+	fnZ.close();
 	a(invoked, false, "Second close call has no effect");
 	invoked = false;
 
-	x.close();
+	fnX.close();
 	a(invoked, false, "After one of two calls");
 	invoked = false;
-	y.close();
+	fnY.close();
 	a(invoked, true, "After two of two calls");
 	invoked = false;
-	x.close();
+	fnX.close();
 	a(invoked, false, "Second close call has no effect (two calls case)");
 	invoked = false;
 };

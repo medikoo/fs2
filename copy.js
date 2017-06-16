@@ -4,22 +4,25 @@
 
 "use strict";
 
-var isCallable       = require("es5-ext/object/is-callable")
-  , normalizeOptions = require("es5-ext/object/normalize-options")
-  , d                = require("d")
-  , deferred         = require("deferred")
-  , fs               = require("fs")
-  , path             = require("path")
-  , mkdir            = require("./mkdir")
-
-  , hasOwnProperty = Object.prototype.hasOwnProperty, defineProperty = Object.defineProperty
-  , dirname = path.dirname, resolve = path.resolve
-  , createReadStream = fs.createReadStream, createWriteStream = fs.createWriteStream
-  , stat = fs.stat;
+var isCallable        = require("es5-ext/object/is-callable")
+  , isValue           = require("es5-ext/object/is-value")
+  , normalizeOptions  = require("es5-ext/object/normalize-options")
+  , d                 = require("d")
+  , deferred          = require("deferred")
+  , fs                = require("fs")
+  , path              = require("path")
+  , mkdir             = require("./mkdir")
+  , objHasOwnProperty = Object.prototype.hasOwnProperty
+  , defineProperty    = Object.defineProperty
+  , dirname           = path.dirname
+  , resolve           = path.resolve
+  , createReadStream  = fs.createReadStream
+  , createWriteStream = fs.createWriteStream
+  , stat              = fs.stat;
 
 var fixOptions = function (options) {
 	if (options.hasOwnProperty) return options;
-	return defineProperty(options, "hasOwnProperty", d(hasOwnProperty));
+	return defineProperty(options, "hasOwnProperty", d(objHasOwnProperty));
 };
 
 var copyWithMode = function (def, source, dest, options) {
@@ -44,7 +47,7 @@ var copyWithMode = function (def, source, dest, options) {
 
 	write.on("error", function (e) {
 		read.destroy();
-		if ((e.code === "ENOENT") && options.intermediate) {
+		if (e.code === "ENOENT" && options.intermediate) {
 			mkdir(dirname(resolve(dest)), { intermediate: true }).done(function () {
 				options = normalizeOptions(options);
 				delete options.intermediate;
@@ -79,9 +82,9 @@ var copy = function (source, dest, options) {
 };
 copy.returnsPromise = true;
 
-module.exports = exports = function (source, dest/*, options, cb*/) {
+module.exports = exports = function (source, dest /*, options, cb*/) {
 	var options = Object(arguments[2]), cb = arguments[3];
-	if ((cb == null) && isCallable(options)) {
+	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
 	}

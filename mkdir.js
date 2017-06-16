@@ -5,20 +5,22 @@
 
 var isNumber   = require("es5-ext/number/is-number")
   , isCallable = require("es5-ext/object/is-callable")
+  , isValue    = require("es5-ext/object/is-value")
   , deferred   = require("deferred")
   , fs         = require("fs")
-  , path       = require("path")
+  , pathUtils  = require("path")
+  , stat       = fs.stat
+  , original   = fs.mkdir
+  , dirname    = pathUtils.dirname
+  , resolve    = pathUtils.resolve
+  , _mkdir
+  , mkdir;
 
-  , stat = fs.stat, original = fs.mkdir
-  , dirname = path.dirname, resolve = path.resolve
-
-  , _mkdir, mkdir;
-
-_mkdir = function (path, options, resolve, reject) {
+_mkdir = function (path, options, pResolve, reject) {
 	original(path, options.mode, function (err) {
 		var dir;
-		if (err == null) {
-			resolve(null);
+		if (!isValue(err)) {
+			pResolve(null);
 			return;
 		}
 		if (!options.intermediate) {
@@ -31,9 +33,14 @@ _mkdir = function (path, options, resolve, reject) {
 				reject(err);
 				return;
 			}
-			_mkdir(dir, options, function () {
-				_mkdir(path, options, resolve, reject);
-			}, reject);
+			_mkdir(
+				dir,
+				options,
+				function () {
+					_mkdir(path, options, pResolve, reject);
+				},
+				reject
+			);
 		} else {
 			stat(path, function (statErr, stats) {
 				if (statErr) {
@@ -41,11 +48,11 @@ _mkdir = function (path, options, resolve, reject) {
 						reject(err);
 						return;
 					}
-					_mkdir(path, options, resolve, reject);
+					_mkdir(path, options, pResolve, reject);
 					return;
 				}
-				if (!stats.isDirectory()) reject(err);
-				else resolve(null);
+				if (stats.isDirectory()) pResolve(null);
+				else reject(err);
 			});
 		}
 	});
@@ -57,14 +64,14 @@ mkdir = function (path, options) {
 };
 mkdir.returnsPromise = true;
 
-module.exports = exports = function (path/*, mode|options, cb*/) {
+module.exports = exports = function (path /*, mode|options, cb*/) {
 	var options, cb;
 
 	path = resolve(String(path));
 	options = arguments[1];
 	cb = arguments[2];
 
-	if ((cb == null) && isCallable(options)) {
+	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
 	} else {

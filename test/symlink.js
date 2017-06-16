@@ -3,14 +3,13 @@
 var promisify = require("deferred").promisify
   , fs        = require("fs")
   , path      = require("path")
-
-  , resolve = path.resolve
-  , lstat = promisify(fs.lstat), unlink = promisify(fs.unlink)
-
-  , root = resolve(__dirname, "./__playground/symlink")
-  , base = resolve(root, "from")
-  , regular = resolve(root, "foo")
-  , deep = resolve(root, "foo/bar");
+  , resolve   = path.resolve
+  , lstat     = promisify(fs.lstat)
+  , unlink    = promisify(fs.unlink)
+  , rootPath  = resolve(__dirname, "./__playground/symlink")
+  , base      = resolve(rootPath, "from")
+  , regular   = resolve(rootPath, "foo")
+  , deep      = resolve(rootPath, "foo/bar");
 
 module.exports = function (t) {
 	return {

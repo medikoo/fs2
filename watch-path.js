@@ -1,12 +1,12 @@
 "use strict";
 
-var ee    = require("event-emitter")
-  , path  = require("path")
-  , watch = require("./watch").watch
-
-  , basename = path.basename, dirname = path.dirname, join = path.join
-  , resolve = path.resolve
-
+var ee        = require("event-emitter")
+  , pathUtils = require("path")
+  , watch     = require("./watch").watch
+  , basename  = pathUtils.basename
+  , dirname   = pathUtils.dirname
+  , join      = pathUtils.join
+  , resolve   = pathUtils.resolve
   , Watcher;
 
 Watcher = function (path) {
@@ -57,24 +57,27 @@ Watcher.prototype = {
 		if (!this.missing.length) {
 			this.onwatch(watcher);
 			this.oncreate();
-		} else if (!this.tryDown()) {
-			this.onwatch(watcher);
-		} else {
+		} else if (this.tryDown()) {
 			watcher.close();
+		} else {
+			this.onwatch(watcher);
 		}
 		return true;
 	},
 	onwatch: function (watcher) {
-		if (!this.missing.length) {
+		if (this.missing.length) {
+			watcher.on(
+				"change",
+				function () {
+					if (this.tryDown()) {
+						watcher.close();
+					}
+				}.bind(this)
+			);
+			watcher.once("end", this.up);
+		} else {
 			watcher.on("change", this.onchange);
 			watcher.once("end", this.onremove);
-		} else {
-			watcher.on("change", function () {
-				if (this.tryDown()) {
-					watcher.close();
-				}
-			}.bind(this));
-			watcher.once("end", this.up);
 		}
 		this.watcher = watcher;
 	},

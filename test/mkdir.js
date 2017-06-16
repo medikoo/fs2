@@ -3,14 +3,14 @@
 var promisify = require("deferred").promisify
   , fs        = require("fs")
   , path      = require("path")
-
-  , dirname = path.dirname, resolve = path.resolve
-  , lstat = promisify(fs.lstat), rmdir = promisify(fs.rmdir)
-
-  , root = resolve(__dirname, "./__playground/mkdir")
-  , regular = resolve(root, "foo")
-  , existing = resolve(root, "one")
-  , deep = resolve(root, "foo", "bar");
+  , dirname   = path.dirname
+  , resolve   = path.resolve
+  , lstat     = promisify(fs.lstat)
+  , rmdir     = promisify(fs.rmdir)
+  , rootPath  = resolve(__dirname, "./__playground/mkdir")
+  , regular   = resolve(rootPath, "foo")
+  , existing  = resolve(rootPath, "one")
+  , deep      = resolve(rootPath, "foo", "bar");
 
 module.exports = function (t) {
 	return {

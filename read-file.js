@@ -1,31 +1,35 @@
 "use strict";
 
 var isCallable = require("es5-ext/object/is-callable")
+  , isValue    = require("es5-ext/object/is-value")
   , isString   = require("es5-ext/string/is-string")
   , deferred   = require("deferred")
   , original   = require("fs").readFile
   , resolve    = require("path").resolve
   , watch      = require("./watch").watch
   , WatchPath  = require("./watch-path").WatchPath
-
   , readFile;
 
 readFile = function (filename, options) {
-	var def, current, promise, watcher, resolve, onchange, loose;
+	var def, current, promise, watcher, resolveCb, onchange, loose;
 
 	def = deferred();
 	loose = options.loose;
-	original(filename, options.encoding, resolve = function (err, data) {
-		if (def.resolved) return;
-		if (err) {
-			if (watcher && !loose) watcher.close();
-			if (loose) def.resolve(null);
-			else def.reject(err);
-			return;
+	original(
+		filename,
+		options.encoding,
+		resolveCb = function (err, data) {
+			if (def.resolved) return;
+			if (err) {
+				if (watcher && !loose) watcher.close();
+				if (loose) def.resolve(null);
+				else def.reject(err);
+				return;
+			}
+			if (options.watch) current = String(data);
+			def.resolve(data);
 		}
-		if (options.watch) current = String(data);
-		def.resolve(data);
-	});
+	);
 	promise = def.promise;
 
 	if (options.watch) {
@@ -33,7 +37,7 @@ readFile = function (filename, options) {
 			original(filename, options.encoding, function (err, data) {
 				var dataStr;
 				if (!def.resolved) {
-					resolve(err, data);
+					resolveCb(err, data);
 					return;
 				}
 				if (!watcher) return;
@@ -54,7 +58,7 @@ readFile = function (filename, options) {
 			watcher = new WatchPath(filename);
 			watcher.on("change", function (event) {
 				if (event.type === "remove") {
-					if (current != null) promise.emit("change", current = null);
+					if (isValue(current)) promise.emit("change", current = null);
 				} else {
 					onchange();
 				}
@@ -89,7 +93,7 @@ module.exports = exports = function (filename) {
 	filename = resolve(String(filename));
 	options = arguments[1];
 	cb = arguments[2];
-	if ((cb == null) && isCallable(options)) {
+	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
 	} else {

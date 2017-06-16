@@ -1,15 +1,14 @@
 "use strict";
 
-var fs      = require("fs")
-  , resolve = require("path").resolve
-  , rmdir   = require("../rmdir")
-
-  , readFile = fs.readFile, unlink = fs.unlink
-
-  , pgPath = resolve(__dirname, "./__playground")
-  , overwritePath = resolve(pgPath, "write-file-test")
+var fs                  = require("fs")
+  , resolve             = require("path").resolve
+  , rmdir               = require("../rmdir")
+  , readFile            = fs.readFile
+  , unlink              = fs.unlink
+  , pgPath              = resolve(__dirname, "./__playground")
+  , overwritePath       = resolve(pgPath, "write-file-test")
   , intermediateDirPath = resolve(pgPath, "_write-file")
-  , intermediatePath = resolve(intermediateDirPath, "intermediate/test");
+  , intermediatePath    = resolve(intermediateDirPath, "intermediate/test");
 
 module.exports = {
 	Overwrite: function (t, a, d) {
@@ -21,7 +20,7 @@ module.exports = {
 		});
 		t(overwritePath, "trzy", function (err) {
 			a(err, null, "#3");
-			readFile(overwritePath, function (err, content) {
+			readFile(overwritePath, function (err2, content) {
 				a(String(content), "trzy", "Last written");
 				unlink(overwritePath, d);
 			});
@@ -33,9 +32,9 @@ module.exports = {
 				d(err);
 				return;
 			}
-			fs.readFile(intermediatePath, function (err, content) {
-				if (err) {
-					d(err);
+			fs.readFile(intermediatePath, function (err2, content) {
+				if (err2) {
+					d(err2);
 					return;
 				}
 				a(String(content), "elo", "Content");

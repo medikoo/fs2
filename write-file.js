@@ -4,27 +4,32 @@
 "use strict";
 
 var isCallable = require("es5-ext/object/is-callable")
+  , isValue    = require("es5-ext/object/is-value")
   , isString   = require("es5-ext/string/is-string")
   , deferred   = require("deferred")
   , fs         = require("fs")
-  , path       = require("path")
+  , pathUtils  = require("path")
   , mkdir      = require("./mkdir").mkdir
-
-  , dirname = path.dirname, resolve = path.resolve
-  , next, writeAll, cache = {}, _writeFile, writeFile;
+  , dirname    = pathUtils.dirname
+  , resolve    = pathUtils.resolve
+  , next
+  , writeAll
+  , cache      = {}
+  , _writeFile
+  , writeFile;
 
 next = function (path, err, content, encoding, flag, mode) {
 	var data = cache[path];
 	if (err) {
-		if (!cache[path].intermediate || (err.code !== "ENOENT")) {
+		if (!cache[path].intermediate || err.code !== "ENOENT") {
 			delete cache[path];
 			data.def.reject(err);
 			return;
 		}
-		mkdir(dirname(path), { intermediate: true }).cb(function (err) {
+		mkdir(dirname(path), { intermediate: true }).cb(function (err2) {
 			delete cache[path].intermediate;
-			if (err) {
-				next(path, err);
+			if (err2) {
+				next(path, err2);
 				return;
 			}
 			_writeFile(path, content, encoding, flag, mode);
@@ -47,13 +52,13 @@ writeAll = function (path, fd, buffer, offset, length) {
 			fs.close(fd, function () {
 				next(path, writeErr);
 			});
-		} else if ((written === length) || cache[path].data) {
-				fs.close(fd, function (err) {
-					next(path, err);
-				});
-			} else {
-				writeAll(path, fd, buffer, offset + written, length - written);
-			}
+		} else if (written === length || cache[path].data) {
+			fs.close(fd, function (err) {
+				next(path, err);
+			});
+		} else {
+			writeAll(path, fd, buffer, offset + written, length - written);
+		}
 	});
 };
 
@@ -64,14 +69,15 @@ _writeFile = function (path, data, encoding, flag, mode) {
 	fs.open(path, flag || "w", mode || 438, function (openErr, fd) {
 		if (openErr) {
 			next(path, openErr, data, encoding, flag, mode);
-		} else if (!cache[path].data) {
-			var buffer = Buffer.isBuffer(data) ? data : new Buffer(String(data),
-				encoding);
-			writeAll(path, fd, buffer, 0, buffer.length);
-		} else {
+			return;
+		}
+		if (cache[path].data) {
 			fs.close(fd, function (err) {
 				next(path, err);
 			});
+		} else {
+			var buffer = Buffer.isBuffer(data) ? data : Buffer.from(String(data), encoding);
+			writeAll(path, fd, buffer, 0, buffer.length);
 		}
 	});
 };
@@ -82,7 +88,12 @@ writeFile = function (path, data, options) {
 		if (!cache[path].intermediate && options.intermediate) {
 			cache[path].intermediate = true;
 		}
-		cache[path].data = { data: data, encoding: encoding, flag: options.flag, mode: options.mode };
+		cache[path].data = {
+			data: data,
+			encoding: encoding,
+			flag: options.flag,
+			mode: options.mode
+		};
 		def = cache[path].def;
 	} else {
 		def = deferred();
@@ -100,7 +111,7 @@ module.exports = exports = function (path, data) {
 	path = resolve(String(path));
 	options = arguments[2];
 	cb = arguments[3];
-	if ((cb == null) && isCallable(options)) {
+	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
 	} else {

@@ -1,3 +1,5 @@
+/* eslint max-statements: off */
+
 "use strict";
 
 var last           = require("es5-ext/array/#/last")
@@ -7,15 +9,19 @@ var last           = require("es5-ext/array/#/last")
   , watchReg       = require("./lib/watch")
   , watchAlt       = require("./lib/watch-alt")
   , memoizeWatcher = require("./lib/memoize-watcher")
+  , max            = Math.max
+  , watch
+  , compare
+  , releaseDescs
+  , switchToAlt
+  , switchToReg
+  , switchAltsToReg
+  , onLstat
+  , isAvail
+  , watchers       = { reg: [], alt: [] };
 
-  , max = Math.max
-
-  , watch, compare, releaseDescs, switchToAlt, switchToReg
-  , switchAltsToReg, onLstat, isAvail
-  , watchers = { reg: [], alt: [] };
-
-compare = function (a, b) {
-	return b.count - a.count;
+compare = function (watcherA, watcherB) {
+	return watcherB.count - watcherA.count;
 };
 
 isAvail = function () {
@@ -28,7 +34,7 @@ switchToAlt = function (watcher) {
 	try {
 		watchAlt(watcher.path, watcher.emitter);
 	} catch (err) {
-		if ((err.code === "ENOENT") || (err.code === "DIFFTYPE")) {
+		if (err.code === "ENOENT" || err.code === "DIFFTYPE") {
 			watcher.emitter.end(err);
 			return;
 		}
@@ -43,8 +49,7 @@ switchToAlt = function (watcher) {
 };
 
 switchToReg = function (watcher) {
-	var emitter = watcher.emitter
-	  , closePrevious = emitter._close;
+	var emitter = watcher.emitter, closePrevious = emitter._close;
 
 	try {
 		watchReg(watcher.path, watcher.emitter);
@@ -54,7 +59,7 @@ switchToReg = function (watcher) {
 			releaseDescs();
 			return;
 		}
-		if ((err.code === "ENOENT") || (err.code === "DIFFTYPE")) {
+		if (err.code === "ENOENT" || err.code === "DIFFTYPE") {
 			emitter.off("change", emitter._watchSwitchListener);
 			delete emitter._watchSwitchListener;
 			remove.call(watchers.alt, watcher);
@@ -88,69 +93,75 @@ releaseDescs = function () {
 
 onLstat = function (watcher) {
 	var emitter = watcher.emitter;
-	emitter.on("change", emitter._watchSwitchListener = function () {
-		var candidate;
-		watchers.alt.sort(compare);
-		if (watchers.alt[0] !== watcher) return;
+	emitter.on(
+		"change",
+		emitter._watchSwitchListener = function () {
+			var candidate;
+			watchers.alt.sort(compare);
+			if (watchers.alt[0] !== watcher) return;
 
-		if (isAvail()) {
-			switchAltsToReg();
-		} else if (watchers.reg.length) {
-			candidate = last.call(watchers.reg.sort(compare));
-			if (candidate.count >= watcher.count) return;
+			if (isAvail()) {
+				switchAltsToReg();
+			} else if (watchers.reg.length) {
+				candidate = last.call(watchers.reg.sort(compare));
+				if (candidate.count >= watcher.count) return;
 
-			// Move last regular watcher to lstat watch
-			switchToAlt(candidate);
+				// Move last regular watcher to lstat watch
+				switchToAlt(candidate);
 
-			// Move current watcher to regular watch
-			switchToReg(watcher);
+				// Move current watcher to regular watch
+				switchToReg(watcher);
+			}
 		}
-	});
+	);
 };
 
-watch = memoizeWatcher(function self (path) {
-	var emitter, watcher;
-	watcher = { path: path, count: 0 };
-	if (isAvail()) {
-		try {
-			emitter = watcher.emitter = watchReg(path);
-		} catch (e) {
-			if (e.code === "EMFILE") {
-				descHandler.limit = descHandler.taken;
-				releaseDescs();
-				return self(path);
+watch = memoizeWatcher(
+	function self (path) {
+		var emitter, watcher;
+		watcher = { path: path, count: 0 };
+		if (isAvail()) {
+			try {
+				emitter = watcher.emitter = watchReg(path);
+			} catch (e) {
+				if (e.code === "EMFILE") {
+					descHandler.limit = descHandler.taken;
+					releaseDescs();
+					return self(path);
+				}
+				throw e;
 			}
-			throw e;
+			descHandler.open();
+			watchers.reg.push(watcher);
+		} else {
+			emitter = watcher.emitter = watchAlt(path);
+			watcher.alt = true;
+			watchers.alt.push(watcher);
 		}
-		descHandler.open();
-		watchers.reg.push(watcher);
-	} else {
-		emitter = watcher.emitter = watchAlt(path);
-		watcher.alt = true;
-		watchers.alt.push(watcher);
-	}
-	emitter._close = emitter.close;
-	emitter.close = function () {
-		emitter._close();
-		remove.call(watchers[watcher.alt ? "alt" : "reg"], watcher);
-		if (!watcher.alt) {
-			descHandler.close();
-			// Switch if possible
-			switchAltsToReg();
+		emitter._close = emitter.close;
+		emitter.close = function () {
+			emitter._close();
+			remove.call(watchers[watcher.alt ? "alt" : "reg"], watcher);
+			if (!watcher.alt) {
+				descHandler.close();
+				// Switch if possible
+				switchAltsToReg();
+			}
+		};
+		emitter.on("end", function () {
+			watch.clear(path);
+			emitter.close();
+		});
+		emitter.on("change", function () {
+			++watcher.count;
+		});
+		if (watcher.alt) {
+			onLstat(watcher);
 		}
-	};
-	emitter.on("end", function () {
-		watch.clear(path);
-		emitter.close();
-	});
-	emitter.on("change", function () {
-		++watcher.count;
-	});
-	if (watcher.alt) {
-		onLstat(watcher);
-	}
-	return emitter;
-}, { primitive: true });
+		return emitter;
+	},
+	{ primitive: true }
+);
 
 module.exports = exports = function (path) {
 	return watch(resolve(String(path)));

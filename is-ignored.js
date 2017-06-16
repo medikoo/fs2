@@ -1,37 +1,48 @@
+/* eslint max-statements: off, max-lines: off */
+
 "use strict";
 
 var invoke         = require("es5-ext/function/invoke")
   , noop           = require("es5-ext/function/noop")
   , isCallable     = require("es5-ext/object/is-callable")
+  , isValue        = require("es5-ext/object/is-value")
   , forEach        = require("es5-ext/object/for-each")
   , contains       = require("es5-ext/string/#/contains")
   , last           = require("es5-ext/string/#/last")
   , memoize        = require("memoizee")
   , deferred       = require("deferred")
   , minimatch      = require("minimatch")
-  , path           = require("path")
+  , pathUtils      = require("path")
   , modes          = require("./lib/ignore-modes")
   , getMap         = require("./lib/get-conf-file-map")
   , memoizeWatcher = require("./lib/memoize-watcher")
   , findRoot       = require("./lib/find-root")
-
-  , isArray = Array.isArray, push = Array.prototype.push
-  , call = Function.prototype.call, trim = call.bind(String.prototype.trim)
-  , dirname = path.dirname, resolve = path.resolve, sep = path.sep
-  , ConfMap = getMap.ConfMap
-
-  , applyRules, applyGlobalRules, compile
-  , IsIgnored, isIgnored, buildMap, prepareRules, parseSrc
-  , eolRe = /(?:\r\n|[\n\r\u2028\u2029])/
-  , sepRe = /[\\\/]/
-  , minimatchOpts = { matchBase: true };
+  , isArray        = Array.isArray
+  , push           = Array.prototype.push
+  , call           = Function.prototype.call
+  , trim           = call.bind(String.prototype.trim)
+  , dirname        = pathUtils.dirname
+  , resolve        = pathUtils.resolve
+  , sep            = pathUtils.sep
+  , ConfMap        = getMap.ConfMap
+  , applyRules
+  , applyGlobalRules
+  , compile
+  , IsIgnored
+  , isIgnored
+  , buildMap
+  , prepareRules
+  , parseSrc
+  , eolRe          = /(?:\r\n|[\n\r\u2028\u2029])/
+  , sepRe          = /[\\/]/
+  , minimatchOpts  = { matchBase: true };
 
 prepareRules = function (data) {
 	return data.map(trim).filter(Boolean).reverse();
 };
 
 parseSrc = function (src) {
- return prepareRules(String(src).split(eolRe));
+	return prepareRules(String(src).split(eolRe));
 };
 
 compile = function (maps, result) {
@@ -52,12 +63,11 @@ compile = function (maps, result) {
 	return result;
 };
 
-applyRules = function (rules, root, path) {
+applyRules = function (rules, rootPath, path) {
 	var value, current, relPath, paths, iterate, preValue;
 
-	current = root;
-	paths = path.slice(root.length +
-		(last.call(root) === sep ? 0 : 1)).split(sep);
+	current = rootPath;
+	paths = path.slice(rootPath.length + (last.call(rootPath) === sep ? 0 : 1)).split(sep);
 	iterate = function (rule) {
 		preValue = true;
 		if (rule[0] === "!") {
@@ -76,10 +86,11 @@ applyRules = function (rules, root, path) {
 			value = preValue;
 			return true;
 		}
+		return false;
 	};
 	while (paths.length) {
 		current = current + sep + paths.shift();
-		relPath = current.slice(root.length);
+		relPath = current.slice(rootPath.length);
 		value = null;
 		rules.some(iterate);
 		if (value === true) return { value: true, target: current };
@@ -95,14 +106,14 @@ applyGlobalRules = function (path, rules) {
 	return Boolean(value.value);
 };
 
-buildMap = function (dirname, getMap, watch) {
+buildMap = function (lDirname, lGetMap, watch) {
 	var promise, data = {}, maps;
-	getMap = getMap.map(function (getMap, index) {
-		var map = getMap(dirname);
+	lGetMap = lGetMap.map(function (getSubMap, index) {
+		var map = getSubMap(lDirname);
 		if (watch) {
-			map.on("change", function (map) {
+			map.on("change", function (targetMap) {
 				if (maps) {
-					maps[index] = map;
+					maps[index] = targetMap;
 					compile(maps, data);
 					promise.emit("change", data);
 				}
@@ -110,21 +121,21 @@ buildMap = function (dirname, getMap, watch) {
 		}
 		return map;
 	});
-	if (getMap.length > 1) {
-		promise = deferred.map(getMap)(function (result) {
+	if (lGetMap.length > 1) {
+		promise = deferred.map(lGetMap)(function (result) {
 			maps = result;
 			return compile(maps, data);
 		});
 	} else {
-		promise = getMap[0](function (map) {
+		promise = lGetMap[0](function (map) {
 			maps = [map];
 			return compile(maps, data);
 		});
 	}
 	if (watch) {
 		promise.close = function () {
- getMap.forEach(invoke("close"));
-};
+			lGetMap.forEach(invoke("close"));
+		};
 	}
 	return promise;
 };
@@ -138,25 +149,30 @@ IsIgnored = function (path, watch) {
 IsIgnored.prototype = {
 	init: function (mapPromise) {
 		this.mapPromise = mapPromise;
-		this.promise = mapPromise(function (data) {
-			this.data = data;
-			return this.calculate();
-		}.bind(this));
+		this.promise = mapPromise(
+			function (data) {
+				this.data = data;
+				return this.calculate();
+			}.bind(this)
+		);
 		if (this.watch) {
-			mapPromise.on("change", function () {
-				var value = this.calculate();
-				if (value !== this.promise.value) {
-					this.promise.value = value;
-					this.promise.emit("change", value, this.path);
-				}
-			}.bind(this));
+			mapPromise.on(
+				"change",
+				function () {
+					var value = this.calculate();
+					if (value !== this.promise.value) {
+						this.promise.value = value;
+						this.promise.emit("change", value, this.path);
+					}
+				}.bind(this)
+			);
 			this.promise.close = this.close.bind(this);
 		}
 		return this.promise;
 	},
 	close: function () {
- this.mapPromise.close();
-},
+		this.mapPromise.close();
+	},
 	calculate: function () {
 		var current, result = false;
 
@@ -168,25 +184,27 @@ IsIgnored.prototype = {
 			if (rulesPath.length > this.dirname.length) return true;
 			this.data.data[rulesPath].forEach(function (rules) {
 				var data = applyRules(rules, rulesPath, current);
-				if ((data.value === false) && (current !== path)) {
+				if (data.value === false && current !== pathUtils) {
 					data = applyRules(rules, rulesPath, this.path);
 				}
-				if ((data.target !== current) || (data.value != null)) {
+				if (data.target !== current || isValue(data.value)) {
 					result = data.value;
 				}
 				current = data.target;
 			}, this);
+			return false;
 		}, this);
 		return Boolean(result);
 	}
 };
 
 isIgnored = function (mode, path, options) {
-	var watch, globalRules, isIgnored, getMapFns, dirname, promise;
+	var watch, globalRules, lIsIgnored, getMapFns, lDirname, promise;
 
-	if (options.globalRules != null) {
-		globalRules = isArray(options.globalRules) ? options.globalRules
-				: String(options.globalRules).split(eolRe);
+	if (isValue(options.globalRules)) {
+		globalRules = isArray(options.globalRules)
+			? options.globalRules
+			: String(options.globalRules).split(eolRe);
 	}
 
 	if (mode) {
@@ -197,12 +215,12 @@ isIgnored = function (mode, path, options) {
 			mode = [mode];
 		}
 		mode.forEach(function (name) {
-			var mode = modes[name];
-			if (!mode) throw new Error("Unknown mode '" + name + "'");
-			getMapFns.push(function (path) {
-				return getMap(dirname, mode, watch, parseSrc);
+			var lMode = modes[name];
+			if (!lMode) throw new Error("Unknown mode '" + name + "'");
+			getMapFns.push(function (pathIgnored) {
+				return getMap(lDirname, lMode, watch, parseSrc);
 			});
-			if (mode.globalRules) push.apply(globalRules, mode.globalRules);
+			if (lMode.globalRules) push.apply(globalRules, lMode.globalRules);
 		});
 	}
 	watch = options.watch;
@@ -222,9 +240,9 @@ isIgnored = function (mode, path, options) {
 		return promise;
 	}
 
-	isIgnored = new IsIgnored(path, watch);
-	dirname = isIgnored.dirname;
-	return isIgnored.init(buildMap(dirname, getMapFns, watch));
+	lIsIgnored = new IsIgnored(path, watch);
+	lDirname = lIsIgnored.dirname;
+	return lIsIgnored.init(buildMap(lDirname, getMapFns, watch));
 };
 isIgnored.returnsPromise = true;
 
@@ -255,10 +273,8 @@ exports.getIsIgnored = function (modeNames, globalRules, watch) {
 	modeNames.forEach(function (name) {
 		var mode = modes[name], isRoot, readRules;
 		if (!mode) throw new Error("Unknown mode '" + name + "'");
-		isRoot = memo(mode[watch ? "isRootWatcher" : "isRoot"],
-			{ primitive: true });
-		readRules = memo(getMap[watch ? "readRulesWatcher" : "readRules"],
-			{ primitive: true });
+		isRoot = memo(mode[watch ? "isRootWatcher" : "isRoot"], { primitive: true });
+		readRules = memo(getMap[watch ? "readRulesWatcher" : "readRules"], { primitive: true });
 		mapGetters.push(function (path) {
 			var map;
 			map = new ConfMap(path, watch);
@@ -269,15 +285,18 @@ exports.getIsIgnored = function (modeNames, globalRules, watch) {
 		});
 		if (mode.globalRules) push.apply(globalRules, mode.globalRules);
 	});
-	build = memo(function (dirname) {
-		return buildMap(dirname, mapGetters, watch);
-	}, { primitive: true });
+	build = memo(
+		function (lDirname) {
+			return buildMap(lDirname, mapGetters, watch);
+		},
+		{ primitive: true }
+	);
 
 	return {
 		isIgnored: function (path) {
-			var isIgnored;
-			isIgnored = new IsIgnored(path, watch);
-			return isIgnored.init(build(isIgnored.dirname));
+			var lIsIgnored;
+			lIsIgnored = new IsIgnored(path, watch);
+			return lIsIgnored.init(build(lIsIgnored.dirname));
 		},
 		globalRules: globalRules.length ? prepareRules(globalRules) : null
 	};

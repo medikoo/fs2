@@ -1,19 +1,20 @@
 "use strict";
 
 var isCallable = require("es5-ext/object/is-callable")
+  , isValue    = require("es5-ext/object/is-value")
   , deferred   = require("deferred")
   , path       = require("path")
   , original   = require("fs").rename
   , mkdir      = require("./mkdir")
   , copy       = require("./copy")
   , unlink     = require("./unlink")
-
-  , dirname = path.dirname, resolve = path.resolve;
+  , dirname    = path.dirname
+  , resolve    = path.resolve;
 
 var crossDeviceRename = function (oldPath, newPath) {
 	return copy(oldPath, newPath)(function () {
- return unlink(oldPath);
-});
+		return unlink(oldPath);
+	});
 };
 
 var rename = function (oldPath, newPath) {
@@ -33,9 +34,9 @@ var rename = function (oldPath, newPath) {
 };
 rename.returnsPromise = true;
 
-module.exports = exports = function (oldPath, newPath/*, options, cb*/) {
+module.exports = exports = function (oldPath, newPath /*, options, cb*/) {
 	var options = Object(arguments[2]), cb = arguments[3];
-	if ((cb == null) && isCallable(options)) {
+	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
 	}

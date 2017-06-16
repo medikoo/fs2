@@ -6,19 +6,23 @@ var last         = require("es5-ext/array/#/last")
   , d            = require("d")
   , memoize      = require("memoizee")
   , fs           = require("fs")
-
-  , max = Math.max, slice = Array.prototype.slice
-  , limit = Infinity, count = 0, queue = [], release
+  , max          = Math.max
+  , slice        = Array.prototype.slice
+  , limit        = Infinity
+  , count        = 0
+  , queue        = []
+  , release
   , wrap;
 
 release = function () {
-	var data, cb;
-	while ((count < limit) && (data = queue.shift())) {
+	var data, fnCb;
+	// eslint-disable-next-line no-unmodified-loop-condition
+	while (count < limit && (data = queue.shift())) {
 		try {
 			data.fn.apply(data.context, data.args);
 		} catch (e) {
-			cb = last.call(data.args);
-			if (typeof cb === "function") cb(e);
+			fnCb = last.call(data.args);
+			if (typeof fnCb === "function") fnCb(e);
 		}
 	}
 };
@@ -28,17 +32,17 @@ wrap = function (asyncFn) {
 	callable(asyncFn);
 	return self = defineLength(function () {
 		var openCount, args = arguments, context, cb = last.call(args);
-		if (!exports.initialized || (typeof cb !== "function")) return asyncFn.apply(this, arguments);
+		if (!exports.initialized || typeof cb !== "function") return asyncFn.apply(this, arguments);
 		if (count >= limit) {
 			queue.push({ fn: self, context: this, args: arguments });
-			return;
+			return null;
 		}
 		openCount = count++;
 		context = this;
 		args = slice.call(args, 0, -1);
-		args.push(function (err, result) {
+		args.push(function (err, resultIgnored) {
 			--count;
-			if (err && ((err.code === "EMFILE") || (err.code === "ENFILE"))) {
+			if (err && (err.code === "EMFILE" || err.code === "ENFILE")) {
 				if (limit > openCount) limit = openCount;
 				queue.push({ fn: self, context: context, args: args });
 				release();
@@ -56,7 +60,7 @@ module.exports = exports = memoize(function () {
 
 	if (exports.initialized) return;
 
-	fs.open = function (path, flags, mode, cb) {
+	fs.open = function (path, flags, mode, fnCb) {
 		var openCount, args;
 		if (count >= limit) {
 			queue.push({ fn: fs.open, context: this, args: arguments });
@@ -64,11 +68,11 @@ module.exports = exports = memoize(function () {
 		}
 		openCount = count++;
 		args = arguments;
-		cb = last.call(args);
+		fnCb = last.call(args);
 		open(path, flags, mode, function (err, fd) {
 			if (err) {
 				--count;
-				if ((err.code === "EMFILE") || (err.code === "ENFILE")) {
+				if (err.code === "EMFILE" || err.code === "ENFILE") {
 					if (limit > openCount) limit = openCount;
 					queue.push({ fn: fs.open, context: this, args: args });
 					release();
@@ -76,23 +80,23 @@ module.exports = exports = memoize(function () {
 				}
 				release();
 			}
-			if (typeof cb === "function") cb(err, fd);
+			if (typeof fnCb === "function") fnCb(err, fd);
 		});
 	};
 
-	fs.openSync = function (path, flags, mode) {
+	fs.openSync = function (pathIgnored, flagsIgnored, modeIgnored) {
 		var result = openSync.apply(this, arguments);
 		++count;
 		return result;
 	};
 
-	fs.close = function (fd, cb) {
+	fs.close = function (fd, fnCb) {
 		close(fd, function (err) {
 			if (!err) {
 				--count;
 				release();
 			}
-			if (typeof cb === "function") cb(err);
+			if (typeof fnCb === "function") fnCb(err);
 		});
 	};
 
@@ -112,20 +116,23 @@ module.exports = exports = memoize(function () {
 
 Object.defineProperties(exports, {
 	initialized: d("ce", false),
-	limit: d.gs(function () {
- return limit;
-}, function (nLimit) {
-		if (limit >= nLimit) limit = max(nLimit, 5);
-	}),
+	limit: d.gs(
+		function () {
+			return limit;
+		},
+		function (nLimit) {
+			if (limit >= nLimit) limit = max(nLimit, 5);
+		}
+	),
 	available: d.gs(function () {
- return max(limit - count, 0);
-}),
+		return max(limit - count, 0);
+	}),
 	taken: d.gs(function () {
- return count;
-}),
+		return count;
+	}),
 	open: d(function () {
- ++count;
-}),
+		++count;
+	}),
 	close: d(function () {
 		--count;
 		if (release) release();

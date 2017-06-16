@@ -1,8 +1,10 @@
+/* eslint max-lines: off */
+
 "use strict";
 
 var push       = Array.prototype.push
   , fs         = require("fs")
-  , path       = require("path")
+  , pathUtils  = require("path")
   , aFrom      = require("es5-ext/array/from")
   , diff       = require("es5-ext/array/#/diff")
   , startsWith = require("es5-ext/string/#/starts-with")
@@ -14,7 +16,7 @@ var push       = Array.prototype.push
   , unlink     = promisify(fs.unlink)
   , rmdir      = promisify(fs.rmdir)
 
-  , basename = path.basename, resolve = path.resolve, sep = path.sep
+  , basename = pathUtils.basename, resolve = pathUtils.resolve, sep = pathUtils.sep
 
   , pgPath = resolve(__dirname, "./__playground/readdir");
 
@@ -500,56 +502,56 @@ watch: true })
 				a.deep(data.sort(), paths);
 				return mkdir(otherPath);
 			})(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Created other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Created other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Created other type: data");
 				}).done();
 				return rmdir(otherPath);
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Deleted other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Deleted other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted other type: data");
 				}).done();
 				return mkdir(testPath);
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [], "Created: removed");
-				a.deep(invoked.added, [testName], "Created: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [], "Created: removed");
+				a.deep(lInvoked.added, [testName], "Created: added");
 				reader(function (data) {
-					var npaths = aFrom(paths);
-					npaths.push(testName);
-					a.deep(data.sort(), npaths.sort(), "Created: data");
+					var npaths2 = aFrom(paths);
+					npaths2.push(testName);
+					a.deep(data.sort(), npaths2.sort(), "Created: data");
 				}).done();
 				return t(pgPath, { depth: 2, ignoreRules: "git" });
 			}, DELAY))(function (data) {
-				var npaths = aFrom(paths);
-				npaths.push(testName);
-				a.deep(data.sort(), npaths.sort(), "Not watched");
+				var npaths2 = aFrom(paths);
+				npaths2.push(testName);
+				a.deep(data.sort(), npaths2.sort(), "Not watched");
 				return rmdir(testPath);
 			})(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [testName], "Deleted: removed");
-				a.deep(invoked.added, [], "Deleted: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [testName], "Deleted: removed");
+				a.deep(lInvoked.added, [], "Deleted: added");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted: data");
 				}).done();
 				return writeFile(ignoreFile, "dtwo\none\n/dthree/dthree");
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked && invoked.removed && invoked.removed.sort(),
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked && lInvoked.removed && lInvoked.removed.sort(),
 					diff.call(paths, npaths).sort(),
 					"Ignored: removed");
-				a.deep(invoked.added, [], "Ignored: added");
+				a.deep(lInvoked.added, [], "Ignored: added");
 				reader(function (data) {
 					a.deep(data.sort(), npaths, "Ignored: data");
 				}).done();
 				return writeFile(ignoreFile, "dtwo");
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [], "Ignored revert: removed");
-				a.deep(invoked && invoked.added && invoked.added.sort(),
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [], "Ignored revert: removed");
+				a.deep(lInvoked && lInvoked.added && lInvoked.added.sort(),
 					diff.call(paths, npaths).sort(),
 					"Ignored revert: added");
 				reader(function (data) {
@@ -603,23 +605,23 @@ watch: true });
 				a.deep(data.sort(), paths);
 				return writeFile(otherPath, "foo");
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Created other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Created other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Created other type: data");
 				}).done();
 				return unlink(otherPath);
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Deleted other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Deleted other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted other type: data");
 				}).done();
 				return writeFile(testPath, "foo");
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [], "Created: removed");
-				a.deep(invoked.added, [testName], "Created: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [], "Created: removed");
+				a.deep(lInvoked.added, [testName], "Created: added");
 				reader(function (data) {
 					var npaths = aFrom(paths);
 					npaths.push(testName);
@@ -634,22 +636,22 @@ type: { file: true },
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return unlink(testPath);
 			})(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [testName], "Deleted: removed");
-				a.deep(invoked.added, [], "Deleted: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [testName], "Deleted: removed");
+				a.deep(lInvoked.added, [], "Deleted: added");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted: data");
 				}).done();
 			}, DELAY))(delay(function () {
 				return writeFile(ignoreFile, "dtwo\none");
 			}, DELAY))(delay(function () {
-				var invoked, npaths = paths.filter(function (path) {
+				var lInvoked, npaths = paths.filter(function (path) {
 					return (path !== "one") && (path.indexOf(sep + "one") === -1);
 				}).sort();
-				invoked = mergeInvoked();
-				a.deep(invoked.removed && invoked.removed.sort(),
+				lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed && lInvoked.removed.sort(),
 					diff.call(paths, npaths).sort(), "Ignored: removed");
-				a.deep(invoked.added, [], "Ignored: added");
+				a.deep(lInvoked.added, [], "Ignored: added");
 				reader(function (data) {
 					a.deep(data.sort(), npaths, "Ignored: data");
 				}).done();
@@ -699,23 +701,23 @@ watch: true });
 				a.deep(data.sort(), paths);
 				return mkdir(otherPath);
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Created other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Created other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Created other type: data");
 				}).done();
 				return rmdir(otherPath);
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Deleted other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Deleted other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted other type: data");
 				}).done();
 				return mkdir(testPath);
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [], "Created: removed");
-				a.deep(invoked.added, [testName], "Created: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [], "Created: removed");
+				a.deep(lInvoked.added, [testName], "Created: added");
 				reader(function (data) {
 					var npaths = aFrom(paths);
 					npaths.push(testName);
@@ -730,22 +732,22 @@ pattern: pattern,
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return rmdir(testPath);
 			})(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [testName], "Deleted: removed");
-				a.deep(invoked.added, [], "Deleted: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [testName], "Deleted: removed");
+				a.deep(lInvoked.added, [], "Deleted: added");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted: data");
 				}).done();
 			}, DELAY))(delay(function () {
 				return writeFile(ignoreFile, "dtwo\none");
 			}, DELAY))(delay(function () {
-				var invoked, npaths = paths.filter(function (path) {
+				var lInvoked, npaths = paths.filter(function (path) {
 					return (path !== "one") && (path.indexOf(sep + "one") === -1);
 				}).sort();
-				invoked = mergeInvoked();
-				a.deep(invoked && invoked.removed && invoked.removed.sort(),
+				lInvoked = mergeInvoked();
+				a.deep(lInvoked && lInvoked.removed && lInvoked.removed.sort(),
 					diff.call(paths, npaths).sort(), "Ignored: removed");
-				a.deep(invoked.added, [], "Ignored: added");
+				a.deep(lInvoked.added, [], "Ignored: added");
 				reader(function (data) {
 					a.deep(data.sort(), npaths, "Ignored: data");
 				}).done();
@@ -796,23 +798,23 @@ watch: true });
 				a.deep(data.sort(), paths);
 				return writeFile(otherPath, "foo");
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Created other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Created other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Created other type: data");
 				}).done();
 				return unlink(otherPath);
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a(invoked, false, "Deleted other type: event");
+				var lInvoked = mergeInvoked();
+				a(lInvoked, false, "Deleted other type: event");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted other type: data");
 				}).done();
 				return writeFile(testPath, "foo");
 			}, DELAY))(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [], "Created: removed");
-				a.deep(invoked.added, [testName], "Created: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [], "Created: removed");
+				a.deep(lInvoked.added, [testName], "Created: added");
 				reader(function (data) {
 					var npaths = aFrom(paths);
 					npaths.push(testName);
@@ -828,22 +830,22 @@ ignoreRules: "git" });
 				a.deep(data.sort(), npaths.sort(), "Not watched");
 				return unlink(testPath);
 			})(delay(function () {
-				var invoked = mergeInvoked();
-				a.deep(invoked.removed, [testName], "Deleted: removed");
-				a.deep(invoked.added, [], "Deleted: added");
+				var lInvoked = mergeInvoked();
+				a.deep(lInvoked.removed, [testName], "Deleted: removed");
+				a.deep(lInvoked.added, [], "Deleted: added");
 				reader(function (data) {
 					a.deep(data.sort(), paths, "Deleted: data");
 				}).done();
 			}, DELAY))(delay(function () {
 				return writeFile(ignoreFile, "dtwo\none");
 			}, DELAY))(delay(function () {
-				var invoked, npaths = paths.filter(function (path) {
+				var lInvoked, npaths = paths.filter(function (path) {
 					return (path !== "one") && (path.indexOf(sep + "one") === -1);
 				}).sort();
-				invoked = mergeInvoked();
-				a.deep(invoked && invoked.removed && invoked.removed.sort(),
+				lInvoked = mergeInvoked();
+				a.deep(lInvoked && lInvoked.removed && lInvoked.removed.sort(),
 					diff.call(paths, npaths).sort(), "Ignored: removed");
-				a.deep(invoked.added, [], "Ignored: added");
+				a.deep(lInvoked.added, [], "Ignored: added");
 				reader(function (data) {
 					a.deep(data.sort(), npaths, "Ignored: data");
 				}).done();

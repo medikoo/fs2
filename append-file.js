@@ -1,19 +1,20 @@
 "use strict";
 
 var isCallable = require("es5-ext/object/is-callable")
+  , isValue    = require("es5-ext/object/is-value")
   , isString   = require("es5-ext/string/is-string")
   , deferred   = require("deferred")
-  , path       = require("path")
+  , pathUtils  = require("path")
   , original   = require("fs").appendFile
   , mkdir      = require("./mkdir").mkdir
+  , dirname    = pathUtils.dirname
+  , resolve    = pathUtils.resolve;
 
-  , dirname = path.dirname, resolve = path.resolve;
-
-var _appendFile = function (path, data, options, resolve, reject) {
+var _appendFile = function (path, data, options, pResolve, reject) {
 	original(path, data, options, function (err) {
 		var dir;
-		if (err == null) {
-			resolve(null);
+		if (!isValue(err)) {
+			pResolve(null);
 			return;
 		}
 		if (!options.intermediate) {
@@ -30,7 +31,7 @@ var _appendFile = function (path, data, options, resolve, reject) {
 			return;
 		}
 		mkdir(dir, { intermediate: true }).cb(function () {
-			_appendFile(path, data, options, resolve, reject);
+			_appendFile(path, data, options, pResolve, reject);
 		}, reject);
 	});
 };
@@ -41,13 +42,13 @@ var appendFile = function (path, data, options) {
 };
 appendFile.returnsPromise = true;
 
-module.exports = exports = function (path, data/*, options*/) {
+module.exports = exports = function (path, data /*, options*/) {
 	var cb, options;
 
 	path = resolve(String(path));
 	options = arguments[2];
 	cb = arguments[3];
-	if ((cb == null) && isCallable(options)) {
+	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
 	} else {
