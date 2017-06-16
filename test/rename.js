@@ -21,9 +21,13 @@ module.exports = function (t, a, d) {
 						// Do not compare eventual birthtime and ctime
 						// as in some envs they may not reflect value of source file
 						delete stats1.birthtime;
+						delete stats1.birthtimeMs;
 						delete stats2.birthtime;
+						delete stats2.birthtimeMs;
 						delete stats1.ctime;
+						delete stats1.ctimeMs;
 						delete stats2.ctime;
+						delete stats2.ctimeMs;
 						a.deep(stats1, stats2, "Same");
 						return unlink(name2);
 					})
