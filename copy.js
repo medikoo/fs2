@@ -58,7 +58,7 @@ var copyWithMode = function (def, source, dest, options) {
 		def.reject(e);
 	});
 	read.pipe(write);
-	write.on("close", def.resolve);
+	write.on("close", def.resolve.bind(def, true));
 
 	return def.promise;
 };
