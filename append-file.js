@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var isCallable = require('es5-ext/object/is-callable')
-  , isString   = require('es5-ext/string/is-string')
-  , deferred   = require('deferred')
-  , path       = require('path')
-  , original   = require('fs').appendFile
-  , mkdir      = require('./mkdir').mkdir
+var isCallable = require("es5-ext/object/is-callable")
+  , isString   = require("es5-ext/string/is-string")
+  , deferred   = require("deferred")
+  , path       = require("path")
+  , original   = require("fs").appendFile
+  , mkdir      = require("./mkdir").mkdir
 
   , dirname = path.dirname, resolve = path.resolve;
 
@@ -20,7 +20,7 @@ var _appendFile = function (path, data, options, resolve, reject) {
 			reject(err);
 			return;
 		}
-		if (err.code !== 'ENOENT') {
+		if (err.code !== "ENOENT") {
 			reject(err);
 			return;
 		}

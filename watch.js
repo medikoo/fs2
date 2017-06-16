@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var last           = require('es5-ext/array/#/last')
-  , remove         = require('es5-ext/array/#/remove')
-  , descHandler    = require('./descriptors-handler')
-  , resolve        = require('path').resolve
-  , watchReg       = require('./lib/watch')
-  , watchAlt       = require('./lib/watch-alt')
-  , memoizeWatcher = require('./lib/memoize-watcher')
+var last           = require("es5-ext/array/#/last")
+  , remove         = require("es5-ext/array/#/remove")
+  , descHandler    = require("./descriptors-handler")
+  , resolve        = require("path").resolve
+  , watchReg       = require("./lib/watch")
+  , watchAlt       = require("./lib/watch-alt")
+  , memoizeWatcher = require("./lib/memoize-watcher")
 
   , max = Math.max
 
@@ -28,7 +28,7 @@ switchToAlt = function (watcher) {
 	try {
 		watchAlt(watcher.path, watcher.emitter);
 	} catch (err) {
-		if ((err.code === 'ENOENT') || (err.code === 'DIFFTYPE')) {
+		if ((err.code === "ENOENT") || (err.code === "DIFFTYPE")) {
 			watcher.emitter.end(err);
 			return;
 		}
@@ -49,13 +49,13 @@ switchToReg = function (watcher) {
 	try {
 		watchReg(watcher.path, watcher.emitter);
 	} catch (err) {
-		if (err.code === 'EMFILE') {
+		if (err.code === "EMFILE") {
 			descHandler.limit = descHandler.taken;
 			releaseDescs();
 			return;
 		}
-		if ((err.code === 'ENOENT') || (err.code === 'DIFFTYPE')) {
-			emitter.off('change', emitter._watchSwitchListener);
+		if ((err.code === "ENOENT") || (err.code === "DIFFTYPE")) {
+			emitter.off("change", emitter._watchSwitchListener);
 			delete emitter._watchSwitchListener;
 			remove.call(watchers.alt, watcher);
 			watcher.emitter.end(err);
@@ -63,7 +63,7 @@ switchToReg = function (watcher) {
 		}
 		throw err;
 	}
-	emitter.off('change', emitter._watchSwitchListener);
+	emitter.off("change", emitter._watchSwitchListener);
 	delete emitter._watchSwitchListener;
 	remove.call(watchers.alt, watcher);
 	closePrevious();
@@ -88,7 +88,7 @@ releaseDescs = function () {
 
 onLstat = function (watcher) {
 	var emitter = watcher.emitter;
-	emitter.on('change', emitter._watchSwitchListener = function () {
+	emitter.on("change", emitter._watchSwitchListener = function () {
 		var candidate;
 		watchers.alt.sort(compare);
 		if (watchers.alt[0] !== watcher) return;
@@ -108,14 +108,14 @@ onLstat = function (watcher) {
 	});
 };
 
-watch = memoizeWatcher(function self(path) {
+watch = memoizeWatcher(function self (path) {
 	var emitter, watcher;
 	watcher = { path: path, count: 0 };
 	if (isAvail()) {
 		try {
 			emitter = watcher.emitter = watchReg(path);
 		} catch (e) {
-			if (e.code === 'EMFILE') {
+			if (e.code === "EMFILE") {
 				descHandler.limit = descHandler.taken;
 				releaseDescs();
 				return self(path);
@@ -132,18 +132,18 @@ watch = memoizeWatcher(function self(path) {
 	emitter._close = emitter.close;
 	emitter.close = function () {
 		emitter._close();
-		remove.call(watchers[watcher.alt ? 'alt' : 'reg'], watcher);
+		remove.call(watchers[watcher.alt ? "alt" : "reg"], watcher);
 		if (!watcher.alt) {
 			descHandler.close();
 			// Switch if possible
 			switchAltsToReg();
 		}
 	};
-	emitter.on('end', function () {
+	emitter.on("end", function () {
 		watch.clear(path);
 		emitter.close();
 	});
-	emitter.on('change', function () {
+	emitter.on("change", function () {
 		++watcher.count;
 	});
 	if (watcher.alt) {

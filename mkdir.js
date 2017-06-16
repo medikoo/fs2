@@ -1,13 +1,13 @@
 // Internal logic inspired by substack's node-mkdirp:
 // https://github.com/substack/node-mkdirp/
 
-'use strict';
+"use strict";
 
-var isNumber   = require('es5-ext/number/is-number')
-  , isCallable = require('es5-ext/object/is-callable')
-  , deferred   = require('deferred')
-  , fs         = require('fs')
-  , path       = require('path')
+var isNumber   = require("es5-ext/number/is-number")
+  , isCallable = require("es5-ext/object/is-callable")
+  , deferred   = require("deferred")
+  , fs         = require("fs")
+  , path       = require("path")
 
   , stat = fs.stat, original = fs.mkdir
   , dirname = path.dirname, resolve = path.resolve
@@ -25,7 +25,7 @@ _mkdir = function (path, options, resolve, reject) {
 			reject(err);
 			return;
 		}
-		if (err.code === 'ENOENT') {
+		if (err.code === "ENOENT") {
 			dir = dirname(path);
 			if (dir === path) {
 				reject(err);
@@ -37,7 +37,7 @@ _mkdir = function (path, options, resolve, reject) {
 		} else {
 			stat(path, function (statErr, stats) {
 				if (statErr) {
-					if (statErr.code !== 'ENOENT') {
+					if (statErr.code !== "ENOENT") {
 						reject(err);
 						return;
 					}

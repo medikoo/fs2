@@ -1,23 +1,23 @@
-'use strict';
+"use strict";
 
-var invoke         = require('es5-ext/function/invoke')
-  , noop           = require('es5-ext/function/noop')
-  , curry          = require('es5-ext/function/#/curry')
-  , contains       = curry.call(require('es5-ext/array/#/contains'))
-  , diff           = require('es5-ext/array/#/diff')
-  , remove         = require('es5-ext/array/#/remove')
-  , assign         = require('es5-ext/object/assign')
-  , forEach        = require('es5-ext/object/for-each')
-  , isCallable     = require('es5-ext/object/is-callable')
-  , isCopy         = require('es5-ext/object/is-copy')
-  , toPosInt       = require('es5-ext/number/to-pos-integer')
-  , startsWith     = require('es5-ext/string/#/starts-with')
-  , deferred       = require('deferred')
-  , fs             = require('fs')
-  , path           = require('path')
-  , typeByStats    = require('./type-by-stats')
-  , watchPath      = require('./watch')
-  , isIgnored      = require('./is-ignored')
+var invoke         = require("es5-ext/function/invoke")
+  , noop           = require("es5-ext/function/noop")
+  , curry          = require("es5-ext/function/#/curry")
+  , contains       = curry.call(require("es5-ext/array/#/contains"))
+  , diff           = require("es5-ext/array/#/diff")
+  , remove         = require("es5-ext/array/#/remove")
+  , assign         = require("es5-ext/object/assign")
+  , forEach        = require("es5-ext/object/for-each")
+  , isCallable     = require("es5-ext/object/is-callable")
+  , isCopy         = require("es5-ext/object/is-copy")
+  , toPosInt       = require("es5-ext/number/to-pos-integer")
+  , startsWith     = require("es5-ext/string/#/starts-with")
+  , deferred       = require("deferred")
+  , fs             = require("fs")
+  , path           = require("path")
+  , typeByStats    = require("./type-by-stats")
+  , watchPath      = require("./watch")
+  , isIgnored      = require("./is-ignored")
 
   , isArray = Array.isArray, push = Array.prototype.push
   , promisify = deferred.promisify
@@ -28,7 +28,7 @@ var invoke         = require('es5-ext/function/invoke')
 
   , Readdir, readdir, enoentSurpass
   , eolRe = /(?:\r\n|[\n\r\u2028\u2029])/
-  , passErrCodes = ['ENOENT', 'DIFFTYPE'];
+  , passErrCodes = ["ENOENT", "DIFFTYPE"];
 
 passErrCodes.contains = contains;
 enoentSurpass = function (err) {
@@ -45,7 +45,7 @@ Readdir.prototype = {
 			promise = data.files;
 			if (this.stream) {
 				promise.aside(function (files) {
-					promise.emit('change', { data: files, added: files, removed: [] });
+					promise.emit("change", { data: files, added: files, removed: [] });
 				});
 			}
 			return promise;
@@ -57,29 +57,31 @@ Readdir.prototype = {
 
 		data.files.done(null, this.reject);
 		if (this.watch) {
-			data.files.on('end', function () {
+			data.files.on("end", function () {
 				delete this.readers;
 				if (!promise.resolved) {
 					this.reject(new Error("Directory was removed"));
 					return;
 				}
-				promise.emit('end', result);
+				promise.emit("end", result);
 			}.bind(this));
 			promise.close = this.close.bind(this);
 		}
 
-		(function self(data, root, depth) {
+		(function self (data, root, depth) {
 			var getPath, files;
 			this.readers[root] = { files: data.files };
 			if (data.dirs && (data.dirs !== data.files)) this.readers[root].dirs = data.dirs;
 			if (root) {
-				getPath = function (path) { return root + path; };
+				getPath = function (path) {
+ return root + path;
+};
 				files = data.files.aside(function (files) {
 					if (files.length) {
 						files = files.map(getPath);
 						push.apply(result, files);
 						if (promise.resolved || stream) {
-							promise.emit('change', { data: result, removed: [], added: files });
+							promise.emit("change", { data: result, removed: [], added: files });
 						}
 					}
 					return files;
@@ -89,7 +91,7 @@ Readdir.prototype = {
 					if (files.length) {
 						push.apply(result, files);
 						if (promise.resolved || stream) {
-							promise.emit('change', { data: result, removed: [], added: files });
+							promise.emit("change", { data: result, removed: [], added: files });
 						}
 					}
 					return files;
@@ -97,45 +99,45 @@ Readdir.prototype = {
 			}
 			if (this.watch) {
 				if (root) {
-					data.files.on('end', data.files.onend = function (files) {
+					data.files.on("end", data.files.onend = function (files) {
 						delete this.readers[root];
 						if (files.length) {
 							files = files.map(getPath);
 							remove.apply(result, files);
 							if (promise.resolved || stream) {
-								promise.emit('change', { data: result, removed: files, added: [] });
+								promise.emit("change", { data: result, removed: files, added: [] });
 							}
 						}
 					}.bind(this));
 				}
-				data.files.on('change', function (data) {
+				data.files.on("change", function (data) {
 					var removed, added;
 					removed = root ? data.removed.map(getPath) : data.removed;
 					added = root ? data.added.map(getPath) : data.added;
 					remove.apply(result, removed);
 					push.apply(result, added);
 					if (promise.resolved || stream) {
-						promise.emit('change', { data: result, removed: removed, added: added });
+						promise.emit("change", { data: result, removed: removed, added: added });
 					}
 				});
 			}
 
 			if (data.dirs) {
 				if (this.watch) {
-					data.dirs.on('change', function (data) {
+					data.dirs.on("change", function (data) {
 						deferred.map(data.added, function (dir) {
 							return self.call(this,
 								this.read(this.path + sep + root + dir, depth - 1),
 								root + dir + sep, depth - 1);
 						}, this).done();
-						data.removed.forEach(function self(dir) {
+						data.removed.forEach(function self (dir) {
 							var path = root + dir + sep
 							  , reader = this.readers[path];
 							if (reader) {
 								reader.files.close();
 								if (reader.dirs) reader.dirs.close();
 								reader.files.onend(reader.files.value);
-								forEach(this.readers, function self(reader, key) {
+								forEach(this.readers, function self (reader, key) {
 									if (startsWith.call(key, path)) {
 										reader.files.close();
 										if (reader.dirs) reader.dirs.close();
@@ -154,7 +156,7 @@ Readdir.prototype = {
 					}, this));
 			}
 			return files;
-		}.call(this, data, '', this.depth)).done(this.resolve.bind(this, result), this.reject);
+		}.call(this, data, "", this.depth)).done(this.resolve.bind(this, result), this.reject);
 
 		return this.promise;
 	},
@@ -257,10 +259,10 @@ Readdir.prototype = {
 								(!this.pattern || !getDirs || this.pattern.test(fullPath))) {
 							files.push(path);
 						}
-						if (getDirs && (type === 'directory')) {
+						if (getDirs && (type === "directory")) {
 							if (!this.dirFilter || this.dirFilter(fullPath)) dirs.push(path);
 						}
-					} else if (err.code !== 'ENOENT') {
+					} else if (err.code !== "ENOENT") {
 						resolve(err);
 						return;
 					}
@@ -283,14 +285,14 @@ Readdir.prototype = {
 							(!this.pattern || !getDirs || this.pattern.test(fullPath))) {
 						files.push(path);
 					}
-					if (dirs && (type === 'directory')) dirs.push(path);
+					if (dirs && (type === "directory")) dirs.push(path);
 				}.bind(this));
 				return promise.catch(function (err) {
-					if (err.code !== 'ENOENT') throw err;
+					if (err.code !== "ENOENT") throw err;
 				});
 			}.bind(this);
 
-			paths.on('change', function (data) {
+			paths.on("change", function (data) {
 				var removed, nFiles, nDirs;
 				if (data.added.length) {
 					nFiles = files && [];
@@ -304,7 +306,7 @@ Readdir.prototype = {
 						if (removed.length || (nFiles && nFiles.length)) {
 							remove.apply(files, removed);
 							if (nFiles) push.apply(files, nFiles);
-							result.files.emit('change', { data: files, removed: removed, added: nFiles || [] });
+							result.files.emit("change", { data: files, removed: removed, added: nFiles || [] });
 						}
 					}
 					if (getDirs) {
@@ -312,21 +314,21 @@ Readdir.prototype = {
 						if (removed.length || (nDirs && nDirs.length)) {
 							remove.apply(dirs, removed);
 							if (nDirs) push.apply(dirs, nDirs);
-							result.dirs.emit('change', { data: dirs, removed: removed, added: nDirs || [] });
+							result.dirs.emit("change", { data: dirs, removed: removed, added: nDirs || [] });
 						}
 					}
 				});
 			});
 
-			paths.on('end', function (data, err) {
+			paths.on("end", function (data, err) {
 				if (!resolved) {
 					if (defFiles) defFiles.reject(err);
 					if (defDirs) defDirs.reject(err);
 					return;
 				}
 				if (!failed) {
-					if (files) result.files.emit('end', files, err);
-					if (getDirs) result.dirs.emit('end', dirs, err);
+					if (files) result.files.emit("end", files, err);
+					if (getDirs) result.dirs.emit("end", dirs, err);
 				}
 			});
 
@@ -355,25 +357,31 @@ Readdir.prototype = {
 
 		filter = function (path) {
 			var fullPath = root + sep + path;
-			return ((!pattern || pattern.test(fullPath)) &&
-				(!rules || !applyGlobalRules(fullPath, rules)));
+			return (!pattern || pattern.test(fullPath)) &&
+				(!rules || !applyGlobalRules(fullPath, rules));
 		};
 
-		promise = paths(function (data) { return (result = data.filter(filter)); });
+		promise = paths(function (data) {
+ return result = data.filter(filter);
+});
 		promise.root = root;
 		if (this.watch) {
-			paths.on('change', function (data) {
+			paths.on("change", function (data) {
 				var removed, added;
 				removed = data.removed.filter(contains, result);
 				added = data.added.filter(filter);
 				if (removed.length || added.length) {
 					remove.apply(result, removed);
 					push.apply(result, added);
-					promise.emit('change', { data: result, removed: removed, added: added });
+					promise.emit("change", { data: result, removed: removed, added: added });
 				}
 			});
-			paths.on('end', function (data, err) { promise.emit('end', result, err); });
-			promise.close = function () { paths.close(); };
+			paths.on("end", function (data, err) {
+ promise.emit("end", result, err);
+});
+			promise.close = function () {
+ paths.close();
+};
 		}
 		return promise;
 	},
@@ -385,13 +393,13 @@ Readdir.prototype = {
 			var status = this.isIgnored(root + sep + path);
 			if (this.watch) {
 				promises[path] = status;
-				status.on('change', function (value) {
+				status.on("change", function (value) {
 					if (value) {
 						remove.call(result, path);
-						promise.emit('change', { data: result, removed: [path], added: [] });
+						promise.emit("change", { data: result, removed: [path], added: [] });
 					} else {
 						result.push(path);
-						promise.emit('change', { data: result, removed: [], added: [path] });
+						promise.emit("change", { data: result, removed: [], added: [path] });
 					}
 				});
 			}
@@ -401,7 +409,7 @@ Readdir.prototype = {
 		if (this.watch) {
 			promises = {};
 
-			paths.on('change', function (data) {
+			paths.on("change", function (data) {
 				var removed, added = [], waiting = data.added.length, onEnd;
 				data.removed.forEach(function (path) {
 					promises[path].close();
@@ -412,7 +420,7 @@ Readdir.prototype = {
 					if (removed.length || added.length) {
 						remove.apply(result, removed);
 						push.apply(result, added);
-						promise.emit('change', { data: result, removed: removed, added: added });
+						promise.emit("change", { data: result, removed: removed, added: added });
 					}
 				};
 				if (!waiting) {
@@ -427,21 +435,21 @@ Readdir.prototype = {
 				});
 			});
 
-			paths.on('end', function (data, err) {
+			paths.on("end", function (data, err) {
 				if (!promises) return;
-				forEach(promises, invoke('close'));
+				forEach(promises, invoke("close"));
 				promises = null;
 				if (!def.resolved) {
 					def.reject(err);
 					return;
 				}
-				promise.emit('end', result, err);
+				promise.emit("end", result, err);
 			});
 
 			promise.close = function () {
 				if (promises) {
 					if (!def.resolved) def.reject(new Error("Operation aborted"));
-					forEach(promises, invoke('close'));
+					forEach(promises, invoke("close"));
 					promises = null;
 					paths.close();
 				}
@@ -461,7 +469,9 @@ Readdir.prototype = {
 					if (!--waiting) def.resolve(result);
 				});
 			});
-		}, function (e) { def.reject(e); });
+		}, function (e) {
+ def.reject(e);
+});
 		promise.root = root;
 		return promise;
 	},
@@ -476,15 +486,15 @@ Readdir.prototype = {
 			} catch (e) {
 				return def.reject(e);
 			}
-			watcher.on('end', function (err) {
+			watcher.on("end", function (err) {
 				if (!def.resolved) def.reject(err);
-				else if (files) promise.emit('end', files, err);
+				else if (files) promise.emit("end", files, err);
 			});
-			watcher.on('change', function () {
+			watcher.on("change", function () {
 				original(path, function (err, data) {
 					var removed, added;
 					if (err) {
-						promise.emit('end', files, err);
+						promise.emit("end", files, err);
 						return;
 					}
 					removed = diff.call(files, data);
@@ -492,7 +502,7 @@ Readdir.prototype = {
 					if (removed.length || added.length) {
 						remove.apply(files, removed);
 						push.apply(files, added);
-						promise.emit('change', { data: files, removed: removed, added: added });
+						promise.emit("change", { data: files, removed: removed, added: added });
 					}
 				});
 			});
@@ -507,7 +517,7 @@ Readdir.prototype = {
 				return;
 			}
 			def.resolve(files = data);
-		}.bind(this));
+		});
 		return promise;
 	}
 };
@@ -518,10 +528,10 @@ readdir = function (path, options) {
 	readdir = new Readdir();
 	readdir.path = path;
 	readdir.depth = isNaN(options.depth) ? 0 : toPosInt(options.depth);
-	readdir.type = (options.type != null) ? Object(options.type) : null;
-	readdir.pattern = (options.pattern != null) ? new RegExp(options.pattern) : null;
+	readdir.type = options.type != null ? Object(options.type) : null;
+	readdir.pattern = options.pattern != null ? new RegExp(options.pattern) : null;
 	if (options.dirFilter != null) {
-		if (typeof options.dirFilter === 'function') readdir.dirFilter = options.dirFilter;
+		if (typeof options.dirFilter === "function") readdir.dirFilter = options.dirFilter;
 		else readdir.dirFilter = RegExp.prototype.test.bind(new RegExp(options.dirFilter));
 	}
 	readdir.watch = options.watch;
@@ -532,8 +542,8 @@ readdir = function (path, options) {
 			? options.globalRules : String(options.globalRules).split(eolRe);
 	}
 	if (options.ignoreRules) {
-		assign(readdir, getIsIgnored(isArray(options.ignoreRules) ?
-				options.ignoreRules : [options.ignoreRules], globalRules,
+		assign(readdir, getIsIgnored(isArray(options.ignoreRules)
+				? options.ignoreRules : [options.ignoreRules], globalRules,
 			options.watch));
 	} else {
 		readdir.globalRules = globalRules;

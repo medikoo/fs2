@@ -1,16 +1,19 @@
-'use strict';
+"use strict";
 
 module.exports = function (t, a) {
 	var fn, invoked, mfn, x, y, z;
 	fn = function (path) {
-		return { emit: function () {}, close: function () { invoked = true; } };
+		return { emit: function () {},
+close: function () {
+ invoked = true;
+} };
 	};
 	invoked = false;
 
 	mfn = t(fn);
-	x = mfn('foo');
-	y = mfn('foo');
-	z = mfn('bar');
+	x = mfn("foo");
+	y = mfn("foo");
+	z = mfn("bar");
 	a(invoked, false, "Pre calls");
 
 	z.close();

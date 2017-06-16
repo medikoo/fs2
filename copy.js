@@ -2,15 +2,15 @@
 // Credit: Isaac Schlueter
 // http://groups.google.com/group/nodejs/msg/ef4de0b516f7d5b8
 
-'use strict';
+"use strict";
 
-var isCallable       = require('es5-ext/object/is-callable')
-  , normalizeOptions = require('es5-ext/object/normalize-options')
-  , d                = require('d')
-  , deferred         = require('deferred')
-  , fs               = require('fs')
-  , path             = require('path')
-  , mkdir            = require('./mkdir')
+var isCallable       = require("es5-ext/object/is-callable")
+  , normalizeOptions = require("es5-ext/object/normalize-options")
+  , d                = require("d")
+  , deferred         = require("deferred")
+  , fs               = require("fs")
+  , path             = require("path")
+  , mkdir            = require("./mkdir")
 
   , hasOwnProperty = Object.prototype.hasOwnProperty, defineProperty = Object.defineProperty
   , dirname = path.dirname, resolve = path.resolve
@@ -19,7 +19,7 @@ var isCallable       = require('es5-ext/object/is-callable')
 
 var fixOptions = function (options) {
 	if (options.hasOwnProperty) return options;
-	return defineProperty(options, 'hasOwnProperty', d(hasOwnProperty));
+	return defineProperty(options, "hasOwnProperty", d(hasOwnProperty));
 };
 
 var copyWithMode = function (def, source, dest, options) {
@@ -30,7 +30,7 @@ var copyWithMode = function (def, source, dest, options) {
 	} catch (e) {
 		return def.reject(e);
 	}
-	read.on('error', function (e) {
+	read.on("error", function (e) {
 		write.destroy();
 		def.reject(e);
 	});
@@ -42,9 +42,9 @@ var copyWithMode = function (def, source, dest, options) {
 		return def.reject(e1);
 	}
 
-	write.on('error', function (e) {
+	write.on("error", function (e) {
 		read.destroy();
-		if ((e.code === 'ENOENT') && options.intermediate) {
+		if ((e.code === "ENOENT") && options.intermediate) {
 			mkdir(dirname(resolve(dest)), { intermediate: true }).done(function () {
 				options = normalizeOptions(options);
 				delete options.intermediate;
@@ -55,7 +55,7 @@ var copyWithMode = function (def, source, dest, options) {
 		def.reject(e);
 	});
 	read.pipe(write);
-	write.on('close', def.resolve);
+	write.on("close", def.resolve);
 
 	return def.promise;
 };

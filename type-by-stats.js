@@ -1,26 +1,26 @@
-'use strict';
+"use strict";
 
 module.exports = function (stat) {
 	if (stat.isFile()) {
-		return 'file';
+		return "file";
 	}
 	if (stat.isDirectory()) {
-		return 'directory';
+		return "directory";
 	}
 	if (stat.isSymbolicLink && stat.isSymbolicLink()) {
-		return 'symbolicLink';
+		return "symbolicLink";
 	}
 	if (stat.isSocket()) {
-		return 'socket';
+		return "socket";
 	}
 	if (stat.isBlockDevice()) {
-		return 'blockDevice';
+		return "blockDevice";
 	}
 	if (stat.isCharacterDevice()) {
-		return 'characterDevice';
+		return "characterDevice";
 	}
 	if (stat.isFIFO()) {
-		return 'FIFO';
+		return "FIFO";
 	}
 	throw new Error("Cannot detect type");
 };

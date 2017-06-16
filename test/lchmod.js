@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var lstat = require('../lstat')
+var lstat = require("../lstat")
 
-  , testFile = require('path').resolve(__dirname, '__playground/lchmod/test');
+  , testFile = require("path").resolve(__dirname, "__playground/lchmod/test");
 
 module.exports = function (t, a, d) {
-	if (!require('fs').lchmod) {
+	if (!require("fs").lchmod) {
 		a(t, null);
 		d();
 		return;

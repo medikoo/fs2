@@ -1,23 +1,23 @@
-'use strict';
+"use strict";
 
-var fs        = require('fs')
-  , deferred  = require('deferred')
-  , resolve   = require('path').resolve
+var fs        = require("fs")
+  , deferred  = require("deferred")
+  , resolve   = require("path").resolve
   , promisify = deferred.promisify
   , delay     = deferred.delay
   , mkdir     = promisify(fs.mkdir)
   , rmdir     = promisify(fs.rmdir)
-  , gitMode   = require('../../lib/ignore-modes/git')
+  , gitMode   = require("../../lib/ignore-modes/git")
 
-  , rootPath = resolve(__dirname, '../__playground/lib/find-root');
+  , rootPath = resolve(__dirname, "../__playground/lib/find-root");
 
 module.exports = function (t, a, d) {
-	var gitRoot = resolve(rootPath, '.git')
-	  , onePath = resolve(rootPath, 'one')
-	  , gitOnePath = resolve(onePath, '.git')
-	  , twoPath = resolve(onePath, 'two')
-	  , gitTwoPath = resolve(twoPath, '.git')
-	  , filePath = resolve(twoPath, 'file.xxx')
+	var gitRoot = resolve(rootPath, ".git")
+	  , onePath = resolve(rootPath, "one")
+	  , gitOnePath = resolve(onePath, ".git")
+	  , twoPath = resolve(onePath, "two")
+	  , gitTwoPath = resolve(twoPath, ".git")
+	  , filePath = resolve(twoPath, "file.xxx")
 	  , DELAY = 100
 
 	  , watcher, events = [];
@@ -33,14 +33,14 @@ module.exports = function (t, a, d) {
 		return mkdir(gitOnePath);
 	})(function () {
 		watcher = t(gitMode.isRootWatcher, filePath, { watch: true });
-		watcher.on('change', function (path) {
+		watcher.on("change", function (path) {
 			events.push(path);
 		});
 		return watcher;
 	})(function (path) {
 		a(path, onePath, "#1");
 	})(delay(function () {
-		a(String(events), '', "#1: Event");
+		a(String(events), "", "#1: Event");
 		events = [];
 
 		// Create /one/two

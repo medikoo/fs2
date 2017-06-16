@@ -1,14 +1,14 @@
-// fs.writeFile that's safe for simultaneous calls for same file.
+// Fs.writeFile that's safe for simultaneous calls for same file.
 // In such event write that is ongoing is exited and new one is initialized
 
-'use strict';
+"use strict";
 
-var isCallable = require('es5-ext/object/is-callable')
-  , isString   = require('es5-ext/string/is-string')
-  , deferred   = require('deferred')
-  , fs         = require('fs')
-  , path       = require('path')
-  , mkdir      = require('./mkdir').mkdir
+var isCallable = require("es5-ext/object/is-callable")
+  , isString   = require("es5-ext/string/is-string")
+  , deferred   = require("deferred")
+  , fs         = require("fs")
+  , path       = require("path")
+  , mkdir      = require("./mkdir").mkdir
 
   , dirname = path.dirname, resolve = path.resolve
   , next, writeAll, cache = {}, _writeFile, writeFile;
@@ -16,7 +16,7 @@ var isCallable = require('es5-ext/object/is-callable')
 next = function (path, err, content, encoding, flag, mode) {
 	var data = cache[path];
 	if (err) {
-		if (!cache[path].intermediate || (err.code !== 'ENOENT')) {
+		if (!cache[path].intermediate || (err.code !== "ENOENT")) {
 			delete cache[path];
 			data.def.reject(err);
 			return;
@@ -47,23 +47,21 @@ writeAll = function (path, fd, buffer, offset, length) {
 			fs.close(fd, function () {
 				next(path, writeErr);
 			});
-		} else {
-			if ((written === length) || cache[path].data) {
+		} else if ((written === length) || cache[path].data) {
 				fs.close(fd, function (err) {
 					next(path, err);
 				});
 			} else {
 				writeAll(path, fd, buffer, offset + written, length - written);
 			}
-		}
 	});
 };
 
 _writeFile = function (path, data, encoding, flag, mode) {
 	if (!encoding) {
-		encoding = 'utf8';
+		encoding = "utf8";
 	}
-	fs.open(path, flag || 'w', mode || 438, function (openErr, fd) {
+	fs.open(path, flag || "w", mode || 438, function (openErr, fd) {
 		if (openErr) {
 			next(path, openErr, data, encoding, flag, mode);
 		} else if (!cache[path].data) {

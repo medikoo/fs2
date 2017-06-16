@@ -1,21 +1,21 @@
-'use strict';
+"use strict";
 
-var partial    = require('es5-ext/function/#/partial')
-  , isCallable = require('es5-ext/object/is-callable')
-  , deferred   = require('deferred')
-  , fs         = require('fs')
-  , path       = require('path')
-  , chmod      = require('./chmod')
-  , lstat      = require('./lstat')
-  , readdir    = require('./readdir')
-  , unlink     = require('./unlink')
+var partial    = require("es5-ext/function/#/partial")
+  , isCallable = require("es5-ext/object/is-callable")
+  , deferred   = require("deferred")
+  , fs         = require("fs")
+  , path       = require("path")
+  , chmod      = require("./chmod")
+  , lstat      = require("./lstat")
+  , readdir    = require("./readdir")
+  , unlink     = require("./unlink")
 
   , original = fs.rmdir
   , resolve = path.resolve, sep = path.sep
   , rmdir, rmcontent, empty = {};
 
 rmcontent = function (path, options) {
-	return readdir(path)(function self(files, repeated) {
+	return readdir(path)(function self (files, repeated) {
 		return deferred.map(files, function (name) {
 			var filename = path + sep + name, aborted;
 			return lstat(filename)(function (stats) {
@@ -29,44 +29,44 @@ rmcontent = function (path, options) {
 				}
 				if (options.force) {
 					return unlink(filename)(null, function (err) {
-						if (err.code === 'ENOENT') return;
+						if (err.code === "ENOENT") return;
 						aborted = true;
 						throw err;
 					});
 				}
-				err = new Error('ENOTEMPTY rmdir \'' + path + '\'');
+				err = new Error("ENOTEMPTY rmdir '" + path + "'");
 				err.errno = 53;
-				err.code = 'ENOTEMPTY';
+				err.code = "ENOTEMPTY";
 				err.path = path;
 				options.aborted = true;
 				throw err;
 			}, function (err) {
-				if (err.code === 'ENOENT') return;
+				if (err.code === "ENOENT") return;
 				options.aborted = true;
 				throw err;
 			});
 		})(null, function (err) {
-			if (!options.aborted && !repeated && (err.code === 'EACCES') && chmod) {
+			if (!options.aborted && !repeated && (err.code === "EACCES") && chmod) {
 				return chmod(path, 146)(partial.call(self, files, true));
 			}
 			throw err;
 		});
 	}, function (err) {
-		if (err.code === 'ENOENT') return;
+		if (err.code === "ENOENT") return;
 		throw err;
 	})(function () {
 		if (options.aborted) return;
 		return rmdir(path, empty)(null, function (err) {
 			if (options.aborted) return;
-			if (err.code === 'ENOTEMPTY') {
+			if (err.code === "ENOTEMPTY") {
 				// Race condition (new files were added to the directory in a meantime)
 				return rmcontent(path, options);
 			}
-			if (err.code === 'ENOENT') return;
+			if (err.code === "ENOENT") return;
 			throw err;
 		});
 	}, function (err) {
-		if (err.code === 'ENOENT') return;
+		if (err.code === "ENOENT") return;
 		throw err;
 	});
 };
@@ -75,12 +75,12 @@ rmdir = function (path, options) {
 	var def = deferred();
 	original(path, function (err) {
 		if (err) {
-			if (err.code === 'ENOTEMPTY') {
+			if (err.code === "ENOTEMPTY") {
 				if (options.recursive) {
 					def.resolve(rmcontent(path, { force: options.force }));
 					return;
 				}
-			} else if (err.code === 'ENOENT') {
+			} else if (err.code === "ENOENT") {
 				if (options.loose) {
 					def.resolve(null);
 					return;

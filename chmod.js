@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var deferred = require('deferred')
-  , resolve  = require('path').resolve
-  , original = require('fs').chmod
+var deferred = require("deferred")
+  , resolve  = require("path").resolve
+  , original = require("fs").chmod
 
   , chmod;
 
@@ -16,7 +16,7 @@ chmod = function (path, mode) {
 };
 chmod.returnsPromise = true;
 
-if (process.platform === 'win32') {
+if (process.platform === "win32") {
 	module.exports = null;
 } else {
 	module.exports = exports = function (path, mode/*, callback*/) {

@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-var promisify = require('deferred').promisify
-  , fs        = require('fs')
-  , path      = require('path')
+var promisify = require("deferred").promisify
+  , fs        = require("fs")
+  , path      = require("path")
 
   , resolve = path.resolve
   , lstat = promisify(fs.lstat), unlink = promisify(fs.unlink)
 
-  , root = resolve(__dirname, './__playground/symlink')
-  , base = resolve(root, 'from')
-  , regular = resolve(root, 'foo')
-  , deep = resolve(root, 'foo/bar');
+  , root = resolve(__dirname, "./__playground/symlink")
+  , base = resolve(root, "from")
+  , regular = resolve(root, "foo")
+  , deep = resolve(root, "foo/bar");
 
 module.exports = function (t) {
 	return {

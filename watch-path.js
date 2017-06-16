@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var ee    = require('event-emitter')
-  , path  = require('path')
-  , watch = require('./watch').watch
+var ee    = require("event-emitter")
+  , path  = require("path")
+  , watch = require("./watch").watch
 
   , basename = path.basename, dirname = path.dirname, join = path.join
   , resolve = path.resolve
@@ -66,26 +66,26 @@ Watcher.prototype = {
 	},
 	onwatch: function (watcher) {
 		if (!this.missing.length) {
-			watcher.on('change', this.onchange);
-			watcher.once('end', this.onremove);
+			watcher.on("change", this.onchange);
+			watcher.once("end", this.onremove);
 		} else {
-			watcher.on('change', function () {
+			watcher.on("change", function () {
 				if (this.tryDown()) {
 					watcher.close();
 				}
 			}.bind(this));
-			watcher.once('end', this.up);
+			watcher.once("end", this.up);
 		}
 		this.watcher = watcher;
 	},
 	oncreate: function () {
-		this.emitter.emit('change', { type: 'create' });
+		this.emitter.emit("change", { type: "create" });
 	},
 	onchange: function () {
-		this.emitter.emit('change', { type: 'modify' });
+		this.emitter.emit("change", { type: "modify" });
 	},
 	onremove: function () {
-		this.emitter.emit('change', { type: 'remove' });
+		this.emitter.emit("change", { type: "remove" });
 		this.up();
 	}
 };

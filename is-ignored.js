@@ -1,19 +1,19 @@
-'use strict';
+"use strict";
 
-var invoke         = require('es5-ext/function/invoke')
-  , noop           = require('es5-ext/function/noop')
-  , isCallable     = require('es5-ext/object/is-callable')
-  , forEach        = require('es5-ext/object/for-each')
-  , contains       = require('es5-ext/string/#/contains')
-  , last           = require('es5-ext/string/#/last')
-  , memoize        = require('memoizee')
-  , deferred       = require('deferred')
-  , minimatch      = require('minimatch')
-  , path           = require('path')
-  , modes          = require('./lib/ignore-modes')
-  , getMap         = require('./lib/get-conf-file-map')
-  , memoizeWatcher = require('./lib/memoize-watcher')
-  , findRoot       = require('./lib/find-root')
+var invoke         = require("es5-ext/function/invoke")
+  , noop           = require("es5-ext/function/noop")
+  , isCallable     = require("es5-ext/object/is-callable")
+  , forEach        = require("es5-ext/object/for-each")
+  , contains       = require("es5-ext/string/#/contains")
+  , last           = require("es5-ext/string/#/last")
+  , memoize        = require("memoizee")
+  , deferred       = require("deferred")
+  , minimatch      = require("minimatch")
+  , path           = require("path")
+  , modes          = require("./lib/ignore-modes")
+  , getMap         = require("./lib/get-conf-file-map")
+  , memoizeWatcher = require("./lib/memoize-watcher")
+  , findRoot       = require("./lib/find-root")
 
   , isArray = Array.isArray, push = Array.prototype.push
   , call = Function.prototype.call, trim = call.bind(String.prototype.trim)
@@ -30,7 +30,9 @@ prepareRules = function (data) {
 	return data.map(trim).filter(Boolean).reverse();
 };
 
-parseSrc = function (src) { return prepareRules(String(src).split(eolRe)); };
+parseSrc = function (src) {
+ return prepareRules(String(src).split(eolRe));
+};
 
 compile = function (maps, result) {
 	var data = result.data = {}, paths = result.paths = [];
@@ -55,10 +57,10 @@ applyRules = function (rules, root, path) {
 
 	current = root;
 	paths = path.slice(root.length +
-		((last.call(root) === sep) ? 0 : 1)).split(sep);
+		(last.call(root) === sep ? 0 : 1)).split(sep);
 	iterate = function (rule) {
 		preValue = true;
-		if (rule[0] === '!') {
+		if (rule[0] === "!") {
 			preValue = false;
 			rule = rule.slice(1);
 		}
@@ -98,11 +100,11 @@ buildMap = function (dirname, getMap, watch) {
 	getMap = getMap.map(function (getMap, index) {
 		var map = getMap(dirname);
 		if (watch) {
-			map.on('change', function (map) {
+			map.on("change", function (map) {
 				if (maps) {
 					maps[index] = map;
 					compile(maps, data);
-					promise.emit('change', data);
+					promise.emit("change", data);
 				}
 			});
 		}
@@ -120,7 +122,9 @@ buildMap = function (dirname, getMap, watch) {
 		});
 	}
 	if (watch) {
-		promise.close = function () { getMap.forEach(invoke('close')); };
+		promise.close = function () {
+ getMap.forEach(invoke("close"));
+};
 	}
 	return promise;
 };
@@ -139,18 +143,20 @@ IsIgnored.prototype = {
 			return this.calculate();
 		}.bind(this));
 		if (this.watch) {
-			mapPromise.on('change', function () {
+			mapPromise.on("change", function () {
 				var value = this.calculate();
 				if (value !== this.promise.value) {
 					this.promise.value = value;
-					this.promise.emit('change', value, this.path);
+					this.promise.emit("change", value, this.path);
 				}
 			}.bind(this));
 			this.promise.close = this.close.bind(this);
 		}
 		return this.promise;
 	},
-	close: function () { this.mapPromise.close(); },
+	close: function () {
+ this.mapPromise.close();
+},
 	calculate: function () {
 		var current, result = false;
 
@@ -179,8 +185,8 @@ isIgnored = function (mode, path, options) {
 	var watch, globalRules, isIgnored, getMapFns, dirname, promise;
 
 	if (options.globalRules != null) {
-		globalRules = isArray(options.globalRules) ? options.globalRules :
-				String(options.globalRules).split(eolRe);
+		globalRules = isArray(options.globalRules) ? options.globalRules
+				: String(options.globalRules).split(eolRe);
 	}
 
 	if (mode) {
@@ -249,9 +255,9 @@ exports.getIsIgnored = function (modeNames, globalRules, watch) {
 	modeNames.forEach(function (name) {
 		var mode = modes[name], isRoot, readRules;
 		if (!mode) throw new Error("Unknown mode '" + name + "'");
-		isRoot = memo(mode[watch ? 'isRootWatcher' : 'isRoot'],
+		isRoot = memo(mode[watch ? "isRootWatcher" : "isRoot"],
 			{ primitive: true });
-		readRules = memo(getMap[watch ? 'readRulesWatcher' : 'readRules'],
+		readRules = memo(getMap[watch ? "readRulesWatcher" : "readRules"],
 			{ primitive: true });
 		mapGetters.push(function (path) {
 			var map;

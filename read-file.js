@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var isCallable = require('es5-ext/object/is-callable')
-  , isString   = require('es5-ext/string/is-string')
-  , deferred   = require('deferred')
-  , original   = require('fs').readFile
-  , resolve    = require('path').resolve
-  , watch      = require('./watch').watch
-  , WatchPath  = require('./watch-path').WatchPath
+var isCallable = require("es5-ext/object/is-callable")
+  , isString   = require("es5-ext/string/is-string")
+  , deferred   = require("deferred")
+  , original   = require("fs").readFile
+  , resolve    = require("path").resolve
+  , watch      = require("./watch").watch
+  , WatchPath  = require("./watch-path").WatchPath
 
   , readFile;
 
@@ -39,22 +39,22 @@ readFile = function (filename, options) {
 				if (!watcher) return;
 				if (err) {
 					watcher.close();
-					promise.emit('end');
+					promise.emit("end");
 					return;
 				}
 				dataStr = String(data);
 				if (dataStr !== current) {
 					current = dataStr;
-					promise.emit('change', data);
+					promise.emit("change", data);
 				}
 			});
 		};
 		if (loose) {
 			current = null;
 			watcher = new WatchPath(filename);
-			watcher.on('change', function (event) {
-				if (event.type === 'remove') {
-					if (current != null) promise.emit('change', current = null);
+			watcher.on("change", function (event) {
+				if (event.type === "remove") {
+					if (current != null) promise.emit("change", current = null);
 				} else {
 					onchange();
 				}
@@ -65,10 +65,10 @@ readFile = function (filename, options) {
 			} catch (e) {
 				return def.reject(e);
 			}
-			watcher.on('change', onchange);
-			watcher.on('end', function () {
+			watcher.on("change", onchange);
+			watcher.on("end", function () {
 				watcher = null;
-				promise.emit('end');
+				promise.emit("end");
 			});
 		}
 		promise.close = function () {

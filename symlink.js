@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-var isCallable = require('es5-ext/object/is-callable')
-  , isString   = require('es5-ext/string/is-string')
-  , deferred   = require('deferred')
-  , resolve    = require('path').resolve
-  , original   = require('fs').symlink
+var isCallable = require("es5-ext/object/is-callable")
+  , isString   = require("es5-ext/string/is-string")
+  , deferred   = require("deferred")
+  , resolve    = require("path").resolve
+  , original   = require("fs").symlink
 
   , symlink;
 
@@ -21,7 +21,7 @@ symlink = function (src, dest, options) {
 };
 symlink.returnsPromise = true;
 
-module.exports = exports = function (src, dest/*[, options[, callback]]*/) {
+module.exports = exports = function (src, dest/* [, options[, callback]]*/) {
 	var options, cb;
 
 	src = resolve(String(src));

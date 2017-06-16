@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-var promisify = require('deferred').promisify
-  , fs        = require('fs')
-  , path      = require('path')
+var promisify = require("deferred").promisify
+  , fs        = require("fs")
+  , path      = require("path")
 
   , dirname = path.dirname, resolve = path.resolve
   , lstat = promisify(fs.lstat), rmdir = promisify(fs.rmdir)
 
-  , root = resolve(__dirname, './__playground/mkdir')
-  , regular = resolve(root, 'foo')
-  , existing = resolve(root, 'one')
-  , deep = resolve(root, 'foo', 'bar');
+  , root = resolve(__dirname, "./__playground/mkdir")
+  , regular = resolve(root, "foo")
+  , existing = resolve(root, "one")
+  , deep = resolve(root, "foo", "bar");
 
 module.exports = function (t) {
 	return {
@@ -45,7 +45,7 @@ module.exports = function (t) {
 					});
 				}).done(d, d);
 			},
-			Existing: function (a, d) {
+			"Existing": function (a, d) {
 				t(existing, { intermediate: true })(function () {
 					a.ok(true, "");
 				}).done(d, d);

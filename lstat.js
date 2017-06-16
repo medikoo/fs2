@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var deferred = require('deferred')
-  , resolve  = require('path').resolve
-  , original = require('fs').lstat
+var deferred = require("deferred")
+  , resolve  = require("path").resolve
+  , original = require("fs").lstat
 
   , lstat;
 

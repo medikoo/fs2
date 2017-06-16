@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var lstat = require('../lstat')
+var lstat = require("../lstat")
 
-  , testFile = require('path').resolve(__dirname, '__playground/chmod/test');
+  , testFile = require("path").resolve(__dirname, "__playground/chmod/test");
 
 module.exports = function (t, a, d) {
-	if (process.platform === 'win32') {
+	if (process.platform === "win32") {
 		a(t, null);
 		d();
 		return;
