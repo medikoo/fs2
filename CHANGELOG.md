@@ -9,4 +9,9 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 * "loose" option for fs.copy ([885cba7](https://github.com/medikoo/fs2/commit/885cba7))
-* resolve succesful copy with `true` ([72d4961](https://github.com/medikoo/fs2/commit/72d4961))
+* resolve successful copy with `true` ([72d4961](https://github.com/medikoo/fs2/commit/72d4961))
+
+
+## Old Changelog
+
+See `CHANGES`
