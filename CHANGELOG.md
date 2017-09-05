@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.7"></a>
+## [0.2.7](https://github.com/medikoo/fs2/compare/v0.2.6...v0.2.7) (2017-09-05)
+
+
+### Bug Fixes
+
+* bring back node v0.12 support ([370fa80](https://github.com/medikoo/fs2/commit/370fa80))
+
+
+
 <a name="0.2.6"></a>
 ## [0.2.6](https://github.com/medikoo/fs2/compare/v0.2.5...v0.2.6) (2017-06-19)
 
