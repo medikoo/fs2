@@ -77,7 +77,15 @@ _writeFile = function (path, data, encoding, flag, mode) {
 				next(path, err);
 			});
 		} else {
-			var buffer = Buffer.isBuffer(data) ? data : Buffer.from(String(data), encoding);
+			var buffer;
+			if (Buffer.isBuffer(data)) {
+				buffer = data;
+			} else if (typeof Buffer.from === "function") {
+				buffer = Buffer.from(String(data), encoding);
+			} else {
+				// eslint-disable-next-line no-buffer-constructor
+				buffer = new Buffer(String(data), encoding);
+			}
 			writeAll(path, fd, buffer, 0, buffer.length);
 		}
 	});
