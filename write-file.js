@@ -9,12 +9,13 @@ var isCallable = require("es5-ext/object/is-callable")
   , deferred   = require("deferred")
   , fs         = require("fs")
   , pathUtils  = require("path")
-  , mkdir      = require("./mkdir").mkdir
-  , dirname    = pathUtils.dirname
-  , resolve    = pathUtils.resolve
+  , mkdir      = require("./mkdir").mkdir;
+
+var dirname = pathUtils.dirname
+  , resolve = pathUtils.resolve
   , next
   , writeAll
-  , cache      = {}
+  , cache = {}
   , _writeFile
   , writeFile;
 
