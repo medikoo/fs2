@@ -20,13 +20,9 @@ var last           = require("es5-ext/array/#/last")
   , isAvail
   , watchers       = { reg: [], alt: [] };
 
-compare = function (watcherA, watcherB) {
-	return watcherB.count - watcherA.count;
-};
+compare = function (watcherA, watcherB) { return watcherB.count - watcherA.count; };
 
-isAvail = function () {
-	return descHandler.available > 50;
-};
+isAvail = function () { return descHandler.available > 50; };
 
 switchToAlt = function (watcher) {
 	var closePrevious = watcher.emitter._close;
@@ -117,7 +113,7 @@ onLstat = function (watcher) {
 };
 
 watch = memoizeWatcher(
-	function self (path) {
+	function self(path) {
 		var emitter, watcher;
 		watcher = { path: path, count: 0 };
 		if (isAvail()) {
@@ -152,9 +148,7 @@ watch = memoizeWatcher(
 			watch.clear(path);
 			emitter.close();
 		});
-		emitter.on("change", function () {
-			++watcher.count;
-		});
+		emitter.on("change", function () { ++watcher.count; });
 		if (watcher.alt) {
 			onLstat(watcher);
 		}
@@ -163,7 +157,5 @@ watch = memoizeWatcher(
 	{ primitive: true }
 );
 
-module.exports = exports = function (path) {
-	return watch(resolve(String(path)));
-};
+module.exports = exports = function (path) { return watch(resolve(String(path))); };
 exports.watch = watch;

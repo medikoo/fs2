@@ -9,17 +9,18 @@ var partial    = require("es5-ext/function/#/partial")
   , chmod      = require("./chmod")
   , lstat      = require("./lstat")
   , readdir    = require("./readdir")
-  , unlink     = require("./unlink")
-  , original   = fs.rmdir
-  , resolve    = pathUtils.resolve
-  , sep        = pathUtils.sep
+  , unlink     = require("./unlink");
+
+var original = fs.rmdir
+  , resolve = pathUtils.resolve
+  , sep = pathUtils.sep
   , rmdir
   , rmcontent
-  , empty      = {};
+  , empty = {};
 
 rmcontent = function (path, options) {
 	return readdir(path)(
-		function self (files, repeated) {
+		function self(files, repeated) {
 			return deferred.map(files, function (name) {
 				var filename = path + sep + name, aborted;
 				return lstat(filename)(
@@ -107,7 +108,7 @@ rmdir = function (path, options) {
 };
 rmdir.returnsPromise = true;
 
-module.exports = exports = function (path /*, options, callback*/) {
+module.exports = exports = function (path/*, options, callback*/) {
 	var options, cb;
 
 	path = resolve(String(path));

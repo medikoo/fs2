@@ -2,41 +2,44 @@
 
 "use strict";
 
-var invoke         = require("es5-ext/function/invoke")
-  , noop           = require("es5-ext/function/noop")
-  , curry          = require("es5-ext/function/#/curry")
-  , contains       = curry.call(require("es5-ext/array/#/contains"))
-  , diff           = require("es5-ext/array/#/diff")
-  , remove         = require("es5-ext/array/#/remove")
-  , assign         = require("es5-ext/object/assign")
-  , forEach        = require("es5-ext/object/for-each")
-  , isCallable     = require("es5-ext/object/is-callable")
-  , isCopy         = require("es5-ext/object/is-copy")
-	, isValue        = require("es5-ext/object/is-value")
-  , toPosInt       = require("es5-ext/number/to-pos-integer")
-  , startsWith     = require("es5-ext/string/#/starts-with")
-  , deferred       = require("deferred")
-  , fs             = require("fs")
-  , pathUtils      = require("path")
-  , typeByStats    = require("./type-by-stats")
-  , watchPath      = require("./watch")
-  , isIgnored      = require("./is-ignored")
+var invoke      = require("es5-ext/function/invoke")
+  , noop        = require("es5-ext/function/noop")
+  , curry       = require("es5-ext/function/#/curry")
+  , contains    = curry.call(require("es5-ext/array/#/contains"))
+  , diff        = require("es5-ext/array/#/diff")
+  , remove      = require("es5-ext/array/#/remove")
+  , assign      = require("es5-ext/object/assign")
+  , forEach     = require("es5-ext/object/for-each")
+  , isCallable  = require("es5-ext/object/is-callable")
+  , isCopy      = require("es5-ext/object/is-copy")
+  , isValue     = require("es5-ext/object/is-value")
+  , toPosInt    = require("es5-ext/number/to-pos-integer")
+  , startsWith  = require("es5-ext/string/#/starts-with")
+  , deferred    = require("deferred")
+  , fs          = require("fs")
+  , pathUtils   = require("path")
+  , typeByStats = require("./type-by-stats")
+  , watchPath   = require("./watch")
+  , isIgnored   = require("./is-ignored");
 
-  , isArray = Array.isArray, push = Array.prototype.push
+var isArray = Array.isArray
+  , push = Array.prototype.push
   , promisify = deferred.promisify
-  , resolve = pathUtils.resolve, sep = pathUtils.sep
-  , original = fs.readdir, lstat = fs.lstat, pLstat = promisify(lstat)
+  , resolve = pathUtils.resolve
+  , sep = pathUtils.sep
+  , original = fs.readdir
+  , lstat = fs.lstat
+  , pLstat = promisify(lstat)
   , getIsIgnored = isIgnored.getIsIgnored
   , applyGlobalRules = isIgnored.applyGlobalRules
-
-  , Readdir, readdir, enoentSurpass
+  , Readdir
+  , readdir
+  , enoentSurpass
   , eolRe = /(?:\r\n|[\n\r\u2028\u2029])/
   , passErrCodes = ["ENOENT", "DIFFTYPE"];
 
 passErrCodes.contains = contains;
-enoentSurpass = function (err) {
-	return passErrCodes.contains(err.code) ? [] : err;
-};
+enoentSurpass = function (err) { return passErrCodes.contains(err.code) ? [] : err; };
 
 // eslint-disable-next-line no-empty-function
 Readdir = function () {};
@@ -61,27 +64,28 @@ Readdir.prototype = {
 
 		data.files.done(null, this.reject);
 		if (this.watch) {
-			data.files.on("end", function () {
-				delete this.readers;
-				if (!promise.resolved) {
-					this.reject(new Error("Directory was removed"));
-					return;
-				}
-				promise.emit("end", result);
-			}.bind(this));
+			data.files.on(
+				"end",
+				function () {
+					delete this.readers;
+					if (!promise.resolved) {
+						this.reject(new Error("Directory was removed"));
+						return;
+					}
+					promise.emit("end", result);
+				}.bind(this)
+			);
 			promise.close = this.close.bind(this);
 		}
 
-		(function self (nuData, rootPath, depth) {
+		(function self(nuData, rootPath, depth) {
 			var getPath, files;
 			this.readers[rootPath] = { files: nuData.files };
-			if (nuData.dirs && (nuData.dirs !== nuData.files)) {
+			if (nuData.dirs && nuData.dirs !== nuData.files) {
 				this.readers[rootPath].dirs = nuData.dirs;
 			}
 			if (rootPath) {
-				getPath = function (path) {
- return rootPath + path;
-};
+				getPath = function (path) { return rootPath + path; };
 				files = nuData.files.aside(function (newFiles) {
 					if (newFiles.length) {
 						newFiles = newFiles.map(getPath);
@@ -105,17 +109,23 @@ Readdir.prototype = {
 			}
 			if (this.watch) {
 				if (rootPath) {
-					nuData.files.on("end", nuData.files.onend = function (newFiles) {
-						delete this.readers[rootPath];
-						if (newFiles.length) {
-							newFiles = newFiles.map(getPath);
-							remove.apply(result, newFiles);
-							if (promise.resolved || stream) {
-								promise.emit("change",
-									{ data: result, removed: newFiles, added: [] });
+					nuData.files.on(
+						"end",
+						nuData.files.onend = function (newFiles) {
+							delete this.readers[rootPath];
+							if (newFiles.length) {
+								newFiles = newFiles.map(getPath);
+								remove.apply(result, newFiles);
+								if (promise.resolved || stream) {
+									promise.emit("change", {
+										data: result,
+										removed: newFiles,
+										added: []
+									});
+								}
 							}
-						}
-					}.bind(this));
+						}.bind(this)
+					);
 				}
 				nuData.files.on("change", function (nextData) {
 					var removed, added;
@@ -131,39 +141,58 @@ Readdir.prototype = {
 
 			if (nuData.dirs) {
 				if (this.watch) {
-					nuData.dirs.on("change", function (nextData) {
-						deferred.map(nextData.added, function (dir) {
-							return self.call(this,
-								this.read(this.path + sep + rootPath + dir, depth - 1),
-								rootPath + dir + sep, depth - 1);
-						}, this).done();
-						nextData.removed.forEach(function (dir) {
-							var path = rootPath + dir + sep
-							  , reader = this.readers[path];
-							if (reader) {
-								reader.files.close();
-								if (reader.dirs) reader.dirs.close();
-								reader.files.onend(reader.files.value);
-								forEach(this.readers, function (newReader, key) {
-									if (startsWith.call(key, path)) {
-										newReader.files.close();
-										if (newReader.dirs) newReader.dirs.close();
-										newReader.files.onend(newReader.files.value);
+					nuData.dirs.on(
+						"change",
+						function (nextData) {
+							deferred
+								.map(
+									nextData.added,
+									function (dir) {
+										return self.call(
+											this,
+											this.read(this.path + sep + rootPath + dir, depth - 1),
+											rootPath + dir + sep, depth - 1
+										);
+									},
+									this
+								)
+								.done();
+							nextData.removed.forEach(
+								function (dir) {
+									var path = rootPath + dir + sep, reader = this.readers[path];
+									if (reader) {
+										reader.files.close();
+										if (reader.dirs) reader.dirs.close();
+										reader.files.onend(reader.files.value);
+										forEach(this.readers, function (newReader, key) {
+											if (startsWith.call(key, path)) {
+												newReader.files.close();
+												if (newReader.dirs) newReader.dirs.close();
+												newReader.files.onend(newReader.files.value);
+											}
+										});
 									}
-								});
-							}
-						}.bind(this));
-					}.bind(this));
+								}.bind(this)
+							);
+						}.bind(this)
+					);
 				}
-				return deferred(files(null, enoentSurpass),
-					nuData.dirs(null, enoentSurpass).map(function (dir) {
-						return self.call(this,
-							this.read(this.path + sep + rootPath + dir, depth - 1),
-							rootPath + dir + sep, depth - 1);
-					}, this));
+				return deferred(
+					files(null, enoentSurpass),
+					nuData
+						.dirs(null, enoentSurpass)
+						.map(function (dir) {
+							return self.call(
+								this, this.read(this.path + sep + rootPath + dir, depth - 1),
+								rootPath + dir + sep, depth - 1
+							);
+						}, this)
+				);
 			}
 			return files;
-		}.call(this, data, "", this.depth)).done(this.resolve.bind(this, result), this.reject);
+		}
+			.call(this, data, "", this.depth)
+			.done(this.resolve.bind(this, result), this.reject));
 
 		return this.promise;
 	},
@@ -189,7 +218,7 @@ Readdir.prototype = {
 			paths = this.filterByPattern(paths);
 		}
 		if (this.isIgnored) {
-			if (dirPaths && (dirPaths !== paths)) {
+			if (dirPaths && dirPaths !== paths) {
 				dirPaths = this.filterIgnored(dirPaths);
 				paths = this.filterIgnored(paths);
 			} else {
@@ -201,8 +230,17 @@ Readdir.prototype = {
 		return { files: paths, dirs: dirPaths };
 	},
 	filterByType: function (paths, getDirs) {
-		var result = {}, test, rootPath = paths.root
-		  , files, dirs, resolveCb, defFiles, defDirs, close, resolved, failed;
+		var result = {}
+		  , test
+		  , rootPath = paths.root
+		  , files
+		  , dirs
+		  , resolveCb
+		  , defFiles
+		  , defDirs
+		  , close
+		  , resolved
+		  , failed;
 
 		if (this.type || this.pattern || this.globalRules) {
 			files = [];
@@ -238,65 +276,81 @@ Readdir.prototype = {
 			resolved = true;
 		};
 
-		paths.done(function (newPaths) {
-			var waiting = newPaths.length;
-			if (!waiting) {
-				resolveCb();
-				return;
-			}
-			newPaths.forEach(function (path) {
-				var fullPath = rootPath + sep + path;
-				if ((!getDirs && this.pattern && !this.pattern.test(fullPath)) ||
-						(this.globalRules &&
-							applyGlobalRules(fullPath, this.globalRules))) {
-					if (!--waiting) resolveCb();
+		paths.done(
+			function (newPaths) {
+				var waiting = newPaths.length;
+				if (!waiting) {
+					resolveCb();
 					return;
 				}
-				lstat(fullPath, function (err, stat) {
-					var type;
-					if (resolved) return;
-					if (!err) {
-						try {
-							type = typeByStats(stat);
-						} catch (e) {
-							resolveCb(e);
-							return;
-						}
-						if (files && (!this.type || this.type[type]) &&
-								(!this.pattern || !getDirs || this.pattern.test(fullPath))) {
-							files.push(path);
-						}
-						if (getDirs && (type === "directory")) {
-							if (!this.dirFilter || this.dirFilter(fullPath)) dirs.push(path);
-						}
-					} else if (err.code !== "ENOENT") {
-						resolveCb(err);
+				newPaths.forEach(function (path) {
+					var fullPath = rootPath + sep + path;
+					if (
+						(!getDirs && this.pattern && !this.pattern.test(fullPath)) ||
+						(this.globalRules && applyGlobalRules(fullPath, this.globalRules))
+					) {
+						if (!--waiting) resolveCb();
 						return;
 					}
-					if (!--waiting) resolveCb();
-				}.bind(this));
-			}, this);
-		}.bind(this), resolveCb);
+					lstat(
+						fullPath,
+						function (err, stat) {
+							var type;
+							if (resolved) return;
+							if (!err) {
+								try {
+									type = typeByStats(stat);
+								} catch (e) {
+									resolveCb(e);
+									return;
+								}
+								if (
+									files &&
+									(!this.type || this.type[type]) &&
+									(!this.pattern || !getDirs || this.pattern.test(fullPath))
+								) {
+									files.push(path);
+								}
+								if (getDirs && type === "directory") {
+									if (!this.dirFilter || this.dirFilter(fullPath)) {
+										dirs.push(path);
+									}
+								}
+							} else if (err.code !== "ENOENT") {
+								resolveCb(err);
+								return;
+							}
+							if (!--waiting) resolveCb();
+						}.bind(this)
+					);
+				}, this);
+			}.bind(this),
+			resolveCb
+		);
 
 		if (this.watch) {
 			test = function (path, newFiles, newDirs) {
 				var fullPath = rootPath + sep + path, promise;
-				if ((!getDirs && this.pattern && !this.pattern.test(fullPath)) ||
-						(this.globalRules &&
-							applyGlobalRules(fullPath, this.globalRules))) {
+				if (
+					(!getDirs && this.pattern && !this.pattern.test(fullPath)) ||
+					(this.globalRules && applyGlobalRules(fullPath, this.globalRules))
+				) {
 					return null;
 				}
-				promise = pLstat(fullPath).aside(function (stat) {
-					var type = typeByStats(stat);
-					if (newFiles && (!this.type || this.type[type]) &&
-							(!this.pattern || !getDirs || this.pattern.test(fullPath))) {
-						newFiles.push(path);
-					}
-					if (newDirs && (type === "directory")) newDirs.push(path);
-				}.bind(this));
-				return promise.catch(function (err) {
-					if (err.code !== "ENOENT") throw err;
-				});
+				promise = pLstat(fullPath).aside(
+					function (stat) {
+						var type = typeByStats(stat);
+						if (
+							newFiles &&
+							(!this.type || this.type[type]) &&
+							(!this.pattern || !getDirs || this.pattern.test(fullPath))
+						) {
+							newFiles.push(path);
+						}
+						if (newDirs && type === "directory") newDirs.push(path);
+					}.bind(this)
+				);
+				return promise.catch(function (err) { if (err.code !== "ENOENT") throw err; });
 			}.bind(this);
 
 			paths.on("change", function (data) {
@@ -305,28 +359,34 @@ Readdir.prototype = {
 					nFiles = files && [];
 					nDirs = getDirs && [];
 				}
-				deferred.map(data.added, function (path) {
-					return test(path, nFiles, nDirs);
-				}).done(function () {
-					if (files) {
-						removed = data.removed.filter(contains, files);
-						if (removed.length || (nFiles && nFiles.length)) {
-							remove.apply(files, removed);
-							if (nFiles) push.apply(files, nFiles);
-							result.files.emit("change",
-								{ data: files, removed: removed, added: nFiles || [] });
+				deferred
+					.map(data.added, function (path) { return test(path, nFiles, nDirs); })
+					.done(function () {
+						if (files) {
+							removed = data.removed.filter(contains, files);
+							if (removed.length || (nFiles && nFiles.length)) {
+								remove.apply(files, removed);
+								if (nFiles) push.apply(files, nFiles);
+								result.files.emit("change", {
+									data: files,
+									removed: removed,
+									added: nFiles || []
+								});
+							}
 						}
-					}
-					if (getDirs) {
-						removed = data.removed.filter(contains, dirs);
-						if (removed.length || (nDirs && nDirs.length)) {
-							remove.apply(dirs, removed);
-							if (nDirs) push.apply(dirs, nDirs);
-							result.dirs.emit("change",
-								{ data: dirs, removed: removed, added: nDirs || [] });
+						if (getDirs) {
+							removed = data.removed.filter(contains, dirs);
+							if (removed.length || (nDirs && nDirs.length)) {
+								remove.apply(dirs, removed);
+								if (nDirs) push.apply(dirs, nDirs);
+								result.dirs.emit("change", {
+									data: dirs,
+									removed: removed,
+									added: nDirs || []
+								});
+							}
 						}
-					}
-				});
+					});
 			});
 
 			paths.on("end", function (data, err) {
@@ -361,18 +421,22 @@ Readdir.prototype = {
 		return result;
 	},
 	filterByPattern: function (paths) {
-		var promise, result, rootPath = paths.root, pattern = this.pattern
-		  , rules = this.globalRules, filter;
+		var promise
+		  , result
+		  , rootPath = paths.root
+		  , pattern = this.pattern
+		  , rules = this.globalRules
+		  , filter;
 
 		filter = function (path) {
 			var fullPath = rootPath + sep + path;
-			return (!pattern || pattern.test(fullPath)) &&
-				(!rules || !applyGlobalRules(fullPath, rules));
+			return (
+				(!pattern || pattern.test(fullPath)) &&
+				(!rules || !applyGlobalRules(fullPath, rules))
+			);
 		};
 
-		promise = paths(function (data) {
- return result = data.filter(filter);
-});
+		promise = paths(function (data) { return result = data.filter(filter); });
 		promise.root = rootPath;
 		if (this.watch) {
 			paths.on("change", function (data) {
@@ -385,12 +449,8 @@ Readdir.prototype = {
 					promise.emit("change", { data: result, removed: removed, added: added });
 				}
 			});
-			paths.on("end", function (data, err) {
- promise.emit("end", result, err);
-});
-			promise.close = function () {
- paths.close();
-};
+			paths.on("end", function (data, err) { promise.emit("end", result, err); });
+			promise.close = function () { paths.close(); };
 		}
 		return promise;
 	},
@@ -465,22 +525,23 @@ Readdir.prototype = {
 			};
 		}
 
-		paths.done(function (newPaths) {
-			var waiting = newPaths.length;
-			result = [];
-			if (!waiting) {
-				def.resolve(result);
-				return;
-			}
-			newPaths.forEach(function (path) {
-				test(path, function (lIsIgnored) {
-					if (!lIsIgnored) result.push(path);
-					if (!--waiting) def.resolve(result);
+		paths.done(
+			function (newPaths) {
+				var waiting = newPaths.length;
+				result = [];
+				if (!waiting) {
+					def.resolve(result);
+					return;
+				}
+				newPaths.forEach(function (path) {
+					test(path, function (lIsIgnored) {
+						if (!lIsIgnored) result.push(path);
+						if (!--waiting) def.resolve(result);
+					});
 				});
-			});
-		}, function (e) {
- def.reject(e);
-});
+			},
+			function (e) { def.reject(e); }
+		);
 		promise.root = rootPath;
 		return promise;
 	},
@@ -490,11 +551,8 @@ Readdir.prototype = {
 		promise = def.promise;
 		promise.root = path;
 		if (this.watch) {
-			try {
-				watcher = watchPath(path);
-			} catch (e) {
-				return def.reject(e);
-			}
+			try { watcher = watchPath(path); }
+			catch (e) { return def.reject(e); }
 			watcher.on("end", function (err) {
 				if (!def.resolved) def.reject(err);
 				else if (files) promise.emit("end", files, err);
@@ -548,12 +606,17 @@ readdir = function (path, options) {
 
 	if (options.globalRules) {
 		globalRules = isArray(options.globalRules)
-			? options.globalRules : String(options.globalRules).split(eolRe);
+			? options.globalRules
+			: String(options.globalRules).split(eolRe);
 	}
 	if (options.ignoreRules) {
-		assign(lReaddir, getIsIgnored(isArray(options.ignoreRules)
-				? options.ignoreRules : [options.ignoreRules], globalRules,
-			options.watch));
+		assign(
+			lReaddir,
+			getIsIgnored(
+				isArray(options.ignoreRules) ? options.ignoreRules : [options.ignoreRules],
+				globalRules, options.watch
+			)
+		);
 	} else {
 		lReaddir.globalRules = globalRules;
 	}
