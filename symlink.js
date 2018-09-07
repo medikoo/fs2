@@ -4,9 +4,11 @@ var isCallable = require("es5-ext/object/is-callable")
   , isValue    = require("es5-ext/object/is-value")
   , isString   = require("es5-ext/string/is-string")
   , deferred   = require("deferred")
-  , resolve    = require("path").resolve
+  , path       = require("path")
   , original   = require("fs").symlink
-  , symlink;
+  , mkdir      = require("./mkdir");
+
+var dirname = path.dirname, resolve = path.resolve, symlink;
 
 symlink = function (src, dest, options) {
 	var def = deferred();
@@ -33,6 +35,12 @@ module.exports = exports = function (src, dest /* [, options[, callback]]*/) {
 		options = {};
 	} else {
 		options = isString(options) ? { type: options } : Object(options);
+	}
+
+	if (options.intermediate) {
+		return mkdir(dirname(dest), { intermediate: true })(function () {
+			return symlink(src, dest, options);
+		}).cb(cb);
 	}
 
 	return symlink(src, dest, options).cb(cb);
