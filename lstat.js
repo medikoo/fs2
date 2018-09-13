@@ -1,23 +1,39 @@
 "use strict";
 
-var deferred = require("deferred")
-  , resolve  = require("path").resolve
-  , original = require("fs").lstat
+var isCallable = require("es5-ext/object/is-callable")
+  , isValue    = require("es5-ext/object/is-value")
+  , deferred   = require("deferred")
+  , resolve    = require("path").resolve
+  , original   = require("fs").lstat;
 
-  , lstat;
-
-lstat = function (path) {
+var lstat = function (path, options) {
 	var def = deferred();
 	original(path, function (err, stats) {
-		if (err) def.reject(err);
-		else def.resolve(stats);
+		if (err) {
+			if (options.loose && err.code === "ENOENT") def.resolve(null);
+			else def.reject(err);
+		} else {
+			def.resolve(stats);
+		}
 	});
 	return def.promise;
 };
 lstat.returnsPromise = true;
 
-module.exports = exports = function (path/*, callback*/) {
-	return lstat(resolve(String(path))).cb(arguments[1]);
+module.exports = function (path/*, callback*/) {
+	var options, cb;
+
+	path = resolve(String(path));
+	options = arguments[1];
+	cb = arguments[2];
+	if (!isValue(cb) && isCallable(options)) {
+		cb = options;
+		options = {};
+	} else {
+		options = Object(options);
+	}
+
+	return lstat(path, options).cb(cb);
 };
-exports.returnsPromise = true;
-exports.lstat = lstat;
+module.exports.returnsPromise = true;
+module.exports.lstat = lstat;
