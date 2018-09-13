@@ -31,7 +31,7 @@
   "devDependencies": {
     "tad": "^0.2.7",
     "eslint": "^5.5",
-    "eslint-config-medikoo-es5": "^1.6.1"
+    "eslint-config-medikoo-es5": "^1.7"
   },
   "eslintConfig": {
     "extends": "medikoo-es5",
