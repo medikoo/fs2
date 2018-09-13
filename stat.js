@@ -2,11 +2,9 @@
 
 var deferred = require("deferred")
   , resolve  = require("path").resolve
-  , original = require("fs").stat
+  , original = require("fs").stat;
 
-  , stat;
-
-stat = function (path) {
+var stat = function (path) {
 	var def = deferred();
 	original(path, function (err, stats) {
 		if (err) def.reject(err);
