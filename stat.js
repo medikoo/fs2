@@ -14,8 +14,8 @@ var stat = function (path) {
 };
 stat.returnsPromise = true;
 
-module.exports = exports = function (path/*, callback*/) {
+module.exports = function (path/*, callback*/) {
 	return stat(resolve(String(path))).cb(arguments[1]);
 };
-exports.returnsPromise = true;
-exports.stat = stat;
+module.exports.returnsPromise = true;
+module.exports.stat = stat;
