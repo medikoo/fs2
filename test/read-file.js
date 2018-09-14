@@ -19,9 +19,9 @@ module.exports = function (t) {
 	return {
 		Regular: {
 			"Doesn't exist": function (a, d) {
-				t(resolve(pgPath, "fake"))(a.never, function (err) {
-					a(err.code, "ENOENT");
-				}).done(d, d);
+				t(resolve(pgPath, "fake"))(a.never, function (err) { a(err.code, "ENOENT"); }).done(
+					d, d
+				);
 			},
 			"Exists": function (a, d) {
 				t(resolve(pgPath, "test"))(function (data) {
@@ -65,9 +65,7 @@ module.exports = function (t) {
 								a(invoked, false, "Expected invoke");
 								invoked = data;
 							});
-							watcher.on("end", function () {
-								ended = true;
-							});
+							watcher.on("end", function () { ended = true; });
 							return watcher;
 						}, DELAY)
 					)(
@@ -75,9 +73,9 @@ module.exports = function (t) {
 							a(isBuffer(data), true, "Buffer returned");
 							a(String(data), "one\ntwo", "Content");
 							return open(path, "a")(function (fd) {
-								return write(fd, Buffer.from("\nthree\n"), 0, 7, null)(function () {
-									return close(fd);
-								});
+								return write(
+									fd, Buffer.from("\nthree\n"), 0, 7, null
+								)(function () { return close(fd); });
 							});
 						}, DELAY)
 					)(
@@ -86,9 +84,9 @@ module.exports = function (t) {
 							a(String(invoked), "one\ntwo\nthree\n", "Buffer data");
 							invoked = false;
 							return open(path, "a")(function (fd) {
-								return write(fd, Buffer.from(""), 0, 0, null)(function () {
-									return close(fd);
-								});
+								return write(
+									fd, Buffer.from(""), 0, 0, null
+								)(function () { return close(fd); });
 							});
 						}, DELAY)
 					)(
@@ -97,11 +95,7 @@ module.exports = function (t) {
 							a(ended, false, "Not ended");
 							return unlink(path);
 						}, DELAY)
-					)(
-						delay(function () {
-							a(ended, true, "Watcher ended");
-						}, DELAY)
-					).done(d, d);
+					)(delay(function () { a(ended, true, "Watcher ended"); }, DELAY)).done(d, d);
 				}
 			},
 			Loose: function (a, d) {
@@ -113,9 +107,7 @@ module.exports = function (t) {
 					a(invoked, false, "Expected invoke");
 					invoked = data;
 				});
-				watcher.on("end", function () {
-					ended = true;
-				});
+				watcher.on("end", function () { ended = true; });
 
 				return watcher(
 					delay(function (data) {
@@ -128,9 +120,9 @@ module.exports = function (t) {
 						a(String(invoked), "foo\nbar", "Emitted Content");
 						invoked = false;
 						return open(path, "a")(function (fd) {
-							return write(fd, Buffer.from("\nfour\n"), 0, 6, null)(function () {
-								return close(fd);
-							});
+							return write(
+								fd, Buffer.from("\nfour\n"), 0, 6, null
+							)(function () { return close(fd); });
 						});
 					}, DELAY)
 				)(
@@ -139,9 +131,9 @@ module.exports = function (t) {
 						a(String(invoked), "foo\nbar\nfour\n", "Buffer data");
 						invoked = false;
 						return open(path, "a")(function (fd) {
-							return write(fd, Buffer.from(""), 0, 0, null)(function () {
-								return close(fd);
-							});
+							return write(
+								fd, Buffer.from(""), 0, 0, null
+							)(function () { return close(fd); });
 						});
 					}, DELAY)
 				)(
