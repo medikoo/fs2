@@ -12,6 +12,7 @@ module.exports = {
 	readFile: require("./read-file"),
 	readdir: require("./readdir"),
 	rename: require("./rename"),
+	rm: require("./rm"),
 	rmdir: require("./rmdir"),
 	stat: require("./stat"),
 	symlink: require("./symlink"),
