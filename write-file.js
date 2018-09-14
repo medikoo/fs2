@@ -9,6 +9,7 @@ var isCallable = require("es5-ext/object/is-callable")
   , deferred   = require("deferred")
   , fs         = require("fs")
   , pathUtils  = require("path")
+  , bufferFrom = require("./lib/buffer-from")
   , mkdir      = require("./mkdir").mkdir;
 
 var dirname = pathUtils.dirname
@@ -74,11 +75,8 @@ _writeFile = function (path, data, encoding, flag, mode) {
 			var buffer;
 			if (Buffer.isBuffer(data)) {
 				buffer = data;
-			} else if (typeof Buffer.from === "function") {
-				buffer = Buffer.from(String(data), encoding);
 			} else {
-				// eslint-disable-next-line no-buffer-constructor
-				buffer = new Buffer(String(data), encoding);
+				buffer = bufferFrom(String(data), encoding);
 			}
 			writeAll(path, fd, buffer, 0, buffer.length);
 		}

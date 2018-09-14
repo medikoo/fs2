@@ -1,17 +1,18 @@
 "use strict";
 
-var deferred  = require("deferred")
-  , delay     = deferred.delay
-  , promisify = deferred.promisify
-  , isBuffer  = Buffer.isBuffer
-  , fs        = require("fs")
-  , resolve   = require("path").resolve
-  , open      = promisify(fs.open)
-  , write     = promisify(fs.write)
-  , close     = promisify(fs.close)
-  , writeFile = promisify(fs.writeFile)
-  , unlink    = promisify(fs.unlink)
-  , pgPath    = resolve(__dirname, "./__playground/read-file");
+var deferred   = require("deferred")
+  , bufferFrom = require("../lib/buffer-from")
+  , delay      = deferred.delay
+  , promisify  = deferred.promisify
+  , isBuffer   = Buffer.isBuffer
+  , fs         = require("fs")
+  , resolve    = require("path").resolve
+  , open       = promisify(fs.open)
+  , write      = promisify(fs.write)
+  , close      = promisify(fs.close)
+  , writeFile  = promisify(fs.writeFile)
+  , unlink     = promisify(fs.unlink)
+  , pgPath     = resolve(__dirname, "./__playground/read-file");
 
 module.exports = function (t) {
 	var DELAY = 100;
@@ -74,7 +75,7 @@ module.exports = function (t) {
 							a(String(data), "one\ntwo", "Content");
 							return open(path, "a")(function (fd) {
 								return write(
-									fd, Buffer.from("\nthree\n"), 0, 7, null
+									fd, bufferFrom("\nthree\n"), 0, 7, null
 								)(function () { return close(fd); });
 							});
 						}, DELAY)
@@ -85,7 +86,7 @@ module.exports = function (t) {
 							invoked = false;
 							return open(path, "a")(function (fd) {
 								return write(
-									fd, Buffer.from(""), 0, 0, null
+									fd, bufferFrom(""), 0, 0, null
 								)(function () { return close(fd); });
 							});
 						}, DELAY)
@@ -121,7 +122,7 @@ module.exports = function (t) {
 						invoked = false;
 						return open(path, "a")(function (fd) {
 							return write(
-								fd, Buffer.from("\nfour\n"), 0, 6, null
+								fd, bufferFrom("\nfour\n"), 0, 6, null
 							)(function () { return close(fd); });
 						});
 					}, DELAY)
@@ -132,7 +133,7 @@ module.exports = function (t) {
 						invoked = false;
 						return open(path, "a")(function (fd) {
 							return write(
-								fd, Buffer.from(""), 0, 0, null
+								fd, bufferFrom(""), 0, 0, null
 							)(function () { return close(fd); });
 						});
 					}, DELAY)
