@@ -25,17 +25,11 @@ module.exports = function (t, a, d) {
 	  , watch2;
 
 	watch1 = t(dirPath);
-	watch1.on("change", function (e) {
-		ondirchange.push(e.type);
-	});
+	watch1.on("change", function (e) { ondirchange.push(e.type); });
 	watch2 = t(filePath);
-	watch2.on("change", function (e) {
-		onfilechange.push(e.type);
-	});
+	watch2.on("change", function (e) { onfilechange.push(e.type); });
 
-	delay(function () {
-		return mkdir(dirPath);
-	}, DELAY)()(
+	delay(function () { return mkdir(dirPath); }, DELAY)()(
 		delay(function () {
 			a(String(ondirchange), "create", "Dir: Dir created");
 			a(String(onfilechange), "", "File: Dir created");
@@ -50,9 +44,9 @@ module.exports = function (t, a, d) {
 			ondirchange = [];
 			onfilechange = [];
 			return open(filePath, "a")(function (fd) {
-				return write(fd, Buffer.from("dwatrzy"), 0, 3, null)(function () {
-					return close(fd);
-				});
+				return write(
+					fd, Buffer.from("dwatrzy"), 0, 3, null
+				)(function () { return close(fd); });
 			});
 		}, DELAY)
 	)(
