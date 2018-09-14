@@ -29,7 +29,7 @@
     "minimatch": "~3.0.4"
   },
   "devDependencies": {
-    "tad": "^0.2.7",
+    "tad": "^0.2.8",
     "eslint": "^5.5",
     "eslint-config-medikoo-es5": "^1.7"
   },
