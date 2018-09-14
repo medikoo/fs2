@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.10"></a>
+## [0.2.10](https://github.com/medikoo/fs2/compare/v0.2.9...v0.2.10) (2018-09-14)
+
+
+### Bug Fixes
+
+* support for very old versions of Node.js ([73bc389](https://github.com/medikoo/fs2/commit/73bc389))
+
+
+### Features
+
+* rm util, removes either file or directory ([6733df6](https://github.com/medikoo/fs2/commit/6733df6))
+
+
+
 <a name="0.2.9"></a>
 ## [0.2.9](https://github.com/medikoo/fs2/compare/v0.2.8...v0.2.9) (2018-09-13)
 
