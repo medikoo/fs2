@@ -25,7 +25,7 @@ module.exports = function (t, a, d) {
 	  , w2
 	  , w3
 	  , w4
-	  , DELAY = 100
+	  , DELAY = 500
 	  , dirPath = resolve(pgPath, "tmpdir")
 	  , filePath = resolve(dirPath, "tmpfile");
 
