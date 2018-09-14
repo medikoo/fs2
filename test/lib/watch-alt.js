@@ -25,47 +25,31 @@ module.exports = function (t, a, d) {
 	  , dirPath = resolve(pgPath, "tmpdir")
 	  , filePath = resolve(dirPath, "tmpfile");
 
-	a.throws(function () {
-		t(filePath);
-	}, "Not existing");
+	a.throws(function () { t(filePath); }, "Not existing");
 
-	delay(function () {
-		return mkdir(dirPath);
-	}, DELAY)()(
+	delay(function () { return mkdir(dirPath); }, DELAY)()(
 		delay(function () {
 			var dirWatch;
 			dirWatch = t(dirPath);
-			dirWatch.on("change", function () {
-				++ondirchange;
-			});
-			dirWatch.on("end", function () {
-				++ondirend;
-			});
+			dirWatch.on("change", function () { ++ondirchange; });
+			dirWatch.on("end", function () { ++ondirend; });
 		}, DELAY)
-	)(
-		delay(function () {
-			return writeFile(filePath, "raz");
-		}, DELAYWAIT)
-	)(
+	)(delay(function () { return writeFile(filePath, "raz"); }, DELAYWAIT))(
 		delay(function () {
 			var fileWatch;
 			a(ondirchange, 1, "Dir change: File created");
 			a(ondirend, 0, "Dir end: File created");
 			ondirchange = ondirend = 0;
 			fileWatch = t(filePath);
-			fileWatch.on("change", function () {
-				++onfilechange;
-			});
-			fileWatch.on("end", function () {
-				++onfileend;
-			});
+			fileWatch.on("change", function () { ++onfilechange; });
+			fileWatch.on("end", function () { ++onfileend; });
 		}, DELAYWAIT)
 	)(
 		delay(function () {
 			return open(filePath, "a")(function (fd) {
-				return write(fd, Buffer.from("dwatrzy"), 0, 3, null)(function () {
-					return close(fd);
-				});
+				return write(
+					fd, Buffer.from("dwatrzy"), 0, 3, null
+				)(function () { return close(fd); });
 			});
 		}, DELAY)
 	)(
