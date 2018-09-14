@@ -50,13 +50,9 @@ next = function (path, err, content, encoding, flag, mode) {
 writeAll = function (path, fd, buffer, offset, length) {
 	fs.write(fd, buffer, offset, length, offset, function (writeErr, written) {
 		if (writeErr) {
-			fs.close(fd, function () {
-				next(path, writeErr);
-			});
+			fs.close(fd, function () { next(path, writeErr); });
 		} else if (written === length || cache[path].data) {
-			fs.close(fd, function (err) {
-				next(path, err);
-			});
+			fs.close(fd, function (err) { next(path, err); });
 		} else {
 			writeAll(path, fd, buffer, offset + written, length - written);
 		}
@@ -73,9 +69,7 @@ _writeFile = function (path, data, encoding, flag, mode) {
 			return;
 		}
 		if (cache[path].data) {
-			fs.close(fd, function (err) {
-				next(path, err);
-			});
+			fs.close(fd, function (err) { next(path, err); });
 		} else {
 			var buffer;
 			if (Buffer.isBuffer(data)) {
