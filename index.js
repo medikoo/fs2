@@ -11,7 +11,7 @@ module.exports = {
 	mkdir: require("./mkdir"),
 	readFile: require("./read-file"),
 	readdir: require("./readdir"),
-	readlink: rquire("./readlink"),
+	readlink: require("./readlink"),
 	realpath: require("./realpath"),
 	rename: require("./rename"),
 	rm: require("./rm"),
