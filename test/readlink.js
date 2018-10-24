@@ -6,6 +6,7 @@ var resolve = require("path").resolve
 
 var rootPath = resolve(__dirname, "./__playground/readlink")
   , targetFile = resolve(rootPath, "from")
+  , nonSymlink = resolve(rootPath, "non-symlink")
   , symlink1 = resolve(rootPath, "sym1")
   , symlink2 = resolve(rootPath, "sym2");
 
@@ -15,5 +16,7 @@ module.exports = function (t, a, d) {
 	})(function (resolvedTarget) {
 		a(resolvedTarget, symlink1);
 		return unlink(symlink1)(unlink(symlink2));
+	})(function () { return t(nonSymlink, { loose: true }); })(function (result) {
+		a(result, null);
 	}).done(d, d);
 };
