@@ -90,6 +90,11 @@ Suported options:
 -   **ignoreRules** `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information
 -   **globalRules** `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information.
 
+### readlink(path[, options[, cb]]) _(fs2/readlink)_
+
+Same as [fs.readlink](http://nodejs.org/api/all.html#fs_fs_readlink_path_options_callback). Returns promise.
+Supports `loose: true` option, which when passed, resolves with `null` (instead of exception) if path doesn't exist
+
 ### realpath(path[, options[, cb]]) _(fs2/realpath)_
 
 Same as [fs.realpath](http://nodejs.org/api/all.html#fs_fs_realpath_path_options_callback). Returns promise.
