@@ -90,6 +90,11 @@ Suported options:
 -   **ignoreRules** `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information
 -   **globalRules** `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information.
 
+### realpath(path[, options[, cb]]) _(fs2/realpath)_
+
+Same as [fs.realpath](http://nodejs.org/api/all.html#fs_fs_realpath_path_options_callback). Returns promise.
+Supports `loose: true` option, which when passed, resolves with `null` (instead of exception) if path doesn't exist
+
 ### rename(oldPath, newPath[, cb]) _(fs2/rename)_
 
 Same as [fs.rename](http://nodejs.org/api/all.html#all_fs_rename_oldpath_newpath_callback). Returns promise.
