@@ -93,7 +93,7 @@ Suported options:
 ### readlink(path[, options[, cb]]) _(fs2/readlink)_
 
 Same as [fs.readlink](http://nodejs.org/api/all.html#fs_fs_readlink_path_options_callback). Returns promise.
-Supports `loose: true` option, which when passed, resolves with `null` (instead of exception) if path doesn't exist
+Supports `loose: true` option, which when passed, resolves with `null` (instead of exception) if file at path is not a symlink or it doesn't exist.
 
 ### realpath(path[, options[, cb]]) _(fs2/realpath)_
 
