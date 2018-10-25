@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.15"></a>
+## [0.2.15](https://github.com/medikoo/fs2/compare/v0.2.14...v0.2.15) (2018-10-25)
+
+
+### Bug Fixes
+
+* **readlink:** improve loose option handling ([b54f193](https://github.com/medikoo/fs2/commit/b54f193))
+* improve arguments handling ([c32f340](https://github.com/medikoo/fs2/commit/c32f340))
+* **lstat:** fix loose option handling ([889b829](https://github.com/medikoo/fs2/commit/889b829))
+
+
+### Features
+
+* isDirectory util ([835b4a9](https://github.com/medikoo/fs2/commit/835b4a9))
+
+
+
 <a name="0.2.14"></a>
 ## [0.2.14](https://github.com/medikoo/fs2/compare/v0.2.13...v0.2.14) (2018-10-24)
 
