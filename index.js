@@ -7,6 +7,7 @@ module.exports = {
 	descriptorsHandler: require("./descriptors-handler"),
 	isDirectory: require("./is-directory"),
 	isIgnored: require("./is-ignored"),
+	isSymlink: require("./is-symlink"),
 	lchmod: require("./lchmod"),
 	lstat: require("./lstat"),
 	mkdir: require("./mkdir"),

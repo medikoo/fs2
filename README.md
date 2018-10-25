@@ -53,6 +53,18 @@ Supported options:
 -   **globalRules** `string|array` - additional global rules. They will be matched as if placed in filesystem root directory, it means that any rules found in existing ignore files may override them.
 -   **watch** `bool` - whether to watch for changes. If ignore state would change, returned promise would emit `change` event with new value (_true_/_false_)
 
+### isSymlink(path[, options[, cb]]) _(fs2/is-symlink)_
+
+Whether path points to a symlimk
+Resolves with `true` if provided path points to symlink, `false` if provided path points to a non-symlink file, `null` if there's no file at path. Returns promise.
+
+Additionally resultion can be fine tuned for specific needs with below options:
+
+Supported options:
+
+-   **linkPath** `string` - Expected linkPath to which symlink should point. If provided and symlink points elsewhere `false` is returned.
+-   **recursive** `bool` - whether check for matching `linkPath` should be applied to final path (so if symlink points to other symlink we check against the final path, and not linked symlink path)
+
 ### lchmod(path, mode[, cb]) _(fs2/lchmod)_
 
 Same as [fs.lchmod](http://nodejs.org/api/all.html#all_fs_lchmod_path_mode_callback). Returns promise.
