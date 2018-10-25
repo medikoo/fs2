@@ -23,7 +23,7 @@ var readlink = function (path, options) {
 };
 readlink.returnsPromise = true;
 
-module.exports = function (path/*, callback*/) {
+module.exports = function (path/*[, options[, callback]]*/) {
 	var options, cb;
 
 	path = resolve(String(path));
