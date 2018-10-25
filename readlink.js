@@ -30,7 +30,7 @@ module.exports = function (path/*[, options[, callback]]*/) {
 	options = arguments[1];
 	cb = arguments[2];
 	if (!isValue(cb) && isCallable(options)) {
-		cb = options;
+		cb = Object(options);
 		options = {};
 	} else {
 		options = Object(options);
