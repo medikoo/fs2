@@ -38,6 +38,7 @@ Internally it provides same solution as [fs-graceful](https://github.com/isaacs/
 
 ### isDirectory(path[, cb]) _(fs2/is-directory)_
 
+Whether path points to a directory
 Resolves with `true` if provided path points to a directory, `false` if provided path points to a non-directory file, `null` if there's no file at path. Returns promise.
 
 ### isIgnored(mode, path[, options[, cb]]) _(fs2/is-ignored)_
