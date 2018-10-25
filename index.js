@@ -5,6 +5,7 @@ module.exports = {
 	chmod: require("./chmod"),
 	copy: require("./copy"),
 	descriptorsHandler: require("./descriptors-handler"),
+	isDirectory: require("./is-directory"),
 	isIgnored: require("./is-ignored"),
 	lchmod: require("./lchmod"),
 	lstat: require("./lstat"),
