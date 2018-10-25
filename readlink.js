@@ -10,7 +10,10 @@ var readlink = function (path, options) {
 	var def = deferred();
 	original(path, options, function (err, stats) {
 		if (err) {
-			if (options.loose && (err.code === "ENOENT" || err.code === "EINVAL")) {
+			if (
+				options.loose &&
+				(err.code === "ENOENT" || err.code === "EINVAL" || err.code === "ENOTDIR")
+			) {
 				def.resolve(null);
 			} else {
 				def.reject(err);
