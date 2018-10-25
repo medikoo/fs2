@@ -10,8 +10,11 @@ var lstat = function (path, options) {
 	var def = deferred();
 	original(path, function (err, stats) {
 		if (err) {
-			if (options.loose && err.code === "ENOENT") def.resolve(null);
-			else def.reject(err);
+			if (options.loose && (err.code === "ENOENT" || err.code === "ENOTDIR")) {
+				def.resolve(null);
+			} else {
+				def.reject(err);
+			}
 		} else {
 			def.resolve(stats);
 		}
