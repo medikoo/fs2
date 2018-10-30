@@ -26,14 +26,11 @@ var fixOptions = function (options) {
 	return defineProperty(options, "hasOwnProperty", d(objHasOwnProperty));
 };
 
-var copyWithMode = function (def, source, dest, options) {
+var copyFileWithMode = function (def, source, dest, options) {
 	var read, write;
 
-	try {
-		read = createReadStream(source);
-	} catch (e) {
-		return def.reject(e);
-	}
+	try { read = createReadStream(source); }
+	catch (e) { return def.reject(e); }
 	read.on("error", function (e) {
 		write.destroy();
 		if (options.loose && e.code === "ENOENT") def.resolve(unlink(dest, { loose: true })(false));
@@ -53,7 +50,7 @@ var copyWithMode = function (def, source, dest, options) {
 			mkdir(dirname(resolve(dest)), { intermediate: true }).done(function () {
 				options = normalizeOptions(options);
 				delete options.intermediate;
-				return copyWithMode(def, source, dest, options);
+				return copyFileWithMode(def, source, dest, options);
 			}, def.reject);
 			return;
 		}
@@ -65,10 +62,10 @@ var copyWithMode = function (def, source, dest, options) {
 	return def.promise;
 };
 
-var copy = function (source, dest, options) {
+var copyFile = function (source, dest, options) {
 	var def = deferred();
 	if (options.mode) {
-		copyWithMode(def, source, dest, options);
+		copyFileWithMode(def, source, dest, options);
 		return def.promise;
 	}
 	stat(source, function (e, stats) {
@@ -82,20 +79,20 @@ var copy = function (source, dest, options) {
 		}
 		options = normalizeOptions(options);
 		options.mode = stats.mode;
-		copyWithMode(def, source, dest, options);
+		copyFileWithMode(def, source, dest, options);
 	});
 	return def.promise;
 };
-copy.returnsPromise = true;
+copyFile.returnsPromise = true;
 
-module.exports = exports = function (source, dest /*, options, cb*/) {
+module.exports = exports = function (source, dest/*, options, cb*/) {
 	var options = Object(arguments[2]), cb = arguments[3];
 	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
 	}
 
-	return copy(String(source), String(dest), options).cb(cb);
+	return copyFile(String(source), String(dest), options).cb(cb);
 };
-exports.copy = copy;
+exports.copy = copyFile;
 exports.returnsPromise = true;
