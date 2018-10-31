@@ -33,7 +33,6 @@ var copyFileWithMode = function (def, source, dest, options) {
 	try { read = createReadStream(source); }
 	catch (e) { return def.reject(e); }
 	read.on("error", function (e) {
-		write.destroy();
 		if (options.loose && e.code === "ENOENT") def.resolve(unlink(dest, { loose: true })(false));
 		else def.reject(e);
 	});
@@ -46,7 +45,6 @@ var copyFileWithMode = function (def, source, dest, options) {
 	}
 
 	write.on("error", function (e) {
-		read.destroy();
 		if (e.code === "ENOENT" && options.intermediate) {
 			mkdir(dirname(resolve(dest)), { intermediate: true }).done(function () {
 				options = normalizeOptions(options);
