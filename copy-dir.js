@@ -66,7 +66,10 @@ module.exports = exports = function (source, dest/*, options, cb*/) {
 
 	source = resolve(String(source));
 	dest = resolve(String(dest));
-	return copyDir(source, dest, options, source, dest).cb(cb);
+	return lstat(dest, { loose: true })(function (stats) {
+		if (stats) throw new Error("Destination path exists");
+		return copyDir(source, dest, options, source, dest);
+	}).cb(cb);
 };
 exports.copyDir = copyDir;
 exports.returnsPromise = true;
