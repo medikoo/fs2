@@ -6,6 +6,7 @@ var isCallable = require("es5-ext/object/is-callable")
   , deferred   = require("deferred")
   , path       = require("path")
   , lstat      = require("./lstat")
+  , mkdir      = require("./mkdir")
   , readdir    = require("./readdir")
   , readlink   = require("./readlink")
   , symlink    = require("./symlink")
@@ -23,9 +24,7 @@ var copyDir = function (source, dest, options, sourceTop, destTop) {
 				var filename = resolve(source, relativePath);
 				return lstat(filename)(function (stats) {
 					if (stats.isDirectory()) {
-						return copyDir(
-							filename, resolve(dest, relativePath), options, sourceTop, destTop
-						);
+						return mkdir(resolve(dest, relativePath), { intermediate: true });
 					}
 					if (stats.isFile()) {
 						return copyFile(filename, resolve(dest, relativePath), {
