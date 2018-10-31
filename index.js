@@ -4,6 +4,7 @@ module.exports = {
 	appendFile: require("./append-file"),
 	chmod: require("./chmod"),
 	copy: require("./copy"),
+	copyDir: require("./copy-dir"),
 	descriptorsHandler: require("./descriptors-handler"),
 	isDirectory: require("./is-directory"),
 	isIgnored: require("./is-ignored"),

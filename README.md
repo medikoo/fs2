@@ -21,6 +21,14 @@ Not available on Windows.
 Copy file, returns promise but accepts as well regular callback.
 Eventual options are passed to underlying [fs.createWriteStream](http://nodejs.org/api/all.html#all_fs_createwritestream_path_options)
 
+### copyDir(src, dest[, options[, cb]]) _(fs2/copy-dir)_
+
+Copy directory recursively, returns promise but accepts as well regular callback.
+
+Supported options:
+
+-   **loose** - Do not error if file doesn't exits or is inaccessible, return _false_ instead.
+
 ### descriptorsHandler() _(fs2/descriptors-handler)_
 
 Initializes _EMFILE_ errors prevention.
