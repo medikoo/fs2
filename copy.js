@@ -78,7 +78,11 @@ var copyFile = function (source, dest, options) {
 		}
 		options = normalizeOptions(options);
 		options.mode = stats.mode;
-		copyFileWithMode(def, source, dest, options);
+		stat(dest, function (error) {
+			if (!error) def.reject(new Error("Destinaton '" + dest + "' exists"));
+			else if (error.code === "ENOENT") copyFileWithMode(def, source, dest, options);
+			else def.reject(error);
+		});
 	});
 	return def.promise;
 };
