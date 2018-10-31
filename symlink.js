@@ -26,7 +26,7 @@ symlink.returnsPromise = true;
 module.exports = exports = function (src, dest /* [, options[, callback]]*/) {
 	var options, cb;
 
-	src = resolve(String(src));
+	src = String(src);
 	dest = resolve(String(dest));
 	options = arguments[2];
 	cb = arguments[3];
