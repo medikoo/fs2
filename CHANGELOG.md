@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.18"></a>
+## [0.2.18](https://github.com/medikoo/fs2/compare/v0.2.17...v0.2.18) (2018-10-31)
+
+
+### Bug Fixes
+
+* remove problematic stream.destroy() ([ceb67b9](https://github.com/medikoo/fs2/commit/ceb67b9))
+* **copy:** validate destination existence ([7662c1e](https://github.com/medikoo/fs2/commit/7662c1e))
+* **copyDir:** fix duplicate file copying ([41ff83b](https://github.com/medikoo/fs2/commit/41ff83b))
+
+
+
 <a name="0.2.17"></a>
 ## [0.2.17](https://github.com/medikoo/fs2/compare/v0.2.16...v0.2.17) (2018-10-31)
 
