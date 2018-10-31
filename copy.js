@@ -4,22 +4,23 @@
 
 "use strict";
 
-var isCallable        = require("es5-ext/object/is-callable")
-  , isValue           = require("es5-ext/object/is-value")
-  , normalizeOptions  = require("es5-ext/object/normalize-options")
-  , d                 = require("d")
-  , deferred          = require("deferred")
-  , fs                = require("fs")
-  , path              = require("path")
-  , mkdir             = require("./mkdir")
-  , unlink            = require("./unlink")
-  , objHasOwnProperty = Object.prototype.hasOwnProperty
-  , defineProperty    = Object.defineProperty
-  , dirname           = path.dirname
-  , resolve           = path.resolve
-  , createReadStream  = fs.createReadStream
+var isCallable       = require("es5-ext/object/is-callable")
+  , isValue          = require("es5-ext/object/is-value")
+  , normalizeOptions = require("es5-ext/object/normalize-options")
+  , d                = require("d")
+  , deferred         = require("deferred")
+  , fs               = require("fs")
+  , path             = require("path")
+  , mkdir            = require("./mkdir")
+  , unlink           = require("./unlink");
+
+var objHasOwnProperty = Object.prototype.hasOwnProperty
+  , defineProperty = Object.defineProperty
+  , dirname = path.dirname
+  , resolve = path.resolve
+  , createReadStream = fs.createReadStream
   , createWriteStream = fs.createWriteStream
-  , stat              = fs.stat;
+  , stat = fs.stat;
 
 var fixOptions = function (options) {
 	if (options.hasOwnProperty) return options;
