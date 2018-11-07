@@ -7,7 +7,9 @@ var deferred = require("deferred")
   , symlink  = require("../symlink")
   , rm       = require("../rm");
 
-var resolve = path.resolve, pg = path.resolve(__dirname, "./__playground/copy-dir");
+var relative = path.relative
+  , resolve = path.resolve
+  , pg = path.resolve(__dirname, "./__playground/copy-dir");
 
 module.exports = function (t, a, d) {
 	var src = resolve(pg, "some-dir")
@@ -24,10 +26,10 @@ module.exports = function (t, a, d) {
 			a.deep(srcFiles, dstFiles);
 			return readlink(resolve(dst, "symlink1"));
 		})(function (symLinkPath) {
-			a(symLinkPath, resolve(dst, "sample1"));
+			a(symLinkPath, relative(dst, resolve(dst, "sample1")));
 			return readlink(resolve(dst, "symlink2"));
 		})(function (symLinkPath) {
-			a(symLinkPath, __dirname);
+			a(symLinkPath, relative(dst, __dirname));
 			return rm(dst, { recursive: true, force: true })(rm(srcSymlink1))(rm(srcSymlink2));
 		})
 		.done(d, d);

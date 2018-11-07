@@ -12,7 +12,7 @@ var isCallable = require("es5-ext/object/is-callable")
   , symlink    = require("./symlink")
   , copyFile   = require("./copy").copy;
 
-var dirname = path.dirname, resolve = path.resolve, sep = path.sep;
+var dirname = path.dirname, relative = path.relative, resolve = path.resolve, sep = path.sep;
 
 var copyDir = function (source, dest, options, sourceTop, destTop) {
 	return readdir(source, {
@@ -33,7 +33,7 @@ var copyDir = function (source, dest, options, sourceTop, destTop) {
 					}
 					if (!stats.isSymbolicLink()) return null;
 					return readlink(filename)(function (linkPath) {
-						linkPath = resolve(source, linkPath);
+						linkPath = resolve(dirname(filename), linkPath);
 						var linkDirname = dirname(linkPath);
 						if (
 							linkDirname === sourceTop ||
@@ -41,9 +41,11 @@ var copyDir = function (source, dest, options, sourceTop, destTop) {
 						) {
 							linkPath = resolve(destTop, linkPath.slice(sourceTop.length + 1));
 						}
-						return symlink(linkPath, resolve(dest, relativePath), {
-							intermediate: true
-						});
+						return symlink(
+							relative(dirname(resolve(dest, relativePath)), linkPath),
+							resolve(dest, relativePath),
+							{ intermediate: true }
+						);
 					});
 				});
 			});
