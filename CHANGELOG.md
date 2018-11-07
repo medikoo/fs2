@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.20"></a>
+## [0.2.20](https://github.com/medikoo/fs2/compare/v0.2.19...v0.2.20) (2018-11-07)
+
+
+### Bug Fixes
+
+* **copyDir:** symlink copying ([c0e4a6f](https://github.com/medikoo/fs2/commit/c0e4a6f))
+
+
+
 <a name="0.2.19"></a>
 ## [0.2.19](https://github.com/medikoo/fs2/compare/v0.2.18...v0.2.19) (2018-10-31)
 
