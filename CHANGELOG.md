@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.21"></a>
+## [0.2.21](https://github.com/medikoo/fs2/compare/v0.2.20...v0.2.21) (2018-11-15)
+
+
+### Bug Fixes
+
+* 'loose' option handling on windows ([3788ebf](https://github.com/medikoo/fs2/commit/3788ebf))
+
+
+
 <a name="0.2.20"></a>
 ## [0.2.20](https://github.com/medikoo/fs2/compare/v0.2.19...v0.2.20) (2018-11-07)
 
