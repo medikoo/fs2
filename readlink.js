@@ -12,7 +12,10 @@ var readlink = function (path, options) {
 		if (err) {
 			if (
 				options.loose &&
-				(err.code === "ENOENT" || err.code === "EINVAL" || err.code === "ENOTDIR")
+				(err.code === "ENOENT" ||
+					err.code === "EINVAL" ||
+					err.code === "ENOTDIR" ||
+					err.code === "UNKNOWN")
 			) {
 				def.resolve(null);
 			} else {

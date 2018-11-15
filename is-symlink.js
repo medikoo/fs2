@@ -31,6 +31,7 @@ module.exports = function (path/*[, options[, callback]]*/) {
 			if (error.code === "ENOENT") return null;
 			if (error.code === "EINVAL") return false;
 			if (error.code === "ENOTDIR") return null;
+			if (error.code === "UNKNOWN") return null;
 			throw error;
 		}
 	).cb(cb);
