@@ -2,11 +2,12 @@
 
 var ee        = require("event-emitter")
   , pathUtils = require("path")
-  , watch     = require("./watch").watch
-  , basename  = pathUtils.basename
-  , dirname   = pathUtils.dirname
-  , join      = pathUtils.join
-  , resolve   = pathUtils.resolve
+  , watch     = require("./watch").watch;
+
+var basename = pathUtils.basename
+  , dirname = pathUtils.dirname
+  , join = pathUtils.join
+  , resolve = pathUtils.resolve
   , Watcher;
 
 Watcher = function (path) {
@@ -22,9 +23,7 @@ Watcher = function (path) {
 };
 
 Watcher.prototype = {
-	close: function () {
-		this.watcher.close();
-	},
+	close: function () { this.watcher.close(); },
 	up: function () {
 		var parent = dirname(this.path);
 		if (parent === this.path) {
@@ -47,11 +46,8 @@ Watcher.prototype = {
 	tryDown: function () {
 		var watcher, npath;
 		npath = join(this.path, this.missing[0]);
-		try {
-			watcher = watch(npath);
-		} catch (e) {
-			return false;
-		}
+		try { watcher = watch(npath); }
+		catch (e) { return false; }
 		this.path = npath;
 		this.missing.shift();
 		if (!this.missing.length) {
@@ -81,19 +77,13 @@ Watcher.prototype = {
 		}
 		this.watcher = watcher;
 	},
-	oncreate: function () {
-		this.emitter.emit("change", { type: "create" });
-	},
-	onchange: function () {
-		this.emitter.emit("change", { type: "modify" });
-	},
+	oncreate: function () { this.emitter.emit("change", { type: "create" }); },
+	onchange: function () { this.emitter.emit("change", { type: "modify" }); },
 	onremove: function () {
 		this.emitter.emit("change", { type: "remove" });
 		this.up();
 	}
 };
 
-module.exports = exports = function (path) {
-	return new Watcher(resolve(String(path)));
-};
+module.exports = exports = function (path) { return new Watcher(resolve(String(path))); };
 exports.WatchPath = Watcher;
