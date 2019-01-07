@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/medikoo/fs2/compare/v0.2.21...v0.3.0) (2019-01-07)
+
+
+### Bug Fixes
+
+* Ensure git ignore resolution works as expected ([c5d68fb](https://github.com/medikoo/fs2/commit/c5d68fb))
+
+
+### BREAKING CHANGES
+
+* Due to switch to  'ignore' not supporting Node below v6,
+drop support for old verions of Node.js.
+
+
+
 <a name="0.2.21"></a>
 ## [0.2.21](https://github.com/medikoo/fs2/compare/v0.2.20...v0.2.21) (2018-11-15)
 
