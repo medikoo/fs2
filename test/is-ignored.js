@@ -125,19 +125,17 @@ module.exports = function (t, a, d) {
 		return writeFile(rootFile, "two");
 	})(
 		delay(function () {
-			a(invoked, true, "#8 event");
-			invoked = null;
+			a(invoked, null, "#8 event");
 			return t("git", twoFooPath);
 		}, DELAY)
 	)(function (value) {
-		a(value, true, "#8");
+		a(value, false, "#8");
 
 		// Remove root .gitignore
 		return unlink(rootFile);
 	})(
 		delay(function () {
-			a(invoked, false, "#9 event");
-			invoked = null;
+			a(invoked, null, "#9 event");
 			return t("git", twoFooPath);
 		}, DELAY)
 	)(function (value) {
