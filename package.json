@@ -22,16 +22,16 @@
   },
   "dependencies": {
     "d": "1",
-    "deferred": "~0.7.9",
-    "es5-ext": "~0.10.46",
-    "event-emitter": "~0.3.5",
+    "deferred": "^0.7.10",
+    "es5-ext": "^0.10.46",
+    "event-emitter": "^0.3.5",
     "ignore": "^5.0.4",
-    "memoizee": "~0.4.14"
+    "memoizee": "^0.4.14"
   },
   "devDependencies": {
     "tad": "^0.2.8",
-    "eslint": "^5.5",
-    "eslint-config-medikoo-es5": "^1.7"
+    "eslint": "^5.12",
+    "eslint-config-medikoo-es5": "^1.7.3"
   },
   "eslintConfig": {
     "extends": "medikoo-es5",
