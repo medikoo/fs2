@@ -114,6 +114,7 @@ Suported options:
 -   **stream** `bool` - Whether to provide data continuously. Currently it's not provided as a [stream](http://nodejs.org/api/all.html#all_stream) per se (it would be starting from next release, v0.4), data is emited as `data` events on returned promise object, structure of _event_ objects described under _watch_ option
 -   **ignoreRules** `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information
 -   **globalRules** `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information.
+-   **dirFilter** `function|regexp` - Filter out directories into which we should not recurse to. Can be provided as function which having directory name should return boolaen (`true` if we should recurse into directory), or as regex which if matches means that directory should be recurse into. Neverthless `depth` setting is supported unconditionally
 
 ### readlink(path[, options[, cb]]) _(fs2/readlink)_
 
