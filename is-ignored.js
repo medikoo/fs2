@@ -7,11 +7,9 @@ var invoke         = require("es5-ext/function/invoke")
   , isCallable     = require("es5-ext/object/is-callable")
   , isValue        = require("es5-ext/object/is-value")
   , forEach        = require("es5-ext/object/for-each")
-  , contains       = require("es5-ext/string/#/contains")
-  , last           = require("es5-ext/string/#/last")
   , memoize        = require("memoizee")
   , deferred       = require("deferred")
-  , minimatch      = require("minimatch")
+  , ignore         = require("ignore")
   , pathUtils      = require("path")
   , modes          = require("./lib/ignore-modes")
   , getMap         = require("./lib/get-conf-file-map")
@@ -34,9 +32,7 @@ var isArray = Array.isArray
   , buildMap
   , prepareRules
   , parseSrc
-  , eolRe = /(?:\r\n|[\n\r\u2028\u2029])/
-  , sepRe = /[\\/]/
-  , minimatchOpts = { matchBase: true };
+  , eolRe = /(?:\r\n|[\n\r\u2028\u2029])/;
 
 prepareRules = function (data) { return data.map(trim).filter(Boolean).reverse(); };
 
@@ -61,38 +57,22 @@ compile = function (maps, result) {
 };
 
 applyRules = function (rules, rootPath, path) {
-	var value, current, relPath, paths, iterate, preValue;
-
-	current = rootPath;
-	paths = path.slice(rootPath.length + (last.call(rootPath) === sep ? 0 : 1)).split(sep);
-	iterate = function (rule) {
-		preValue = true;
-		if (rule[0] === "!") {
-			preValue = false;
-			rule = rule.slice(1);
+	if (!rootPath.endsWith(sep)) rootPath += sep;
+	if (!path.startsWith(rootPath)) return { value: false, target: path };
+	rules = rules.slice().reverse().filter(function (rule) { return !rule.startsWith("#"); });
+	var ig = ignore().add(rules);
+	var testPath = path.slice(rootPath.length);
+	var result = ig.ignores(testPath);
+	if (!result) {
+		var excludeRules = rules.filter(function (rule) { return rule.startsWith("!"); });
+		if (excludeRules.length) {
+			var ig2 = ignore().add(excludeRules.map(function (rule) { return rule.slice(1); }));
+			if (!ig2.ignores(testPath)) result = null;
+		} else {
+			result = null;
 		}
-		if (rule.search(sepRe) > 0) {
-			do {
-				relPath = relPath.slice(relPath.indexOf(sep) + 1);
-				if (minimatch(relPath, rule, minimatchOpts)) {
-					value = preValue;
-					return true;
-				}
-			} while (contains.call(relPath, sep));
-		} else if (minimatch(relPath, rule, minimatchOpts)) {
-			value = preValue;
-			return true;
-		}
-		return false;
-	};
-	while (paths.length) {
-		current = current + sep + paths.shift();
-		relPath = current.slice(rootPath.length);
-		value = null;
-		rules.some(iterate);
-		if (value === true) return { value: true, target: current };
 	}
-	return { value: value, target: path };
+	return { value: result, target: path };
 };
 
 applyGlobalRules = function (path, rules) {
@@ -173,8 +153,16 @@ IsIgnored.prototype = {
 
 		// Apply rules
 		current = this.path;
-		this.data.paths.some(function (rulesPath) {
+		this.data.paths.some(function (rulesPath, index) {
 			if (rulesPath.length > this.dirname.length) return true;
+			if (index) {
+				var dirIgnored = this.data.paths.slice(0, index).some(function (preRulesPath) {
+					return this.data.data[preRulesPath].some(function (rules) {
+						return applyRules(rules, preRulesPath, rulesPath).value;
+					}, this);
+				}, this);
+				if (dirIgnored) return false;
+			}
 			this.data.data[rulesPath].forEach(function (rules) {
 				var data = applyRules(rules, rulesPath, current);
 				if (data.value === false && current !== pathUtils) {
