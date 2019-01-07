@@ -16,15 +16,16 @@ var invoke         = require("es5-ext/function/invoke")
   , modes          = require("./lib/ignore-modes")
   , getMap         = require("./lib/get-conf-file-map")
   , memoizeWatcher = require("./lib/memoize-watcher")
-  , findRoot       = require("./lib/find-root")
-  , isArray        = Array.isArray
-  , push           = Array.prototype.push
-  , call           = Function.prototype.call
-  , trim           = call.bind(String.prototype.trim)
-  , dirname        = pathUtils.dirname
-  , resolve        = pathUtils.resolve
-  , sep            = pathUtils.sep
-  , ConfMap        = getMap.ConfMap
+  , findRoot       = require("./lib/find-root");
+
+var isArray = Array.isArray
+  , push = Array.prototype.push
+  , call = Function.prototype.call
+  , trim = call.bind(String.prototype.trim)
+  , dirname = pathUtils.dirname
+  , resolve = pathUtils.resolve
+  , sep = pathUtils.sep
+  , ConfMap = getMap.ConfMap
   , applyRules
   , applyGlobalRules
   , compile
@@ -33,20 +34,16 @@ var invoke         = require("es5-ext/function/invoke")
   , buildMap
   , prepareRules
   , parseSrc
-  , eolRe          = /(?:\r\n|[\n\r\u2028\u2029])/
-  , sepRe          = /[\\/]/
-  , minimatchOpts  = { matchBase: true };
+  , eolRe = /(?:\r\n|[\n\r\u2028\u2029])/
+  , sepRe = /[\\/]/
+  , minimatchOpts = { matchBase: true };
 
-prepareRules = function (data) {
-	return data.map(trim).filter(Boolean).reverse();
-};
+prepareRules = function (data) { return data.map(trim).filter(Boolean).reverse(); };
 
-parseSrc = function (src) {
-	return prepareRules(String(src).split(eolRe));
-};
+parseSrc = function (src) { return prepareRules(String(src).split(eolRe)); };
 
 compile = function (maps, result) {
-	var data = result.data = {}, paths = result.paths = [];
+	var data = (result.data = {}), paths = (result.paths = []);
 
 	// Merge rules found in ignorefiles
 	maps.forEach(function (map) {
@@ -133,9 +130,7 @@ buildMap = function (lDirname, lGetMap, watch) {
 		});
 	}
 	if (watch) {
-		promise.close = function () {
-			lGetMap.forEach(invoke("close"));
-		};
+		promise.close = function () { lGetMap.forEach(invoke("close")); };
 	}
 	return promise;
 };
@@ -170,9 +165,7 @@ IsIgnored.prototype = {
 		}
 		return this.promise;
 	},
-	close: function () {
-		this.mapPromise.close();
-	},
+	close: function () { this.mapPromise.close(); },
 	calculate: function () {
 		var current, result = false;
 
@@ -285,12 +278,9 @@ exports.getIsIgnored = function (modeNames, globalRules, watch) {
 		});
 		if (mode.globalRules) push.apply(globalRules, mode.globalRules);
 	});
-	build = memo(
-		function (lDirname) {
-			return buildMap(lDirname, mapGetters, watch);
-		},
-		{ primitive: true }
-	);
+	build = memo(function (lDirname) { return buildMap(lDirname, mapGetters, watch); }, {
+		primitive: true
+	});
 
 	return {
 		isIgnored: function (path) {
