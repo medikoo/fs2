@@ -37,6 +37,7 @@ module.exports = function (t, a, d) {
 		isRootWatcher: testIsRoot
 	};
 
+	// Make .git dir
 	deferred(mkdir(gitRoot), mkdir(onePath)(function () { return mkdir(twoPath); }))(
 		delay(function () {
 			t("git", resolve(gitRoot, "foo/bar"))(function (value) {
@@ -53,6 +54,8 @@ module.exports = function (t, a, d) {
 	)(
 		delay(function (value) {
 			a(value, false, "#1");
+
+			// Write root .gitignore with "foo"
 			return writeFile(rootFile, "foo");
 		}, DELAY)
 	)(
@@ -63,6 +66,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, true, "#2");
+
+		// Write root/one .gitignore with "/two/foo"
 		return writeFile(oneFile, "/two/foo");
 	})(
 		delay(function () {
@@ -71,6 +76,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, true, "#3");
+
+		// Write root/one/two .gitignore with "!foo"
 		return writeFile(twoFile, "!foo");
 	})(
 		delay(function () {
@@ -80,6 +87,9 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, false, "#4");
+
+		// Remove root .gitignore
+		// Remove root/one .gitignore
 		return deferred(unlink(rootFile), unlink(oneFile));
 	})(
 		delay(function () {
@@ -88,6 +98,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, false, "#5");
+
+		// Remove root/one/two .gitignore
 		return unlink(twoFile);
 	})(
 		delay(function () {
@@ -97,6 +109,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, false, "#6");
+
+		// Write root/one .gitignore with "/two/foo\n!/two/foo"
 		return writeFile(oneFile, "/two/foo\n!/two/foo");
 	})(
 		delay(function () {
@@ -106,6 +120,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, false, "#7");
+
+		// Write root .gitignore with "two"
 		return writeFile(rootFile, "two");
 	})(
 		delay(function () {
@@ -115,6 +131,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, true, "#8");
+
+		// Remove root .gitignore
 		return unlink(rootFile);
 	})(
 		delay(function () {
@@ -124,6 +142,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, false, "#9");
+
+		// Write root .gitignore with "/one"
 		return writeFile(rootFile, "/one");
 	})(
 		delay(function () {
@@ -134,6 +154,9 @@ module.exports = function (t, a, d) {
 	)(function (value) {
 		a(value, true, "#10");
 		watcher.close();
+
+		// Write root .gitignore with "one\n!one/two/foo"
+		// Remove root/one .gitignore
 		return deferred(writeFile(rootFile, "one\n!one/two/foo"), unlink(oneFile));
 	})(
 		delay(function () {
@@ -144,6 +167,7 @@ module.exports = function (t, a, d) {
 	)(function (value) {
 		a(value, true, "#11");
 
+		// Remove root .gitignore
 		return unlink(rootFile);
 	})(
 		delay(function () {
@@ -159,6 +183,8 @@ module.exports = function (t, a, d) {
 		}, DELAY)
 	)(function (value) {
 		a(value, false, "Both #1");
+
+		// Write root .gitignore with "foo"
 		return writeFile(rootFile, "foo");
 	})(
 		delay(function () {
