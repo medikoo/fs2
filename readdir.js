@@ -578,13 +578,20 @@ Readdir.prototype = {
 				if (!def.resolved) def.reject(new Error("Readdir action cancelled"));
 			};
 		}
-		original(path, function (err, data) {
-			if (err) {
-				def.reject(err);
-				return;
-			}
-			def.resolve(files = data);
-		});
+		original(
+			path,
+			function (err, data) {
+				if (err) {
+					if (this.loose && this.path === path && err.code === "ENOENT") {
+						def.resolve(null);
+					} else {
+						def.reject(err);
+					}
+					return;
+				}
+				def.resolve((files = data));
+			}.bind(this)
+		);
 		return promise;
 	}
 };
@@ -596,6 +603,7 @@ readdir = function (path, options) {
 	lReaddir.path = path;
 	lReaddir.depth = isNaN(options.depth) ? 0 : toPosInt(options.depth);
 	lReaddir.type = isValue(options.type) ? Object(options.type) : null;
+	lReaddir.loose = Boolean(options.loose);
 	lReaddir.pattern = isValue(options.pattern) ? new RegExp(options.pattern) : null;
 	if (isValue(options.dirFilter)) {
 		if (typeof options.dirFilter === "function") lReaddir.dirFilter = options.dirFilter;

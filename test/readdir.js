@@ -174,6 +174,13 @@ module.exports = function (t) {
 				}, DELAY)).done(d, d);
 			}
 		},
+		"Loose": function (a, d) {
+			var reader = t(resolve(pgPath, "not-existing"), { loose: true });
+
+			reader(function (data) {
+				a(data, null);
+			}).done(d, d);
+		},
 		"Progress events": function (a, d) {
 			var reader = t(pgPath, { depth: Infinity, stream: true })
 			  , result = []

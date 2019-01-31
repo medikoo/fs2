@@ -107,6 +107,7 @@ Extended version of native [fs.readdir](http://nodejs.org/api/all.html#all_fs_re
 
 Suported options:
 
+-   **loose** `boolean`- Resolve with `null` (instead of error) if directory doesn't exist
 -   **depth** `number`- Level of recurse into subdirectories. Defaults to _0_ which resembles behavior of native version. If you want to recurse without any nest limitation just provide _Infinity_
 -   **type** `object`- Which type of files should be returned. By default all files are returned. [Stats methods](http://nodejs.org/api/all.html#all_class_fs_stats) shows how many different types can be returned. To narrow it down provide a hash. e.g. `{ file: true, symbolicLink: true }`.
 -   **pattern** `regexp`- Filter returned files by specific pattern. Pattern should be regular expression that would be matched against full path.
