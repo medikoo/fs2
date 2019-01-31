@@ -111,7 +111,7 @@ Readdir.prototype = {
 				if (rootPath) {
 					nuData.files.on(
 						"end",
-						nuData.files.onend = function (newFiles) {
+						(nuData.files.onend = function (newFiles) {
 							delete this.readers[rootPath];
 							if (newFiles.length) {
 								newFiles = newFiles.map(getPath);
@@ -124,7 +124,7 @@ Readdir.prototype = {
 									});
 								}
 							}
-						}.bind(this)
+						}.bind(this))
 					);
 				}
 				nuData.files.on("change", function (nextData) {
@@ -436,7 +436,7 @@ Readdir.prototype = {
 			);
 		};
 
-		promise = paths(function (data) { return result = data.filter(filter); });
+		promise = paths(function (data) { return (result = data.filter(filter)); });
 		promise.root = rootPath;
 		if (this.watch) {
 			paths.on("change", function (data) {
