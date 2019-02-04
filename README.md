@@ -25,6 +25,11 @@ Not available on Windows.
 Copy file, returns promise but accepts as well regular callback.
 Eventual options are passed to underlying [fs.createWriteStream](http://nodejs.org/api/all.html#all_fs_createwritestream_path_options)
 
+Extra options:
+
+-   **force** - Overwrite destination if exists
+-   **loose** - Do not error if source file doesn't exits, abort and resolve with `null` instead.
+
 ### copyDir(src, dest[, options[, cb]]) _(fs2/copy-dir)_
 
 Copy directory recursively, returns promise but accepts as well regular callback.
