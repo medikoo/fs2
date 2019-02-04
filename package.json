@@ -1,6 +1,6 @@
 {
   "name": "fs2",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "fs (file system package) extensions",
   "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
