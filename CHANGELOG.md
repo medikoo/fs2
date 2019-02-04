@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.3"></a>
+## [0.3.3](https://github.com/medikoo/fs2/compare/v0.3.2...v0.3.3) (2019-02-04)
+
+
+### Features
+
+* 'access' util ([d85f934](https://github.com/medikoo/fs2/commit/d85f934))
+* hasAccess util ([8c53ea9](https://github.com/medikoo/fs2/commit/8c53ea9))
+
+
+
 <a name="0.3.2"></a>
 ## [0.3.2](https://github.com/medikoo/fs2/compare/v0.3.1...v0.3.2) (2019-02-04)
 
