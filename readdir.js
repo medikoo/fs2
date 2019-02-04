@@ -52,6 +52,7 @@ Readdir.prototype = {
 			promise = data.files;
 			if (this.stream) {
 				promise.aside(function (files) {
+					if (!files) return;
 					promise.emit("change", { data: files, added: files, removed: [] });
 				});
 			}
@@ -98,7 +99,7 @@ Readdir.prototype = {
 				});
 			} else {
 				files = nuData.files.aside(function (newFiles) {
-					if (newFiles.length) {
+					if (newFiles && newFiles.length) {
 						push.apply(result, newFiles);
 						if (promise.resolved || stream) {
 							promise.emit("change", { data: result, removed: [], added: newFiles });
@@ -278,6 +279,11 @@ Readdir.prototype = {
 
 		paths.done(
 			function (newPaths) {
+				if (!newPaths) {
+					files = null;
+					resolveCb();
+					return;
+				}
 				var waiting = newPaths.length;
 				if (!waiting) {
 					resolveCb();
@@ -527,6 +533,10 @@ Readdir.prototype = {
 
 		paths.done(
 			function (newPaths) {
+				if (!newPaths) {
+					def.resolve(newPaths);
+					return;
+				}
 				var waiting = newPaths.length;
 				result = [];
 				if (!waiting) {
