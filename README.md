@@ -48,6 +48,15 @@ Internally it provides same solution as [fs-graceful](https://github.com/isaacs/
 3. Covers readdir calls (which also happen to throw _EMFILE_ errors)
 4. More bulletproof (I assume) error handling logic
 
+### hasAccess(path[, options[, cb]]) _(fs2/has-access)_
+
+Conditional version of [`access`](#accesspath-mode-cb-fs2access). Returns promise.
+
+Supported options:
+
+-   **mode** - Passed as `mode` argument to [`access`](#accesspath-mode-cb-fs2access)
+-   **loose** - Do not error if file doesn't exits, resolve with `null` instead.
+
 ### isDirectory(path[, cb]) _(fs2/is-directory)_
 
 Whether path points to a directory
