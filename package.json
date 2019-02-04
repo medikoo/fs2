@@ -23,15 +23,15 @@
   "dependencies": {
     "d": "1",
     "deferred": "^0.7.10",
-    "es5-ext": "^0.10.46",
+    "es5-ext": "^0.10.47",
     "event-emitter": "^0.3.5",
-    "ignore": "^5.0.4",
+    "ignore": "^5.0.5",
     "memoizee": "^0.4.14"
   },
   "devDependencies": {
     "tad": "^0.2.8",
-    "eslint": "^5.12",
-    "eslint-config-medikoo-es5": "^1.7.3",
+    "eslint": "^5.13",
+    "eslint-config-medikoo-es5": "2",
     "git-list-updated": "^1.1.2",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.3",
