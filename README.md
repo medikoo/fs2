@@ -10,6 +10,10 @@ _Originally derived from [node-ext](https://github.com/medikoo/node-ext) package
 
 ## API
 
+### access(path[, mode[, cb]]) _(fs2/access)_
+
+Same as [fs.access](https://nodejs.org/api/fs.html#fs_fs_access_path_mode_callback). Returns promise.
+
 ### chmod(path, mode[, cb]) _(fs2/chmod)_
 
 Same as [fs.chmod](http://nodejs.org/api/all.html#all_fs_lchmod_path_mode_callback). Returns promise.
