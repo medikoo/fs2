@@ -1,6 +1,12 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.3.5](https://github.com/medikoo/fs2/compare/v0.3.4...v0.3.5) (2019-07-10)
+
+### Features
+
+- 'append' mode for chmod ([afa7aaa](https://github.com/medikoo/fs2/commit/afa7aaa))
 
 <a name="0.3.4"></a>
 
