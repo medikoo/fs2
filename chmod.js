@@ -1,5 +1,10 @@
 "use strict";
 
+if (process.platform === "win32") {
+	module.exports = null;
+	return;
+}
+
 var deferred = require("deferred")
   , resolve  = require("path").resolve
   , original = require("fs").chmod;
@@ -14,12 +19,8 @@ var chmod = function (path, mode) {
 };
 chmod.returnsPromise = true;
 
-if (process.platform === "win32") {
-	module.exports = null;
-} else {
-	module.exports = exports = function (path, mode/*, callback*/) {
-		return chmod(resolve(String(path)), mode).cb(arguments[2]);
-	};
-	exports.returnsPromise = true;
-	exports.chmod = chmod;
-}
+module.exports = exports = function (path, mode/*, callback*/) {
+	return chmod(resolve(String(path)), mode).cb(arguments[2]);
+};
+exports.returnsPromise = true;
+exports.chmod = chmod;
