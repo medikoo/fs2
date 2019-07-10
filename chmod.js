@@ -2,10 +2,9 @@
 
 var deferred = require("deferred")
   , resolve  = require("path").resolve
-  , original = require("fs").chmod
-  , chmod;
+  , original = require("fs").chmod;
 
-chmod = function (path, mode) {
+var chmod = function (path, mode) {
 	var def = deferred();
 	original(path, mode, function (err, stats) {
 		if (err) def.reject(err);
