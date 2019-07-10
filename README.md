@@ -20,6 +20,10 @@ Same as [fs.chmod](http://nodejs.org/api/all.html#all_fs_lchmod_path_mode_callba
 
 Not available on Windows.
 
+Extra options:
+
+- **append** - If set to true, then given mode is appended to file
+
 ### copy(src, dest[, options[, cb]]) _(fs2/copy)_
 
 Copy file, returns promise but accepts as well regular callback.
