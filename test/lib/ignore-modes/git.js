@@ -36,17 +36,11 @@ module.exports = function (t, a, d) {
 		return mkdir(gitOnePath);
 	})(function () {
 		w1 = t.isRootWatcher(rootPath);
-		w1.on("change", function (value) {
-			rootEvents.push(value);
-		});
+		w1.on("change", function (value) { rootEvents.push(value); });
 		w2 = t.isRootWatcher(onePath);
-		w2.on("change", function (value) {
-			oneEvents.push(value);
-		});
+		w2.on("change", function (value) { oneEvents.push(value); });
 		w3 = t.isRootWatcher(twoPath);
-		w3.on("change", function (value) {
-			twoEvents.push(value);
-		});
+		w3.on("change", function (value) { twoEvents.push(value); });
 		return deferred(w1, w2, w3);
 	})(
 		delay(function (data) {
@@ -141,9 +135,7 @@ module.exports = function (t, a, d) {
 
 			return deferred(t.isRoot(rootPath), t.isRoot(onePath), t.isRoot(twoPath));
 		}, 20)
-	)(function (data) {
-		a.deep(data, [true, false, false], "#6");
-	})(function () {
+	)(function (data) { a.deep(data, [true, false, false], "#6"); })(function () {
 		// Remove /one/two
 		return rmdir(twoPath);
 	})(function () {

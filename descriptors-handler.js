@@ -30,7 +30,7 @@ release = function () {
 wrap = function (asyncFn) {
 	var self;
 	callable(asyncFn);
-	return self = defineLength(function () {
+	return (self = defineLength(function () {
 		var openCount, args = arguments, context, cb = last.call(args);
 		if (!exports.initialized || typeof cb !== "function") return asyncFn.apply(this, arguments);
 		if (count >= limit) {
@@ -52,7 +52,7 @@ wrap = function (asyncFn) {
 			if (typeof cb === "function") cb.apply(this, arguments);
 		});
 		return asyncFn.apply(this, args);
-	}, asyncFn.length);
+	}, asyncFn.length));
 };
 
 module.exports = exports = memoize(function () {
@@ -117,22 +117,12 @@ module.exports = exports = memoize(function () {
 Object.defineProperties(exports, {
 	initialized: d("ce", false),
 	limit: d.gs(
-		function () {
-			return limit;
-		},
-		function (nLimit) {
-			if (limit >= nLimit) limit = max(nLimit, 5);
-		}
+		function () { return limit; },
+		function (nLimit) { if (limit >= nLimit) limit = max(nLimit, 5); }
 	),
-	available: d.gs(function () {
-		return max(limit - count, 0);
-	}),
-	taken: d.gs(function () {
-		return count;
-	}),
-	open: d(function () {
-		++count;
-	}),
+	available: d.gs(function () { return max(limit - count, 0); }),
+	taken: d.gs(function () { return count; }),
+	open: d(function () { ++count; }),
 	close: d(function () {
 		--count;
 		if (release) release();

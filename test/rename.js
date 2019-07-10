@@ -14,9 +14,7 @@ module.exports = function (t, a, d) {
 		return lstat(name1)(function (stats1) {
 			return t(name1, name2)(function () {
 				return deferred(
-					lstat(name1)(a.never, function () {
-						a.ok(true, "No first file");
-					}),
+					lstat(name1)(a.never, function () { a.ok(true, "No first file"); }),
 					lstat(name2)(function (stats2) {
 						// Do not compare eventual birthtime and ctime
 						// as in some envs they may not reflect value of source file

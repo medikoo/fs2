@@ -12,9 +12,7 @@ var isCallable = require("es5-ext/object/is-callable")
   , resolve    = path.resolve;
 
 var crossDeviceRename = function (oldPath, newPath) {
-	return copy(oldPath, newPath)(function () {
-		return unlink(oldPath);
-	});
+	return copy(oldPath, newPath)(function () { return unlink(oldPath); });
 };
 
 var rename = function (oldPath, newPath) {
@@ -34,7 +32,7 @@ var rename = function (oldPath, newPath) {
 };
 rename.returnsPromise = true;
 
-module.exports = exports = function (oldPath, newPath /*, options, cb*/) {
+module.exports = exports = function (oldPath, newPath/*, options, cb*/) {
 	var options = Object(arguments[2]), cb = arguments[3];
 	if (!isValue(cb) && isCallable(options)) {
 		cb = options;

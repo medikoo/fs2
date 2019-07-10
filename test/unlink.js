@@ -2,8 +2,7 @@
 
 var lstat     = require("../lstat")
   , writeFile = require("../write-file")
-
-  , testFile = require("path").resolve(__dirname, "__playground/unlink");
+  , testFile  = require("path").resolve(__dirname, "__playground/unlink");
 
 module.exports = function (t, a, d) {
 	return writeFile(testFile, "foo")(function () {

@@ -26,12 +26,7 @@ module.exports = function (t, a, d) {
 	  , gitTwo = resolve(twoPath, ".git")
 	  , watcher;
 
-	deferred(
-		mkdir(gitRoot),
-		mkdir(onePath)(function () {
-			return mkdir(twoPath);
-		})
-	)(
+	deferred(mkdir(gitRoot), mkdir(onePath)(function () { return mkdir(twoPath); }))(
 		delay(function () {
 			watcher = t(twoPath, mode, true);
 			watcher.on("change", function (arg) {
@@ -140,10 +135,7 @@ module.exports = function (t, a, d) {
 			a.deep(omap(data.map, String), map, "#9 Data");
 			watcher.close();
 			return deferred(
-				rmdir(gitRoot),
-				rmdir(twoPath)(function () {
-					return rmdir(onePath);
-				})
+				rmdir(gitRoot), rmdir(twoPath)(function () { return rmdir(onePath); })
 			)(false);
 		}, DELAY)
 	).done(d, d);

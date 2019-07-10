@@ -23,9 +23,7 @@ module.exports = function (t) {
 				}).done(d, d);
 			},
 			Error: function (a, d) {
-				t(base, deep)(a.never, function () {
-					a.ok(true, "");
-				}).done(d, d);
+				t(base, deep)(a.never, function () { a.ok(true, ""); }).done(d, d);
 			}
 		}
 	};

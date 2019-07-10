@@ -33,14 +33,7 @@ _mkdir = function (path, options, pResolve, reject) {
 				reject(err);
 				return;
 			}
-			_mkdir(
-				dir,
-				options,
-				function () {
-					_mkdir(path, options, pResolve, reject);
-				},
-				reject
-			);
+			_mkdir(dir, options, function () { _mkdir(path, options, pResolve, reject); }, reject);
 		} else {
 			stat(path, function (statErr, stats) {
 				if (statErr) {
@@ -64,7 +57,7 @@ mkdir = function (path, options) {
 };
 mkdir.returnsPromise = true;
 
-module.exports = exports = function (path /*, mode|options, cb*/) {
+module.exports = exports = function (path/*, mode|options, cb*/) {
 	var options, cb;
 
 	path = resolve(String(path));

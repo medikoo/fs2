@@ -76,12 +76,12 @@ module.exports = {
 		}, d);
 	},
 	"Loose with mode": function (t, a, d) {
-		t(pg + "/:;\\//wrong-filename", pg + "/sample-test2.js", {
-			loose: true,
-			mode: 33188
-		}).done(function (result) {
-			a(result, false);
-			d();
-		}, d);
+		t(pg + "/:;\\//wrong-filename", pg + "/sample-test2.js", { loose: true, mode: 33188 }).done(
+			function (result) {
+				a(result, false);
+				d();
+			},
+			d
+		);
 	}
 };

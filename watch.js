@@ -91,7 +91,7 @@ onLstat = function (watcher) {
 	var emitter = watcher.emitter;
 	emitter.on(
 		"change",
-		emitter._watchSwitchListener = function () {
+		(emitter._watchSwitchListener = function () {
 			var candidate;
 			watchers.alt.sort(compare);
 			if (watchers.alt[0] !== watcher) return;
@@ -108,7 +108,7 @@ onLstat = function (watcher) {
 				// Move current watcher to regular watch
 				switchToReg(watcher);
 			}
-		}
+		})
 	);
 };
 

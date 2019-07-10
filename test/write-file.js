@@ -12,12 +12,8 @@ var fs                  = require("fs")
 
 module.exports = {
 	Overwrite: function (t, a, d) {
-		t(overwritePath, "raz", function (err) {
-			a(err, null, "#1");
-		});
-		t(overwritePath, "dwa", function (err) {
-			a(err, null, "#2");
-		});
+		t(overwritePath, "raz", function (err) { a(err, null, "#1"); });
+		t(overwritePath, "dwa", function (err) { a(err, null, "#2"); });
 		t(overwritePath, "trzy", function (err) {
 			a(err, null, "#3");
 			readFile(overwritePath, function (err2, content) {

@@ -3,7 +3,6 @@
 var deferred = require("deferred")
   , resolve  = require("path").resolve
   , original = require("fs").lchmod
-
   , lchmod;
 
 lchmod = function (path, mode) {

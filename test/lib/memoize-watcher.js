@@ -3,14 +3,7 @@
 module.exports = function (t, a) {
 	var fn, invoked, mfn, fnX, fnY, fnZ;
 	fn = function (pathIgnored) {
-		return {
-			emit: function () {
-				return true;
-			},
-			close: function () {
-				invoked = true;
-			}
-		};
+		return { emit: function () { return true; }, close: function () { invoked = true; } };
 	};
 	invoked = false;
 

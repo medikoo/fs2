@@ -27,8 +27,8 @@ Eventual options are passed to underlying [fs.createWriteStream](http://nodejs.o
 
 Extra options:
 
--   **force** - Overwrite destination if exists
--   **loose** - Do not error if source file doesn't exits, abort and resolve with `null` instead.
+- **force** - Overwrite destination if exists
+- **loose** - Do not error if source file doesn't exits, abort and resolve with `null` instead.
 
 ### copyDir(src, dest[, options[, cb]]) _(fs2/copy-dir)_
 
@@ -36,7 +36,7 @@ Copy directory recursively, returns promise but accepts as well regular callback
 
 Supported options:
 
--   **loose** - Do not error if file doesn't exits or is inaccessible, return _false_ instead.
+- **loose** - Do not error if file doesn't exits or is inaccessible, return _false_ instead.
 
 ### descriptorsHandler() _(fs2/descriptors-handler)_
 
@@ -59,8 +59,8 @@ Conditional version of [`access`](#accesspath-mode-cb-fs2access). Returns promis
 
 Supported options:
 
--   **mode** - Passed as `mode` argument to [`access`](#accesspath-mode-cb-fs2access)
--   **loose** - Do not error if file doesn't exits, resolve with `null` instead.
+- **mode** - Passed as `mode` argument to [`access`](#accesspath-mode-cb-fs2access)
+- **loose** - Do not error if file doesn't exits, resolve with `null` instead.
 
 ### isDirectory(path[, cb]) _(fs2/is-directory)_
 
@@ -76,8 +76,8 @@ Other modes can be easily configured by extending `_ignoreModes` module (See _li
 
 Supported options:
 
--   **globalRules** `string|array` - additional global rules. They will be matched as if placed in filesystem root directory, it means that any rules found in existing ignore files may override them.
--   **watch** `bool` - whether to watch for changes. If ignore state would change, returned promise would emit `change` event with new value (_true_/_false_)
+- **globalRules** `string|array` - additional global rules. They will be matched as if placed in filesystem root directory, it means that any rules found in existing ignore files may override them.
+- **watch** `bool` - whether to watch for changes. If ignore state would change, returned promise would emit `change` event with new value (_true_/_false_)
 
 ### isSymlink(path[, options[, cb]]) _(fs2/is-symlink)_
 
@@ -88,8 +88,8 @@ Additionally resultion can be fine tuned for specific needs with below options:
 
 Supported options:
 
--   **linkPath** `string` - Expected linkPath to which symlink should point. If provided and symlink points elsewhere `false` is returned.
--   **recursive** `bool` - whether check for matching `linkPath` should be applied to final path (so if symlink points to other symlink we check against the final path, and not linked symlink path)
+- **linkPath** `string` - Expected linkPath to which symlink should point. If provided and symlink points elsewhere `false` is returned.
+- **recursive** `bool` - whether check for matching `linkPath` should be applied to final path (so if symlink points to other symlink we check against the final path, and not linked symlink path)
 
 ### lchmod(path, mode[, cb]) _(fs2/lchmod)_
 
@@ -107,8 +107,8 @@ Extended version of native _mkdir_. Returns promise
 
 Supported options:
 
--   **mode** - Reflects _mode_ in [native version](http://nodejs.org/api/all.html#all_fs_mkdir_path_mode_callback)
--   **intermediate** - Whether to create directories recursively (if parent is not created), reflects `mkir -p`, internal implementation inspired by [Substack's node-mkdirp](https://github.com/substack/node-mkdirp/)
+- **mode** - Reflects _mode_ in [native version](http://nodejs.org/api/all.html#all_fs_mkdir_path_mode_callback)
+- **intermediate** - Whether to create directories recursively (if parent is not created), reflects `mkir -p`, internal implementation inspired by [Substack's node-mkdirp](https://github.com/substack/node-mkdirp/)
 
 ### readFile(path[, options][, cb]) _(fs2/read-file)_
 
@@ -116,8 +116,8 @@ Extended version of native [fs.readFile](http://nodejs.org/api/all.html#all_fs_r
 
 Supported options:
 
--   **loose** - Do not error if file doesn't exits or is inaccessible, return _null_ instead.
--   **watch** - Whether to watch file for changes. Changes are emited via _change_ event on returned promise. If file was removed and _loose_ option is off, _end_ event is emitted and watcher is closed
+- **loose** - Do not error if file doesn't exits or is inaccessible, return _null_ instead.
+- **watch** - Whether to watch file for changes. Changes are emited via _change_ event on returned promise. If file was removed and _loose_ option is off, _end_ event is emitted and watcher is closed
 
 ### readdir(path[, options[, cb]]) _(fs2/readdir)_
 
@@ -125,15 +125,15 @@ Extended version of native [fs.readdir](http://nodejs.org/api/all.html#all_fs_re
 
 Suported options:
 
--   **loose** `boolean`- Resolve with `null` (instead of error) if directory doesn't exist
--   **depth** `number`- Level of recurse into subdirectories. Defaults to _0_ which resembles behavior of native version. If you want to recurse without any nest limitation just provide _Infinity_
--   **type** `object`- Which type of files should be returned. By default all files are returned. [Stats methods](http://nodejs.org/api/all.html#all_class_fs_stats) shows how many different types can be returned. To narrow it down provide a hash. e.g. `{ file: true, symbolicLink: true }`.
--   **pattern** `regexp`- Filter returned files by specific pattern. Pattern should be regular expression that would be matched against full path.
--   **watch** `bool` - Watch directory for changes. Changes are emitted on returned promise with `change` events. _event_ object states which files were added (`event.added`) and which were removed (`event.removed`), **_Starting from next release (v0.4) this functionality will most likely be provided as valid Node.js [stream](http://nodejs.org/api/all.html#all_stream)_**
--   **stream** `bool` - Whether to provide data continuously. Currently it's not provided as a [stream](http://nodejs.org/api/all.html#all_stream) per se (it would be starting from next release, v0.4), data is emited as `change` events on returned promise object, structure of _event_ objects described under _watch_ option
--   **ignoreRules** `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information
--   **globalRules** `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information.
--   **dirFilter** `function|regexp` - Filter out directories into which we should not recurse to. Can be provided as function which having directory name should return boolaen (`true` if we should recurse into directory), or as regex which if matches means that directory should be recurse into. Neverthless `depth` setting is supported unconditionally
+- **loose** `boolean`- Resolve with `null` (instead of error) if directory doesn't exist
+- **depth** `number`- Level of recurse into subdirectories. Defaults to _0_ which resembles behavior of native version. If you want to recurse without any nest limitation just provide _Infinity_
+- **type** `object`- Which type of files should be returned. By default all files are returned. [Stats methods](http://nodejs.org/api/all.html#all_class_fs_stats) shows how many different types can be returned. To narrow it down provide a hash. e.g. `{ file: true, symbolicLink: true }`.
+- **pattern** `regexp`- Filter returned files by specific pattern. Pattern should be regular expression that would be matched against full path.
+- **watch** `bool` - Watch directory for changes. Changes are emitted on returned promise with `change` events. _event_ object states which files were added (`event.added`) and which were removed (`event.removed`), **_Starting from next release (v0.4) this functionality will most likely be provided as valid Node.js [stream](http://nodejs.org/api/all.html#all_stream)_**
+- **stream** `bool` - Whether to provide data continuously. Currently it's not provided as a [stream](http://nodejs.org/api/all.html#all_stream) per se (it would be starting from next release, v0.4), data is emited as `change` events on returned promise object, structure of _event_ objects described under _watch_ option
+- **ignoreRules** `string|array` - Whether to obey ignore rules found in ignore files. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information
+- **globalRules** `string|array` - Global rules that complement ignoreRules. See _[fs.isIgnored](#isignoredmode-path-options-cb)_ for more information.
+- **dirFilter** `function|regexp` - Filter out directories into which we should not recurse to. Can be provided as function which having directory name should return boolaen (`true` if we should recurse into directory), or as regex which if matches means that directory should be recurse into. Neverthless `depth` setting is supported unconditionally
 
 ### readlink(path[, options[, cb]]) _(fs2/readlink)_
 
@@ -155,8 +155,8 @@ Extended version of native _rmdir_. Returns promise
 
 Supported options:
 
--   **recursive** - Attempt to remove directory with subdirectories recursively.
--   **force** - Attempt to remove other files within directory as well.
+- **recursive** - Attempt to remove directory with subdirectories recursively.
+- **force** - Attempt to remove other files within directory as well.
 
 ### stat(path[, cb]) _(fs2/stat)_
 
@@ -190,8 +190,8 @@ Same as native [fs.writeFile](http://nodejs.org/api/all.html#all_fs_writefile_fi
 
 Supported options:
 
--   **encoding** - Reflects _encoding_ in [native version](http://nodejs.org/api/all.html#all_fs_writefile_filename_data_options_callback)
--   **intermediate** - In case directory doesn't exist, whether to create full directory path
+- **encoding** - Reflects _encoding_ in [native version](http://nodejs.org/api/all.html#all_fs_writefile_filename_data_options_callback)
+- **intermediate** - In case directory doesn't exist, whether to create full directory path
 
 ## Tests [![Build Status](https://travis-ci.org/medikoo/fs2.png?branch=master)](https://travis-ci.org/medikoo/fs2)
 

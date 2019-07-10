@@ -24,14 +24,10 @@ module.exports = function (t) {
 				}).done(d, d);
 			},
 			Error: function (a, d) {
-				t(deep)(a.never, function () {
-					a.ok(true, "");
-				}).done(d, d);
+				t(deep)(a.never, function () { a.ok(true, ""); }).done(d, d);
 			},
 			Existing: function (a, d) {
-				t(existing)(a.never, function () {
-					a.ok(true, "");
-				}).done(d, d);
+				t(existing)(a.never, function () { a.ok(true, ""); }).done(d, d);
 			}
 		},
 		Intermediate: {
@@ -39,16 +35,12 @@ module.exports = function (t) {
 				t(deep, { intermediate: true })(function () {
 					return lstat(deep)(function (stats) {
 						a(stats.isDirectory(), true);
-						return rmdir(deep)(function () {
-							return rmdir(dirname(deep));
-						});
+						return rmdir(deep)(function () { return rmdir(dirname(deep)); });
 					});
 				}).done(d, d);
 			},
 			"Existing": function (a, d) {
-				t(existing, { intermediate: true })(function () {
-					a.ok(true, "");
-				}).done(d, d);
+				t(existing, { intermediate: true })(function () { a.ok(true, ""); }).done(d, d);
 			}
 		}
 	};

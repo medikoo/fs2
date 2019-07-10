@@ -3,7 +3,6 @@
 var deferred = require("deferred")
   , resolve  = require("path").resolve
   , original = require("fs").chmod
-
   , chmod;
 
 chmod = function (path, mode) {

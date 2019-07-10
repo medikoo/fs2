@@ -42,7 +42,7 @@ var appendFile = function (path, data, options) {
 };
 appendFile.returnsPromise = true;
 
-module.exports = exports = function (path, data /*, options*/) {
+module.exports = exports = function (path, data/*, options*/) {
 	var cb, options;
 
 	path = resolve(String(path));

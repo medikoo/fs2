@@ -18,7 +18,7 @@ readFile = function (filename, options) {
 	original(
 		filename,
 		options.encoding,
-		resolveCb = function (err, data) {
+		(resolveCb = function (err, data) {
 			if (def.resolved) return;
 			if (err) {
 				if (watcher && !loose) watcher.close();
@@ -28,7 +28,7 @@ readFile = function (filename, options) {
 			}
 			if (options.watch) current = String(data);
 			def.resolve(data);
-		}
+		})
 	);
 	promise = def.promise;
 
@@ -58,17 +58,14 @@ readFile = function (filename, options) {
 			watcher = new WatchPath(filename);
 			watcher.on("change", function (event) {
 				if (event.type === "remove") {
-					if (isValue(current)) promise.emit("change", current = null);
+					if (isValue(current)) promise.emit("change", (current = null));
 				} else {
 					onchange();
 				}
 			});
 		} else {
-			try {
-				watcher = watch(filename);
-			} catch (e) {
-				return def.reject(e);
-			}
+			try { watcher = watch(filename); }
+			catch (e) { return def.reject(e); }
 			watcher.on("change", onchange);
 			watcher.on("end", function () {
 				watcher = null;
