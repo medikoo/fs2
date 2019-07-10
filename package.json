@@ -1,71 +1,71 @@
 {
-  "name": "fs2",
-  "version": "0.3.4",
-  "description": "fs (file system package) extensions",
-  "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
-  "keywords": [
-    "addons",
-    "extensions",
-    "extras",
-    "fs",
-    "filesystem",
-    "mkdir",
-    "readdir",
-    "files",
-    "dirs",
-    "directories",
-    "git"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/medikoo/fs2.git"
-  },
-  "dependencies": {
-    "d": "^1.0.1",
-    "deferred": "^0.7.11",
-    "es5-ext": "^0.10.50",
-    "event-emitter": "^0.3.5",
-    "ignore": "^5.1.2",
-    "memoizee": "^0.4.14"
-  },
-  "devDependencies": {
-    "eslint": "^6.0.1",
-    "eslint-config-medikoo": "^2.4.0",
-    "git-list-updated": "^1.2.0",
-    "husky": "^3.0.0",
-    "lint-staged": "^9.1.0",
-    "prettier-elastic": "^1.18.2",
-    "tad": "^2.0.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint"
-    ],
-    "*.{css,html,js,json,md,yaml,yml}": [
-      "prettier -c"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "medikoo/es5",
-    "root": true,
-    "env": {
-      "node": true
-    }
-  },
-  "scripts": {
-    "lint": "eslint --ignore-path=.gitignore .",
-    "lint-updated": "pipe-git-updated --ext=js -- eslint --ignore-pattern '!*'",
-    "prettier-check-updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
-    "prettify": "prettier --write --ignore-path .gitignore '**/*.{css,html,js,json,md,yaml,yml}'",
-    "test": "node ./node_modules/tad/bin/tad"
-  },
-  "engines": {
-    "node": ">=0.8"
-  },
-  "license": "ISC"
+	"name": "fs2",
+	"version": "0.3.4",
+	"description": "fs (file system package) extensions",
+	"author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
+	"keywords": [
+		"addons",
+		"extensions",
+		"extras",
+		"fs",
+		"filesystem",
+		"mkdir",
+		"readdir",
+		"files",
+		"dirs",
+		"directories",
+		"git"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/medikoo/fs2.git"
+	},
+	"dependencies": {
+		"d": "^1.0.1",
+		"deferred": "^0.7.11",
+		"es5-ext": "^0.10.50",
+		"event-emitter": "^0.3.5",
+		"ignore": "^5.1.2",
+		"memoizee": "^0.4.14"
+	},
+	"devDependencies": {
+		"eslint": "^6.0.1",
+		"eslint-config-medikoo": "^2.4.0",
+		"git-list-updated": "^1.2.0",
+		"husky": "^3.0.0",
+		"lint-staged": "^9.1.0",
+		"prettier-elastic": "^1.18.2",
+		"tad": "^2.0.1"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.js": [
+			"eslint"
+		],
+		"*.{css,html,js,json,md,yaml,yml}": [
+			"prettier -c"
+		]
+	},
+	"eslintConfig": {
+		"extends": "medikoo/es5",
+		"root": true,
+		"env": {
+			"node": true
+		}
+	},
+	"scripts": {
+		"lint": "eslint --ignore-path=.gitignore .",
+		"lint-updated": "pipe-git-updated --ext=js -- eslint --ignore-pattern '!*'",
+		"prettier-check-updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
+		"prettify": "prettier --write --ignore-path .gitignore '**/*.{css,html,js,json,md,yaml,yml}'",
+		"test": "node ./node_modules/tad/bin/tad"
+	},
+	"engines": {
+		"node": ">=0.8"
+	},
+	"license": "ISC"
 }
