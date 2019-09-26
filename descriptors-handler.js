@@ -9,7 +9,12 @@ var last         = require("es5-ext/array/#/last")
   , memoize      = require("memoizee")
   , fs           = require("fs");
 
-var max = Math.max, slice = Array.prototype.slice, limit = Infinity, count = 0, queue = [];
+var max = Math.max
+  , slice = Array.prototype.slice
+  , limit = Infinity
+  , count = 0
+  , queue = []
+  , debugStats = { fd: 0, unknown: 0 };
 
 var release = function () {
 	var data, fnCb;
@@ -24,8 +29,9 @@ var release = function () {
 	}
 };
 
-var wrap = function (asyncFn) {
+var wrap = function (asyncFn, type) {
 	var self;
+	debugStats[type] = 0;
 	callable(asyncFn);
 	return (self = defineLength(function () {
 		var openCount, args = arguments, context, cb = last.call(args);
@@ -38,6 +44,7 @@ var wrap = function (asyncFn) {
 		context = this;
 		args = slice.call(args, 0, -1);
 		args.push(function (err, resultIgnored) {
+			--debugStats[type];
 			--count;
 			if (err && (err.code === "EMFILE" || err.code === "ENFILE")) {
 				if (limit > openCount) limit = openCount;
@@ -48,6 +55,7 @@ var wrap = function (asyncFn) {
 			release();
 			if (typeof cb === "function") cb.apply(this, arguments);
 		});
+		++debugStats[type];
 		return asyncFn.apply(this, args);
 	}, asyncFn.length));
 };
@@ -66,8 +74,10 @@ module.exports = exports = memoize(function () {
 		openCount = count++;
 		args = arguments;
 		fnCb = last.call(args);
+		++debugStats.fd;
 		open(path, flags, mode, function (err, fd) {
 			if (err) {
+				--debugStats.fd;
 				--count;
 				if (err.code === "EMFILE" || err.code === "ENFILE") {
 					if (limit > openCount) limit = openCount;
@@ -83,6 +93,7 @@ module.exports = exports = memoize(function () {
 
 	fs.openSync = function (pathIgnored, flagsIgnored, modeIgnored) {
 		var result = openSync.apply(this, arguments);
+		++debugStats.fd;
 		++count;
 		return result;
 	};
@@ -90,6 +101,7 @@ module.exports = exports = memoize(function () {
 	fs.close = function (fd, fnCb) {
 		close(fd, function (err) {
 			if (!err) {
+				--debugStats.fd;
 				--count;
 				release();
 			}
@@ -100,13 +112,15 @@ module.exports = exports = memoize(function () {
 	fs.closeSync = function (fd) {
 		var result;
 		result = closeSync(fd);
+		--debugStats.fd;
 		--count;
 		release();
 		return result;
 	};
 
-	fs.readdir = wrap(fs.readdir);
-	fs.readFile = wrap(fs.readFile); // Needed for Node >=1.2 because of commit e65308053c
+	fs.readdir = wrap(fs.readdir, "readdir");
+	// Needed for Node >=1.2 because of commit e65308053c
+	fs.readFile = wrap(fs.readFile, "readFile");
 
 	Object.defineProperty(exports, "initialized", d("e", true));
 });
@@ -119,10 +133,15 @@ Object.defineProperties(exports, {
 	),
 	available: d.gs(function () { return max(limit - count, 0); }),
 	taken: d.gs(function () { return count; }),
-	open: d(function () { ++count; }),
+	open: d(function () {
+		++debugStats.unknown;
+		++count;
+	}),
 	close: d(function () {
+		--debugStats.unknown;
 		--count;
 		if (release) release();
 	}),
-	wrap: d(wrap)
+	wrap: d(wrap),
+	debugStats: d(debugStats)
 });
