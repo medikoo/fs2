@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.6](https://github.com/medikoo/fs2/compare/v0.3.5...v0.3.6) (2019-09-26)
+
+### Bug Fixes
+
+- Ensure to not leave open file descriptors when write crashes ([cf8ef7e](https://github.com/medikoo/fs2/commit/cf8ef7e))
+
+### Features
+
+- Expose debug stats in descriptors handler ([cdcac3f](https://github.com/medikoo/fs2/commit/cdcac3f))
+
 ### [0.3.5](https://github.com/medikoo/fs2/compare/v0.3.4...v0.3.5) (2019-07-10)
 
 ### Features
