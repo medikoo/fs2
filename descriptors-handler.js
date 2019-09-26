@@ -1,3 +1,5 @@
+/* eslint max-lines: off */
+
 "use strict";
 
 var last         = require("es5-ext/array/#/last")
@@ -5,16 +7,11 @@ var last         = require("es5-ext/array/#/last")
   , callable     = require("es5-ext/object/valid-callable")
   , d            = require("d")
   , memoize      = require("memoizee")
-  , fs           = require("fs")
-  , max          = Math.max
-  , slice        = Array.prototype.slice
-  , limit        = Infinity
-  , count        = 0
-  , queue        = []
-  , release
-  , wrap;
+  , fs           = require("fs");
 
-release = function () {
+var max = Math.max, slice = Array.prototype.slice, limit = Infinity, count = 0, queue = [];
+
+var release = function () {
 	var data, fnCb;
 	// eslint-disable-next-line no-unmodified-loop-condition
 	while (count < limit && (data = queue.shift())) {
@@ -27,7 +24,7 @@ release = function () {
 	}
 };
 
-wrap = function (asyncFn) {
+var wrap = function (asyncFn) {
 	var self;
 	callable(asyncFn);
 	return (self = defineLength(function () {
