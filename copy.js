@@ -32,10 +32,12 @@ var fixOptions = function (options) {
 
 var copyFileWithMode = function (def, source, dest, options) {
 	var read, write;
+	var isReadDisposed = false;
 
 	try { read = createReadStream(source); }
 	catch (e) { return def.reject(e); }
 	read.on("error", function (e) {
+		if (isReadDisposed) return;
 		if (options.loose && e.code === "ENOENT") def.resolve(unlink(dest, { loose: true })(false));
 		else def.reject(e);
 	});
@@ -48,6 +50,8 @@ var copyFileWithMode = function (def, source, dest, options) {
 	}
 
 	write.on("error", function (e) {
+		isReadDisposed = true;
+		read.destroy();
 		if (e.code === "ENOENT" && options.intermediate) {
 			mkdir(dirname(resolve(dest)), { intermediate: true }).done(function () {
 				options = normalizeOptions(options);
