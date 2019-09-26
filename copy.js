@@ -1,3 +1,5 @@
+/* eslint max-lines: off */
+
 // Copy file
 // Credit: Isaac Schlueter
 // http://groups.google.com/group/nodejs/msg/ef4de0b516f7d5b8
