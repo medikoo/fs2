@@ -8,13 +8,11 @@ var isNumber   = require("es5-ext/number/is-number")
   , isValue    = require("es5-ext/object/is-value")
   , deferred   = require("deferred")
   , fs         = require("fs")
-  , pathUtils  = require("path")
-  , stat       = fs.stat
-  , original   = fs.mkdir
-  , dirname    = pathUtils.dirname
-  , resolve    = pathUtils.resolve
-  , _mkdir
-  , mkdir;
+  , pathUtils  = require("path");
+
+var stat = fs.stat, original = fs.mkdir, dirname = pathUtils.dirname, resolve = pathUtils.resolve;
+
+var _mkdir, mkdir;
 
 _mkdir = function (path, options, pResolve, reject) {
 	original(path, options.mode, function (err) {
