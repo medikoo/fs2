@@ -21,6 +21,10 @@ _mkdir = function (path, options, pResolve, reject) {
 			pResolve(null);
 			return;
 		}
+		if (err.code === "EEXIST" && options.silent) {
+			pResolve(null);
+			return;
+		}
 		if (!options.intermediate) {
 			reject(err);
 			return;

@@ -113,6 +113,7 @@ Supported options:
 
 - **mode** - Reflects _mode_ in [native version](http://nodejs.org/api/all.html#all_fs_mkdir_path_mode_callback)
 - **intermediate** - Whether to create directories recursively (if parent is not created), reflects `mkir -p`, internal implementation inspired by [Substack's node-mkdirp](https://github.com/substack/node-mkdirp/)
+- **silent** - Do not throw error if directory already exists
 
 ### readFile(path[, options][, cb]) _(fs2/read-file)_
 
