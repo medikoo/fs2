@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.7](https://github.com/medikoo/fs2/compare/v0.3.6...v0.3.7) (2019-11-07)
+
+### Features
+
+- 'silent' option for mkdir ([e3fe863](https://github.com/medikoo/fs2/commit/e3fe863))
+
 ### [0.3.6](https://github.com/medikoo/fs2/compare/v0.3.5...v0.3.6) (2019-09-26)
 
 ### Bug Fixes
