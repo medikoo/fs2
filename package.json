@@ -27,7 +27,7 @@
 		"event-emitter": "^0.3.5",
 		"ignore": "^5.1.4",
 		"memoizee": "^0.4.14",
-		"type": "^1.2.0"
+		"type": "^2.0.0"
 	},
 	"devDependencies": {
 		"eslint": "^6.4.0",
