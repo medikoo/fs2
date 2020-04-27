@@ -23,19 +23,19 @@
 	"dependencies": {
 		"d": "^1.0.1",
 		"deferred": "^0.7.11",
-		"es5-ext": "^0.10.51",
+		"es5-ext": "^0.10.53",
 		"event-emitter": "^0.3.5",
 		"ignore": "^5.1.4",
 		"memoizee": "^0.4.14",
 		"type": "^2.0.0"
 	},
 	"devDependencies": {
-		"eslint": "^6.4.0",
-		"eslint-config-medikoo": "^2.5.1",
+		"eslint": "^6.8.0",
+		"eslint-config-medikoo": "^2.7.0",
 		"git-list-updated": "^1.2.1",
-		"husky": "^3.0.5",
-		"lint-staged": "^9.4.0",
-		"prettier-elastic": "^1.18.2",
+		"husky": "^3.1.0",
+		"lint-staged": "^9.5.0",
+		"prettier-elastic": "^1.19.1",
 		"tad": "^2.0.1"
 	},
 	"husky": {
