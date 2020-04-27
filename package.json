@@ -33,7 +33,7 @@
 		"eslint": "^6.8.0",
 		"eslint-config-medikoo": "^2.7.0",
 		"git-list-updated": "^1.2.1",
-		"husky": "^3.1.0",
+		"husky": "^4.2.5",
 		"lint-staged": "^9.5.0",
 		"prettier-elastic": "^1.19.1",
 		"tad": "^2.0.1"
