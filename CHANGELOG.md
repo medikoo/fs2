@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.8](https://github.com/medikoo/fs2/compare/v0.3.7...v0.3.8) (2020-04-27)
+
+### Bug Fixes
+
+- Fix `mode` normalization in `fs.access` ([00f2a52](https://github.com/medikoo/fs2/commit/00f2a52b139576b5b5adcec7c3c01bb84b905076))
+
 ### [0.3.7](https://github.com/medikoo/fs2/compare/v0.3.6...v0.3.7) (2019-11-07)
 
 ### Features
