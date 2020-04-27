@@ -30,8 +30,8 @@ module.exports = function (path/*[, mode[, callback]]*/) {
 	if (!isValue(cb) && isCallable(mode)) {
 		cb = mode;
 		mode = defaultMode;
-	} else {
-		mode = Object(mode);
+	} else if (isValue(mode)) {
+		mode = Number(mode);
 	}
 
 	return access(path, mode).cb(cb);
