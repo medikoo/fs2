@@ -11,12 +11,14 @@ var rootPath = resolve(__dirname, "./__playground/is-symlink")
   , symlink2 = resolve(rootPath, "sym2");
 
 module.exports = function (t, a, d) {
-	symlink(targetFile, symlink1)(function () { return symlink(symlink1, symlink2); })(function () {
-		return t(symlink2);
-	})(function (result) {
-		a(result, true);
-		return t(symlink2, { linkPath: targetFile });
-	})(function (result) {
+	symlink(
+		targetFile, symlink1
+	)(function () { return symlink(symlink1, symlink2); })(function () { return t(symlink2); })(
+		function (result) {
+			a(result, true);
+			return t(symlink2, { linkPath: targetFile });
+		}
+	)(function (result) {
 		a(result, false);
 		return t(symlink2, { linkPath: symlink1 });
 	})(function (result) {
