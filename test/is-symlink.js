@@ -12,8 +12,8 @@ var rootPath = resolve(__dirname, "./__playground/is-symlink")
 
 module.exports = function (t, a, d) {
 	symlink(
-		targetFile, symlink1
-	)(function () { return symlink(symlink1, symlink2); })(function () { return t(symlink2); })(
+		"from", symlink1
+	)(function () { return symlink("sym1", symlink2); })(function () { return t(symlink2); })(
 		function (result) {
 			a(result, true);
 			return t(symlink2, { linkPath: targetFile });
