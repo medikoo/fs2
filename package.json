@@ -90,7 +90,7 @@
 		"test": "node ./node_modules/tad/bin/tad"
 	},
 	"engines": {
-		"node": ">=0.8"
+		"node": ">=6"
 	},
 	"license": "ISC"
 }
