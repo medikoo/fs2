@@ -163,6 +163,14 @@ Supported options:
 - **recursive** - Attempt to remove directory with subdirectories recursively.
 - **force** - Attempt to remove other files within directory as well.
 
+### rmdirSync(path[, options]) _(fs2/rmdir-sync)_
+
+Extended version of native _rmdirSynnc_.
+
+Supported options:
+
+- **recursive** - Attempt to remove directory with all its content recursively.
+
 ### stat(path[, cb]) _(fs2/stat)_
 
 Same as [fs.stat](http://nodejs.org/api/all.html#all_fs_stat_path_callback). Returns promise.

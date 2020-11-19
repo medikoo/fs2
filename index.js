@@ -19,6 +19,7 @@ module.exports = {
 	rename: require("./rename"),
 	rm: require("./rm"),
 	rmdir: require("./rmdir"),
+	rmdirSync: require("./rmdir-sync"),
 	stat: require("./stat"),
 	symlink: require("./symlink"),
 	typeByStats: require("./type-by-stats"),
