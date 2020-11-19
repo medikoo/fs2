@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.9](https://github.com/medikoo/fs2/compare/v0.3.8...v0.3.9) (2020-11-19)
+
+### Features
+
+- rmdirSync util ([3c50c17](https://github.com/medikoo/fs2/commit/3c50c17198bd77e52c2889e3ce05161d790250a8))
+
 ### [0.3.8](https://github.com/medikoo/fs2/compare/v0.3.7...v0.3.8) (2020-04-27)
 
 ### Bug Fixes
