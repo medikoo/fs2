@@ -16,10 +16,7 @@
 		"directories",
 		"git"
 	],
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/medikoo/fs2.git"
-	},
+	"repository": "medikoo/fs2",
 	"dependencies": {
 		"d": "^1.0.1",
 		"deferred": "^0.7.11",
