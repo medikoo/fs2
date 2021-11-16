@@ -58,7 +58,7 @@ var copyDir = function (source, dest, options, sourceTop, destTop) {
 };
 copyDir.returnsPromise = true;
 
-module.exports = exports = function (source, dest/*, options, cb*/) {
+module.exports = exports = function (source, dest /*, options, cb*/) {
 	var options = Object(arguments[2]), cb = arguments[3];
 	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
