@@ -64,9 +64,14 @@ module.exports = exports = function (source, dest, options = null, cb = null) {
 	source = path.resolve(String(source));
 	dest = path.resolve(String(dest));
 	return lstat(dest, { loose: true })(stats => {
-		if (stats) throw new Error("Destination path exists");
-		return copyDir(source, dest, options, source, dest);
-	}).cb(cb);
+		if (stats && stats.isDirectory()) {
+			return readdir(dest).then(filenames => {
+				if (!filenames.length) return;
+				throw new Error("Destination path is not empty");
+			});
+		}
+		return null;
+	})(() => copyDir(source, dest, options, source, dest)).cb(cb);
 };
 exports.copyDir = copyDir;
 exports.returnsPromise = true;
