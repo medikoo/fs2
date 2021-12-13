@@ -154,6 +154,10 @@ Supports `loose: true` option, which when passed, resolves with `null` (instead 
 
 Same as [fs.rename](http://nodejs.org/api/all.html#all_fs_rename_oldpath_newpath_callback). Returns promise.
 
+Supported options:
+
+- **intermediate** - Whether to create directories recursively (if parent is not created)
+
 ### rmdir(path[, options[, cb]]) _(fs2/rmdir)_
 
 Extended version of native _rmdir_. Returns promise
