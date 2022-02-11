@@ -166,6 +166,7 @@ Supported options:
 
 - **recursive** - Attempt to remove directory with subdirectories recursively.
 - **force** - Attempt to remove other files within directory as well.
+- **loose** - Do not error if directory doesn't exists
 
 ### rmdirSync(path[, options]) _(fs2/rmdir-sync)_
 
