@@ -166,7 +166,7 @@ Supported options:
 
 - **recursive** - Attempt to remove directory with subdirectories recursively.
 - **force** - Attempt to remove other files within directory as well.
-- **loose** - Do not error if directory doesn't exists
+- **loose** - Do not error if directory doesn't exist
 
 ### rmdirSync(path[, options]) _(fs2/rmdir-sync)_
 
@@ -191,6 +191,10 @@ Returns type of file according to provided [stats](http://nodejs.org/api/all.htm
 ### unlink(path[, cb]) _(fs2/unlink)_
 
 Same as [fs.unlink](http://nodejs.org/api/all.html#all_fs_unlink_path_callback). Returns promise.
+
+Supported options:
+
+- **loose** - Do not error if file doesn't exist
 
 ### watchPath(path) _(fs2/watch-path)_
 
