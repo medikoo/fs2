@@ -60,6 +60,15 @@
 				"rules": {
 					"no-bitwise": "off"
 				}
+			},
+			{
+				"files": [
+					"empty-dir-sync.js",
+					"rmdir-sync.js"
+				],
+				"rules": {
+					"no-use-before-define": "off"
+				}
 			}
 		]
 	},

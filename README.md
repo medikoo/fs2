@@ -57,6 +57,14 @@ Internally it provides same solution as [fs-graceful](https://github.com/isaacs/
 3. Covers readdir calls (which also happen to throw _EMFILE_ errors)
 4. More bulletproof (I assume) error handling logic
 
+### emptyDirSync(path[, options]) _(fs2/empty-dir-sync)_
+
+Empty directory synchronously
+
+Supported options:
+
+- **recursive** - Attempt to empty directory content recursively (if not set, command will succeed only on removing top level directory files)
+
 ### hasAccess(path[, options[, cb]]) _(fs2/has-access)_
 
 Conditional version of [`access`](#accesspath-mode-cb-fs2access). Returns promise.
