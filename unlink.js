@@ -1,15 +1,14 @@
 "use strict";
 
-var isCallable = require("es5-ext/object/is-callable")
-  , isValue    = require("es5-ext/object/is-value")
-  , deferred   = require("deferred")
-  , resolve    = require("path").resolve
-  , original   = require("fs").unlink
-  , unlink;
+const isCallable  = require("es5-ext/object/is-callable")
+    , isValue     = require("es5-ext/object/is-value")
+    , deferred    = require("deferred")
+    , { resolve } = require("path")
+    , original    = require("fs").unlink;
 
-unlink = function (path, options) {
-	var def = deferred();
-	original(path, function (err) {
+const unlink = function (path, options) {
+	const def = deferred();
+	original(path, err => {
 		if (err) {
 			if (err.code === "ENOENT" && options.loose) def.resolve();
 			else def.reject(err);
@@ -21,12 +20,8 @@ unlink = function (path, options) {
 };
 unlink.returnsPromise = true;
 
-module.exports = exports = function (path /* [, options[, callback]]*/) {
-	var options, cb;
-
+module.exports = exports = function (path, options = {}, cb = null) {
 	path = resolve(String(path));
-	options = arguments[1];
-	cb = arguments[2];
 	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
