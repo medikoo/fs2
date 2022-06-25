@@ -33,6 +33,7 @@ Extra options:
 
 - **force** - Overwrite destination if exists
 - **loose** - Do not error if source file doesn't exits, abort and resolve with `null` instead.
+- **intermediate** - Whether to create directories recursively (if parent is not created),
 
 ### copyDir(src, dest[, options[, cb]]) _(fs2/copy-dir)_
 
