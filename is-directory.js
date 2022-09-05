@@ -1,11 +1,11 @@
 "use strict";
 
-var lstat = require("./lstat").lstat;
+const { lstat } = require("./lstat");
 
-module.exports = function (path/*, callback*/) {
-	return lstat(path, { loose: true })(function (stats) {
+module.exports = function (path, callback = null) {
+	return lstat(path, { loose: true })(stats => {
 		if (stats) return stats.isDirectory();
 		return null;
-	}).cb(arguments[1]);
+	}).cb(callback);
 };
 module.exports.returnsPromise = true;
