@@ -198,6 +198,10 @@ Same as [fs.stat](http://nodejs.org/api/all.html#all_fs_stat_path_callback). Ret
 
 Same as [fs.symlink](http://nodejs.org/api/all.html#all_fs_symlink_srcpath_dstpath_type_callback). Returns promise.
 
+Supported options:
+
+- **intermediate** - Attempt to create directory with subdirectories in which symlink is expected to be placed if they do not exist
+
 ### typeByStats(stats) _(fs2/type-by-stats)_
 
 Returns type of file according to provided [stats](http://nodejs.org/api/all.html#all_class_fs_stats) object.
