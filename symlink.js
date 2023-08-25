@@ -7,7 +7,8 @@ const isCallable = require("es5-ext/object/is-callable")
     , path       = require("path")
     , original   = require("fs").symlink
     , mkdir      = require("./mkdir")
-    , isSymlink  = require("./is-symlink");
+    , isSymlink  = require("./is-symlink")
+    , unlink     = require("./unlink");
 
 const symlink = function (src, dest, options) {
 	const def = deferred();
@@ -19,11 +20,12 @@ const symlink = function (src, dest, options) {
 		def.resolve();
 	});
 	return def.promise.catch(error => {
-		if (!options.loose) throw error;
+		if (!options.loose && !options.force) throw error;
 		if (error.code === "EEXIST") {
 			return isSymlink(dest, { linkPath: src })(result => {
 				if (result) return Promise.resolve();
-				throw error;
+				if (!options.force) throw error;
+				return unlink(dest).then(() => symlink(src, dest, options), () => { throw error; });
 			});
 		}
 		throw error;

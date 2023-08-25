@@ -36,6 +36,16 @@ module.exports = function (t) {
 				.then(() => unlink(regular))
 				.done(d, d);
 		},
+		Force(a, d) {
+			t(base, regular)
+				.then(() => lstat(regular))
+				.then(stats => { a(stats.isSymbolicLink(), true); })
+				.then(() => t(resolve(rootPath, "other"), regular, { force: true }))
+				.then(() => lstat(regular))
+				.then(stats => { a(stats.isSymbolicLink(), true); })
+				.then(() => unlink(regular))
+				.done(d, d);
+		},
 		Error(a, d) {
 			t(base, deep)(a.never, () => { a.ok(true, ""); }).done(d, d);
 		}

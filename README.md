@@ -202,6 +202,7 @@ Supported options:
 
 - **intermediate** - Attempt to create directory with subdirectories in which symlink is expected to be placed if they do not exist
 - **loose** - Do not error if same symlink at path already exists
+- **force** - If there's other file at the path, remove and retry to create symlink
 
 ### typeByStats(stats) _(fs2/type-by-stats)_
 
