@@ -28,6 +28,14 @@ module.exports = function (t) {
 				.then(() => rmdir(path.dirname(deep), { force: true }))
 				.done(d, d);
 		},
+		Loose(a, d) {
+			t(base, regular)
+				.then(() => lstat(regular))
+				.then(stats => { a(stats.isSymbolicLink(), true); })
+				.then(() => t(base, regular, { loose: true }))
+				.then(() => unlink(regular))
+				.done(d, d);
+		},
 		Error(a, d) {
 			t(base, deep)(a.never, () => { a.ok(true, ""); }).done(d, d);
 		}

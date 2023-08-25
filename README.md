@@ -201,6 +201,7 @@ Same as [fs.symlink](http://nodejs.org/api/all.html#all_fs_symlink_srcpath_dstpa
 Supported options:
 
 - **intermediate** - Attempt to create directory with subdirectories in which symlink is expected to be placed if they do not exist
+- **loose** - Do not error if same symlink at path already exists
 
 ### typeByStats(stats) _(fs2/type-by-stats)_
 
