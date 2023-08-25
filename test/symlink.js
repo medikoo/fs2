@@ -15,14 +15,11 @@ module.exports = function (t) {
 	return {
 		Regular: {
 			Success(a, d) {
-				t(
-					base, regular
-				)(() =>
-					lstat(regular)(stats => {
-						a(stats.isSymbolicLink(), true);
-						return unlink(regular);
-					})
-				).done(d, d);
+				t(base, regular)
+					.then(() => lstat(regular))
+					.then(stats => { a(stats.isSymbolicLink(), true); })
+					.then(() => unlink(regular))
+					.done(d, d);
 			},
 			Error(a, d) {
 				t(base, deep)(a.never, () => { a.ok(true, ""); }).done(d, d);
