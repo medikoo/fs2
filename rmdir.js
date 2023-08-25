@@ -22,7 +22,7 @@ const rmcontent = function (path, options) {
 				return lstat(filename)(
 					stats => {
 						if (aborted || options.aborted) return null;
-						if (stats.isDirectory()) {
+						if (options.recursive && stats.isDirectory()) {
 							return rmcontent(filename, options)(null, err2 => {
 								options.aborted = true;
 								throw err2;
@@ -84,8 +84,8 @@ const rmdir = function (path, options) {
 	original(path, err => {
 		if (err) {
 			if (err.code === "ENOTEMPTY") {
-				if (options.recursive) {
-					def.resolve(rmcontent(path, { force: options.force }));
+				if (options.recursive || options.force) {
+					def.resolve(rmcontent(path, options));
 					return;
 				}
 			} else if (err.code === "ENOENT") {

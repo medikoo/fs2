@@ -37,6 +37,13 @@ module.exports = function (t, a, d) {
 		)
 		// Ignore not existing directory (with loose option)
 		.then(() => t(nested, { loose: true })(res => { a(res, null, "Loose option"); }, a.never))
+		// Remove non empty directory without directories (with force option)
+		.then(() =>
+			t(resolve(nested, "../"), { force: true })(() =>
+				lstat(resolve(nested, "../"))(a.never, err => { a(err.code, "ENOENT", "Forced"); })
+			)
+		)
+
 		// Remove non empty deep directory (with force and recursive option)
 		.then(() =>
 			t(rootPath, { recursive: true, force: true })(() =>
