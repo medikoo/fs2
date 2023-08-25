@@ -6,6 +6,7 @@ const { promisify } = require("deferred")
     , { resolve }   = path
     , lstat         = promisify(fs.lstat)
     , unlink        = promisify(fs.unlink)
+    , rmdir         = require("../rmdir")
     , rootPath      = resolve(__dirname, "./__playground/symlink")
     , base          = resolve(rootPath, "from")
     , regular       = resolve(rootPath, "foo")
@@ -18,6 +19,13 @@ module.exports = function (t) {
 				.then(() => lstat(regular))
 				.then(stats => { a(stats.isSymbolicLink(), true); })
 				.then(() => unlink(regular))
+				.done(d, d);
+		},
+		Intermediate(a, d) {
+			t(base, deep, { intermediate: true })
+				.then(() => lstat(deep))
+				.then(stats => { a(stats.isSymbolicLink(), true); })
+				.then(() => rmdir(path.dirname(deep), { force: true }))
 				.done(d, d);
 		},
 		Error(a, d) {
