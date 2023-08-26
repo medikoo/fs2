@@ -15,7 +15,9 @@ module.exports = function (path, options = {}, cb = null) {
 	} else {
 		options = Object(options);
 	}
-	const expectedLinkPath = options.linkPath ? resolve(String(options.linkPath)) : null;
+	const expectedLinkPath = options.linkPath
+		? resolve(dirname(path), String(options.linkPath))
+		: null;
 	return readlink(path, {})(
 		linkPath => {
 			if (!linkPath) return null;

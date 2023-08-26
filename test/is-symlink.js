@@ -16,6 +16,10 @@ module.exports = function (t, a, d) {
 		.then(() => t(symlink2))
 		.then(result => {
 			a(result, true);
+			return t(symlink2, { linkPath: "sym1" });
+		})
+		.then(result => {
+			a(result, true);
 			return t(symlink2, { linkPath: targetFile });
 		})
 		.then(result => {
