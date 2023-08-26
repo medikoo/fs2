@@ -17,13 +17,13 @@ const symlink = function (src, dest, options) {
 			def.reject(err);
 			return;
 		}
-		def.resolve();
+		def.resolve(true);
 	});
 	return def.promise.catch(error => {
 		if (!options.loose && !options.force) throw error;
 		if (error.code === "EEXIST") {
 			return isSymlink(dest, { linkPath: src })(result => {
-				if (result) return Promise.resolve();
+				if (result) return Promise.resolve(false);
 				if (!options.force) throw error;
 				return unlink(dest).then(() => symlink(src, dest, options), () => { throw error; });
 			});

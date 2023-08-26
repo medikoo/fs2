@@ -196,7 +196,7 @@ Same as [fs.stat](http://nodejs.org/api/all.html#all_fs_stat_path_callback). Ret
 
 ### symlink(srcPath, dstPath[, type[, cb]]) _(fs2/symlink)_
 
-Same as [fs.symlink](http://nodejs.org/api/all.html#all_fs_symlink_srcpath_dstpath_type_callback). Returns promise.
+Same as [fs.symlink](http://nodejs.org/api/all.html#all_fs_symlink_srcpath_dstpath_type_callback). Returns promise that resolves with `true` if symlink was created (`false` can be returned with `loose` option, when symlink already exists)
 
 Supported options:
 
