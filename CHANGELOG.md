@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.22](https://github.com/medikoo/fs2/compare/v0.2.21...v0.2.22) (2023-12-08)
+
+### Bug Fixes
+
+- **isIgnored:** Ensure `relPath` is not altered during rule application ([9eee0ac](https://github.com/medikoo/fs2/commit/9eee0aca8623d1ca4ae1fdeb50e9873357ac81d4))
+
 <a name="0.2.21"></a>
 
 ## [0.2.21](https://github.com/medikoo/fs2/compare/v0.2.20...v0.2.21) (2018-11-15)
