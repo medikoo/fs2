@@ -75,13 +75,14 @@ applyRules = function (rules, rootPath, path) {
 			rule = rule.slice(1);
 		}
 		if (rule.search(sepRe) > 0) {
+			var currentRelPath = relPath;
 			do {
-				relPath = relPath.slice(relPath.indexOf(sep) + 1);
-				if (minimatch(relPath, rule, minimatchOpts)) {
+				currentRelPath = currentRelPath.slice(currentRelPath.indexOf(sep) + 1);
+				if (minimatch(currentRelPath, rule, minimatchOpts)) {
 					value = preValue;
 					return true;
 				}
-			} while (contains.call(relPath, sep));
+			} while (contains.call(currentRelPath, sep));
 		} else if (minimatch(relPath, rule, minimatchOpts)) {
 			value = preValue;
 			return true;
