@@ -6,37 +6,37 @@
 
 "use strict";
 
-var isCallable       = require("es5-ext/object/is-callable")
-  , isValue          = require("es5-ext/object/is-value")
-  , normalizeOptions = require("es5-ext/object/normalize-options")
-  , d                = require("d")
-  , deferred         = require("deferred")
-  , fs               = require("fs")
-  , path             = require("path")
-  , mkdir            = require("./mkdir")
-  , rm               = require("./rm")
-  , unlink           = require("./unlink");
+const isCallable       = require("es5-ext/object/is-callable")
+    , isValue          = require("es5-ext/object/is-value")
+    , normalizeOptions = require("es5-ext/object/normalize-options")
+    , d                = require("d")
+    , deferred         = require("deferred")
+    , fs               = require("fs")
+    , path             = require("path")
+    , mkdir            = require("./mkdir")
+    , rm               = require("./rm")
+    , unlink           = require("./unlink");
 
-var objHasOwnProperty = Object.prototype.hasOwnProperty
-  , defineProperty = Object.defineProperty
-  , dirname = path.dirname
-  , resolve = path.resolve
-  , createReadStream = fs.createReadStream
-  , createWriteStream = fs.createWriteStream
-  , stat = fs.stat;
+const objHasOwnProperty = Object.prototype.hasOwnProperty
+    , { defineProperty } = Object
+    , { dirname } = path
+    , { resolve } = path
+    , { createReadStream } = fs
+    , { createWriteStream } = fs
+    , { stat } = fs;
 
-var fixOptions = function (options) {
+const fixOptions = function (options) {
 	if (options.hasOwnProperty) return options;
 	return defineProperty(options, "hasOwnProperty", d(objHasOwnProperty));
 };
 
-var copyFileWithMode = function (def, source, dest, options) {
-	var read, write;
-	var isReadDisposed = false;
+const copyFileWithMode = function (def, source, dest, options) {
+	let read, write;
+	let isReadDisposed = false;
 
 	try { read = createReadStream(source); }
 	catch (e) { return def.reject(e); }
-	read.on("error", function (e) {
+	read.on("error", e => {
 		if (isReadDisposed) return;
 		if (options.loose && e.code === "ENOENT") def.resolve(unlink(dest, { loose: true })(false));
 		else def.reject(e);
@@ -49,11 +49,11 @@ var copyFileWithMode = function (def, source, dest, options) {
 		return def.reject(e1);
 	}
 
-	write.on("error", function (e) {
+	write.on("error", e => {
 		isReadDisposed = true;
 		read.destroy();
 		if (e.code === "ENOENT" && options.intermediate) {
-			mkdir(dirname(resolve(dest)), { intermediate: true }).done(function () {
+			mkdir(dirname(resolve(dest)), { intermediate: true }).done(() => {
 				options = normalizeOptions(options);
 				delete options.intermediate;
 				return copyFileWithMode(def, source, dest, options);
@@ -68,13 +68,13 @@ var copyFileWithMode = function (def, source, dest, options) {
 	return def.promise;
 };
 
-var copyFile = function (source, dest, options) {
-	var def = deferred();
+const copyFile = function (source, dest, options) {
+	const def = deferred();
 	if (options.mode) {
 		copyFileWithMode(def, source, dest, options);
 		return def.promise;
 	}
-	stat(source, function (e, stats) {
+	stat(source, (e, stats) => {
 		if (e) {
 			if (options.loose && e.code === "ENOENT") {
 				def.resolve(false);
@@ -85,14 +85,14 @@ var copyFile = function (source, dest, options) {
 		}
 		options = normalizeOptions(options);
 		options.mode = stats.mode;
-		stat(dest, function (error) {
+		stat(dest, error => {
 			if (!error) {
 				if (options.force) {
-					rm(dest, { recursive: true, force: true, loose: true }).then(function () {
-						return copyFileWithMode(def, source, dest, options);
-					});
+					rm(dest, { recursive: true, force: true, loose: true }).then(() =>
+						copyFileWithMode(def, source, dest, options)
+					);
 				} else {
-					def.reject(new Error("Destinaton '" + dest + "' exists"));
+					def.reject(new Error(`Destinaton '${ dest }' exists`));
 				}
 			} else if (error.code === "ENOENT") {
 				copyFileWithMode(def, source, dest, options);
@@ -105,8 +105,7 @@ var copyFile = function (source, dest, options) {
 };
 copyFile.returnsPromise = true;
 
-module.exports = exports = function (source, dest/*, options, cb*/) {
-	var options = Object(arguments[2]), cb = arguments[3];
+module.exports = exports = function (source, dest, options = {}, cb = null) {
 	if (!isValue(cb) && isCallable(options)) {
 		cb = options;
 		options = {};
