@@ -15,7 +15,7 @@ const isCallable  = require("es5-ext/object/is-callable")
     , { resolve } = path;
 
 const crossDeviceRename = function (oldPath, newPath) {
-	return stat.then(stats => {
+	return stat(oldPath).then(stats => {
 		if (stats.isDirectory()) {
 			return copyDir(oldPath, newPath).then(() =>
 				rmdir(oldPath, { recursive: true, force: true })
