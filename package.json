@@ -18,24 +18,24 @@
 	],
 	"repository": "medikoo/fs2",
 	"dependencies": {
-		"d": "^1.0.1",
+		"d": "^1.0.2",
 		"deferred": "^0.7.11",
-		"es5-ext": "^0.10.53",
+		"es5-ext": "^0.10.64",
 		"event-emitter": "^0.3.5",
-		"ext": "^1.6.0",
-		"ignore": "^5.1.8",
-		"memoizee": "^0.4.14",
-		"type": "^2.1.0"
+		"ext": "^1.7.0",
+		"ignore": "^5.3.2",
+		"memoizee": "^0.4.17",
+		"type": "^2.7.3"
 	},
 	"devDependencies": {
-		"eslint": "^8.2.0",
-		"eslint-config-medikoo": "^4.1.1",
+		"eslint": "^8.57.0",
+		"eslint-config-medikoo": "^4.2.0",
 		"git-list-updated": "^1.2.1",
-		"github-release-from-cc-changelog": "^2.2.0",
-		"husky": "^4.3.0",
-		"lint-staged": "^10.5.1",
-		"prettier-elastic": "^2.1.2",
-		"tad": "^3.0.1"
+		"github-release-from-cc-changelog": "^2.3.0",
+		"husky": "^4.3.8",
+		"lint-staged": "^10.5.4",
+		"prettier-elastic": "^2.8.8",
+		"tad": "^3.1.1"
 	},
 	"husky": {
 		"hooks": {
