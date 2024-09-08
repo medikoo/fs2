@@ -6,13 +6,23 @@ const isCallable  = require("es5-ext/object/is-callable")
     , path        = require("path")
     , original    = require("fs").rename
     , mkdir       = require("./mkdir")
+    , stat        = require("./stat")
     , copy        = require("./copy")
+    , copyDir     = require("./copy-dir")
+    , rmdir       = require("./rmdir")
     , unlink      = require("./unlink")
     , { dirname } = path
     , { resolve } = path;
 
 const crossDeviceRename = function (oldPath, newPath) {
-	return copy(oldPath, newPath)(() => unlink(oldPath));
+	return stat.then(stats => {
+		if (stats.isDirectory()) {
+			return copyDir(oldPath, newPath).then(() =>
+				rmdir(oldPath, { recursive: true, force: true })
+			);
+		}
+		return copy(oldPath, newPath).then(() => unlink(oldPath));
+	});
 };
 
 const rename = function (oldPath, newPath) {
