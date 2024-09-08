@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.10](https://github.com/medikoo/fs2/compare/v0.3.9...v0.3.10) (2024-09-08)
+
+### Features
+
+- `emptyDirSync` util ([7ad4055](https://github.com/medikoo/fs2/commit/7ad40550dc80444245daff89b4fec462a97840bf))
+- `isFile` util ([d4ceee8](https://github.com/medikoo/fs2/commit/d4ceee8b873cc6838af65f2e55f42d94c46b24ee))
+- `unlinkSync` function ([b80d0cd](https://github.com/medikoo/fs2/commit/b80d0cd0645871b88e89d901863e7b4803bd3358))
+- Allow empty directory at `copyDir` destination ([2b9bbd6](https://github.com/medikoo/fs2/commit/2b9bbd6438bb774b98151c24952d5be6f2c367d4))
+- **Symlink:**
+  - `--force` option ([5216782](https://github.com/medikoo/fs2/commit/5216782a293967511d5841639ef5e74136116f54))
+  - `--loose` option ([c87a45b](https://github.com/medikoo/fs2/commit/c87a45b91fc918c943c26337fe51488b79836e5e))
+  - Return`true` if symlink was created ([a522bd8](https://github.com/medikoo/fs2/commit/a522bd81529c8e3eb35c5a9151daf30cb4af9ea8))
+
+### Bug Fixes
+
+- Fix directory rename across different devices ([24d70e1](https://github.com/medikoo/fs2/commit/24d70e119f008b213475d1cb103dd4572978eeaa))
+- **rmdir:** Ensure `--force` option empties directory contents ([23d3f3a](https://github.com/medikoo/fs2/commit/23d3f3ac765951c0130c146a092202f5f79bbf79))
+- **Symlink:** Fix resolution of `linkPath` option ([0ee13f6](https://github.com/medikoo/fs2/commit/0ee13f65e7616587ee9351dd52f14e0bf19814f1))
+
+### Maintenance Improvements
+
+- Clear ESLint errors ([0696308](https://github.com/medikoo/fs2/commit/0696308f033d04a106334792101fb330576bb385))
+  33124bbd74d94d60629e6fb5ce712a74e04871b8))
+- Fix lint issues ([cd4e2c6](https://github.com/medikoo/fs2/commit/cd4e2c638026cedd77f418bf23c8de456c5455e7))
+- Prettier ([b8188b2](https://github.com/medikoo/fs2/commit/b8188b2119996f8ff434348df1c32fc10433af1d))
+- Refactor `rename` to ES2015+ ([553c799](https://github.com/medikoo/fs2/commit/553c799acc557224bdc3ef40849ad39dcf4bae2c))
+- Refactor `symlink` to ES2015 ([5ff2670](https://github.com/medikoo/fs2/commit/5ff26708c54a3c299cb904dfa675ff32101402aa))
+- Refactor to ES2015 ([ae2c181](https://github.com/medikoo/fs2/commit/ae2c181d1653952d6c2f1d95cbf7a37c34a47394))
+- Refactor to ES2015 ([22e8cbe](https://github.com/medikoo/fs2/commit/22e8cbe6b121f5cf55191e1bf61774d2125e7c54))
+- Refactor to ES2015 ([433fe9c](https://github.com/medikoo/fs2/commit/433fe9c34c644e7754f99f7b716ba1ee8b97737c))
+- Refactor to ES2015+ ([dc2b946](https://github.com/medikoo/fs2/commit/dc2b946025ed03eec2f58c69e8e19a8446d1d84c))
+- Respect ESLint rules ([5f7e4cd](https://github.com/medikoo/fs2/commit/5f7e4cd516f1958d8ed7a9507c3f3818814dbf58))
+- Reuse `emptyDirSync` logic in `rmDirSync` ([6cd7026](https://github.com/medikoo/fs2/commit/6cd7026b9f66b961bbfdd411be997f3b648c16b7))
+- Simplify configuration of `test` command ([3bced0e](https://github.com/medikoo/fs2/commit/3bced0e8f453ddbe5ca93bae2f0930cd9ba3934b))
+- Simplify meta configuration ([65ae563](https://github.com/medikoo/fs2/commit/65ae5633540804664fc713208e4deb70ff28265f))
+- To ES2015 ([b10e364](https://github.com/medikoo/fs2/commit/b10e36426dc7430834ccd4cafe975d8d051cd374))
+- Upgrade `eslint` to v8 and `eslint-config-medikoo` to v4 ([11a7d11](https://github.com/medikoo/fs2/commit/11a7d11eee46f6e6d00a43f9c8ec5b4b39599e11))
+
 ### [0.3.9](https://github.com/medikoo/fs2/compare/v0.3.8...v0.3.9) (2020-11-19)
 
 ### Features
