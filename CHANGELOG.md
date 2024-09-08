@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.12](https://github.com/medikoo/fs2/compare/v0.3.11...v0.3.12) (2024-09-08)
+
+### Bug Fixes
+
+- Fix cross device rename ([0a52b2d](https://github.com/medikoo/fs2/commit/0a52b2dfe1fb013233c72af58d4de89d44669ccb))
+
 ### [0.3.11](https://github.com/medikoo/fs2/compare/v0.3.10...v0.3.11) (2024-09-08)
 
 ### Maintenance Improvements
