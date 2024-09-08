@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.11](https://github.com/medikoo/fs2/compare/v0.3.10...v0.3.11) (2024-09-08)
+
+### Maintenance Improvements
+
+- Bump dependencies ([ab0be1e](https://github.com/medikoo/fs2/commit/ab0be1e6ed1498a22daa5fa64a841cda90930cdf))
+
 ## [0.3.10](https://github.com/medikoo/fs2/compare/v0.3.9...v0.3.10) (2024-09-08)
 
 ### Features
