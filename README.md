@@ -119,6 +119,10 @@ Only available on Mac OS X.
 
 Same as [fs.lstat](http://nodejs.org/api/all.html#all_fs_lstat_path_callback). Returns promise.
 
+Supported options:
+
+- **loose** - Return `null` instead of erroring if file doesn't exist
+
 ### mkdir(path[, options|mode[, cb]]) _(fs2/mkdir)_
 
 Extended version of native _mkdir_. Returns promise
@@ -193,6 +197,10 @@ Supported options:
 ### stat(path[, cb]) _(fs2/stat)_
 
 Same as [fs.stat](http://nodejs.org/api/all.html#all_fs_stat_path_callback). Returns promise.
+
+Supported options:
+
+- **loose** - Return `null` instead of erroring if file doesn't exist
 
 ### symlink(srcPath, dstPath[, type[, cb]]) _(fs2/symlink)_
 
