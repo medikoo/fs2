@@ -73,7 +73,74 @@ const wrap = function (asyncFn, type) {
 	}, asyncFn.length));
 };
 
-const wrapPromised = function () {
+const handlePromised = function () {
+	const { open } = fs.promises;
+
+	fs.promises.open = defineLength(function (...args) {
+		if (count >= limit) {
+			const deferred = getDeferred();
+			queue.push({ fn: fs.promises.open, context: this, args, deferred });
+			return deferred.promise;
+		}
+		const openCount = count++;
+		++debugStats.promisesFd;
+		return open(...args).then(
+			function (handle) {
+				const { close } = handle;
+				handle.close = function () {
+					return close.call(this).then(() => {
+						--debugStats.promisesFd;
+						--count;
+						release();
+					});
+					return callback ? undefined : promise;
+				};
+				return handle;
+			}, function (error) {
+				--debugStats.promisesFd;
+				--count;
+				if (err.code === "EMFILE" || err.code === "ENFILE") {
+					if (limit > openCount) limit = openCount;
+					const deferred = getDeferred();
+					queue.push({ fn: fs.open, context: this, args, deferred });
+					release();
+					return deferred.promise;
+				}
+				release();
+				throw error;
+			}
+		);
+	}, fs.promises.open.length);
+
+	const wrapPromised = function (asyncFn, type) {
+		let self;
+		debugStats[type] = 0;
+		return (self = defineLength(function (...args) {
+			if (count >= limit) {
+				const deferred = getDeferred();
+				queue.push({ fn: self, context: this, args, deferred });
+				return deferred.promise;
+			}
+			const openCount = count++;
+			++debugStats[type];
+			return asyncFn(...args).catch(error => {
+				--debugStats[type];
+				--count;
+				if (error.code === "EMFILE" || error.code === "ENFILE") {
+					if (limit > openCount) limit = openCount;
+					const deferred = getDeferred();
+					queue.push({ fn: fs.promises.opendir, context: this, args, deferred });
+					release();
+					return deferred.promise;
+				}
+				release();
+				throw error;
+			});
+		}, asyncFn.length));
+	};
+
+	fs.promises.writeFile = wrapPromised(fs.promises.writeFile, "promisesWriteFile");
+
 	if (fs.opendirSync) {
 		const wrapDirEntries = require("./lib/wrap-dir-entries");
 		const { opendir } = fs.promises;
@@ -217,7 +284,7 @@ module.exports = exports = memoize(() => {
 	// Needed for Node >=1.2 because of commit e65308053c
 	fs.readFile = wrap(fs.readFile, "readFile");
 
-	if (fs.promises) wrapPromised();
+	if (fs.promises) handlePromised();
 
 	Object.defineProperty(exports, "initialized", d("e", true));
 });
