@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.13](https://github.com/medikoo/fs2/compare/v0.3.12...v0.3.13) (2024-09-30)
+
+### Features
+
+- Cover `fs.opendir` with EMFILE descriptors handler ([9ae7424](https://github.com/medikoo/fs2/commit/9ae7424917799332641faf26dc32683d8296f590))
+
+### Maintenance Improvements
+
+- Bump dependencies ([86820ea](https://github.com/medikoo/fs2/commit/86820eacdc378ae3e4a8abe94741adbfa14352c7))
+- Refactor into ES2015+ ([9133d39](https://github.com/medikoo/fs2/commit/9133d39f35d95e72e4742f85bb290b62f06980b9))
+- Refactor to ES2015+ ([3a02945](https://github.com/medikoo/fs2/commit/3a02945b967597ec7031e6f590cbd81ad0e82f03))
+
 ### [0.3.12](https://github.com/medikoo/fs2/compare/v0.3.11...v0.3.12) (2024-09-08)
 
 ### Bug Fixes
