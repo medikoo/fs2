@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.14](https://github.com/medikoo/fs2/compare/v0.3.13...v0.3.14) (2024-09-30)
+
+### Features
+
+- Cover `fs.promised` with EMFILE descriptor handler ([eca1f08](https://github.com/medikoo/fs2/commit/eca1f08e5ad8f0aee505ae05001152d8d08e66df))
+- Keep EMFILE limit 1 below to make room for sync executions ([6b757d2](https://github.com/medikoo/fs2/commit/6b757d2101d3a2f4dc438ad6c27df6899c2ca62c))
+
 ## [0.3.13](https://github.com/medikoo/fs2/compare/v0.3.12...v0.3.13) (2024-09-30)
 
 ### Features
