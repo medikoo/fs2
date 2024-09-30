@@ -60,7 +60,7 @@ const wrap = function (asyncFn, type) {
 			--debugStats[type];
 			--count;
 			if (err && (err.code === "EMFILE" || err.code === "ENFILE")) {
-				if (limit > openCount) limit = openCount;
+				if (limit > openCount) limit = openCount - 1;
 				queue.push({ fn: self, context, args });
 				release();
 				return;
@@ -85,7 +85,7 @@ const handlePromised = function () {
 		const openCount = count++;
 		++debugStats.promisesFd;
 		return open(...args).then(
-			function (handle) {
+			handle => {
 				const { close } = handle;
 				handle.close = function () {
 					return close.call(this).then(() => {
@@ -96,11 +96,12 @@ const handlePromised = function () {
 					return callback ? undefined : promise;
 				};
 				return handle;
-			}, function (error) {
+			},
+			function (error) {
 				--debugStats.promisesFd;
 				--count;
 				if (err.code === "EMFILE" || err.code === "ENFILE") {
-					if (limit > openCount) limit = openCount;
+					if (limit > openCount) limit = openCount - 1;
 					const deferred = getDeferred();
 					queue.push({ fn: fs.open, context: this, args, deferred });
 					release();
@@ -127,7 +128,7 @@ const handlePromised = function () {
 				--debugStats[type];
 				--count;
 				if (error.code === "EMFILE" || error.code === "ENFILE") {
-					if (limit > openCount) limit = openCount;
+					if (limit > openCount) limit = openCount - 1;
 					const deferred = getDeferred();
 					queue.push({ fn: fs.promises.opendir, context: this, args, deferred });
 					release();
@@ -199,7 +200,7 @@ const handlePromised = function () {
 					--debugStats.dir;
 					--count;
 					if (error.code === "EMFILE" || error.code === "ENFILE") {
-						if (limit > openCount) limit = openCount;
+						if (limit > openCount) limit = openCount - 1;
 						const deferred = getDeferred();
 						queue.push({ fn: fs.promises.opendir, context: this, args, deferred });
 						release();
@@ -243,7 +244,7 @@ module.exports = exports = memoize(() => {
 				--debugStats.fd;
 				--count;
 				if (err.code === "EMFILE" || err.code === "ENFILE") {
-					if (limit > openCount) limit = openCount;
+					if (limit > openCount) limit = openCount - 1;
 					queue.push({ fn: fs.open, context: this, args });
 					release();
 					return;
