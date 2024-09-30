@@ -28,7 +28,7 @@
 		"type": "^2.7.3"
 	},
 	"devDependencies": {
-		"eslint": "^8.57.0",
+		"eslint": "^8.57.1",
 		"eslint-config-medikoo": "^5.1.0",
 		"git-list-updated": "^1.2.1",
 		"github-release-from-cc-changelog": "^2.3.0",
