@@ -70,6 +70,14 @@
 				"rules": {
 					"no-use-before-define": "off"
 				}
+			},
+			{
+				"files": [
+					"lib/wrap-dir-entries.js"
+				],
+				"parserOptions": {
+					"ecmaVersion": 2018
+				}
 			}
 		]
 	},

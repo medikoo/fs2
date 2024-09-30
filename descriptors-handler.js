@@ -2,26 +2,42 @@
 
 "use strict";
 
-const last         = require("es5-ext/array/#/last")
+const isValue      = require("type/value/is")
+    , last         = require("es5-ext/array/#/last")
     , defineLength = require("es5-ext/function/_define-length")
     , callable     = require("es5-ext/object/valid-callable")
     , d            = require("d")
     , memoize      = require("memoizee")
-    , fs           = require("fs");
+    , fs           = require("fs")
+    , util         = require("util");
 
 const { max } = Math, { slice } = Array.prototype, queue = [], debugStats = { fd: 0, unknown: 0 };
 
 let count = 0, limit = Infinity;
 
+const getDeferred = () => {
+	const deferred = {};
+	deferred.promise = new Promise((resolve, reject) => {
+		deferred.resolve = resolve;
+		deferred.reject = reject;
+	});
+	return deferred;
+};
+
 const release = function () {
-	let data, fnCb;
+	let data;
 	// eslint-disable-next-line no-unmodified-loop-condition
 	while (count < limit && (data = queue.shift())) {
 		try {
-			data.fn.apply(data.context, data.args);
+			const result = data.fn.apply(data.context, data.args);
+			if (data.deferred) data.deferred.resolve(result);
 		} catch (e) {
-			fnCb = last.call(data.args);
-			if (typeof fnCb === "function") fnCb(e);
+			if (data.deferred) {
+				data.deferred.reject(e);
+			} else {
+				const fnCb = last.call(data.args);
+				if (typeof fnCb === "function") fnCb(e);
+			}
 		}
 	}
 };
@@ -55,6 +71,88 @@ const wrap = function (asyncFn, type) {
 		++debugStats[type];
 		return asyncFn.apply(this, args);
 	}, asyncFn.length));
+};
+
+const wrapPromised = function () {
+	if (fs.opendirSync) {
+		const wrapDirEntries = require("./lib/wrap-dir-entries");
+		const { opendir } = fs.promises;
+		const { opendirSync } = fs;
+
+		const wrapDir = dir => {
+			const { close, closeSync } = dir;
+			dir.close = function (callback) {
+				if (isValue(callback) && typeof callback !== "function") {
+					return close.call(this, callback);
+				}
+				const promise = close.call(this).then(
+					() => {
+						--debugStats.dir;
+						--count;
+						release();
+						if (callback) process.nextTick(() => callback());
+					},
+					error => {
+						if (callback) process.nextTick(() => callback(error));
+						else throw error;
+					}
+				);
+				return callback ? undefined : promise;
+			};
+			dir.closeSync = function () {
+				const result = closeSync.call(this);
+				--debugStats.dir;
+				--count;
+				release();
+				return result;
+			};
+			wrapDirEntries(dir, () => {
+				--debugStats.dir;
+				--count;
+				release();
+			});
+
+			return dir;
+		};
+
+		fs.promises.opendir = function (path, options) {
+			const args = [path, options];
+			const context = this;
+			if (count >= limit) {
+				const deferred = getDeferred();
+				// eslint-disable-next-line prefer-rest-params
+				queue.push({ fn: fs.promises.opendir, context, args, deferred });
+				return deferred.promise;
+			}
+			const openCount = count++;
+			++debugStats.dir;
+			return opendir(path, options).then(
+				dir => wrapDir(dir),
+				error => {
+					--debugStats.dir;
+					--count;
+					if (error.code === "EMFILE" || error.code === "ENFILE") {
+						if (limit > openCount) limit = openCount;
+						const deferred = getDeferred();
+						queue.push({ fn: fs.promises.opendir, context: this, args, deferred });
+						release();
+						return deferred.promise;
+					}
+					release();
+					throw error;
+				}
+			);
+		};
+
+		fs.opendirSync = function (path, options) {
+			const dir = opendirSync.call(this, path, options);
+			++debugStats.dir;
+			++count;
+			return wrapDir(dir);
+		};
+
+		fs.opendir = util.callbackify(fs.promises.opendir);
+	}
 };
 
 module.exports = exports = memoize(() => {
@@ -118,6 +216,8 @@ module.exports = exports = memoize(() => {
 	fs.readdir = wrap(fs.readdir, "readdir");
 	// Needed for Node >=1.2 because of commit e65308053c
 	fs.readFile = wrap(fs.readFile, "readFile");
+
+	if (fs.promises) wrapPromised();
 
 	Object.defineProperty(exports, "initialized", d("e", true));
 });
