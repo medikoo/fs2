@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.15](https://github.com/medikoo/fs2/compare/v0.3.14...v0.3.15) (2024-10-02)
+
+### Bug Fixes
+
+- Fix async function reference ([1582f08](https://github.com/medikoo/fs2/commit/1582f08935e47d5ff16f2fac52b7d9f22c5b60ed))
+- Fix error handling in descriptors handler ([83aea92](https://github.com/medikoo/fs2/commit/83aea92bdaaa7072b9a781c634825128669405ba))
+
+### Maintenance Improvements
+
+- Remove unreachable code ([efaf6d3](https://github.com/medikoo/fs2/commit/efaf6d39e3d49065febee115fa1115b450d3b4f1))
+
 ## [0.3.14](https://github.com/medikoo/fs2/compare/v0.3.13...v0.3.14) (2024-09-30)
 
 ### Features
