@@ -129,7 +129,7 @@ const handlePromised = function () {
 				if (error.code === "EMFILE" || error.code === "ENFILE") {
 					if (limit > openCount) limit = openCount - 1;
 					const deferred = getDeferred();
-					queue.push({ fn: fs.promises.opendir, context: this, args, deferred });
+					queue.push({ fn: asyncFn, context: this, args, deferred });
 					release();
 					return deferred.promise;
 				}
