@@ -93,7 +93,6 @@ const handlePromised = function () {
 						--count;
 						release();
 					});
-					return callback ? undefined : promise;
 				};
 				return handle;
 			},
