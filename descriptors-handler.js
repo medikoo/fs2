@@ -99,7 +99,7 @@ const handlePromised = function () {
 			function (error) {
 				--debugStats.promisesFd;
 				--count;
-				if (err.code === "EMFILE" || err.code === "ENFILE") {
+				if (error.code === "EMFILE" || error.code === "ENFILE") {
 					if (limit > openCount) limit = openCount - 1;
 					const deferred = getDeferred();
 					queue.push({ fn: fs.open, context: this, args, deferred });
