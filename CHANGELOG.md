@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.16](https://github.com/medikoo/fs2/compare/v0.3.15...v0.3.16) (2025-05-21)
+
+### Bug Fixes
+
+- Fix race condition in `copy` write errors handling ([620975b](https://github.com/medikoo/fs2/commit/620975b87b85e18a7ad00ec758508576e9e0fd07))
+
+### Maintenance Improvements
+
+- Remove obsolete `return` ([4e5f4d8](https://github.com/medikoo/fs2/commit/4e5f4d8177264d3d9cf7b370774219e0da2c8891))
+
 ### [0.3.15](https://github.com/medikoo/fs2/compare/v0.3.14...v0.3.15) (2024-10-02)
 
 ### Bug Fixes
