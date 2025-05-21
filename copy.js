@@ -32,12 +32,12 @@ const fixOptions = function (options) {
 
 const copyFileWithMode = function (def, source, dest, options) {
 	let read, write;
-	let isReadDisposed = false;
+	let isResolved = false;
 
 	try { read = createReadStream(source); }
 	catch (e) { return def.reject(e); }
 	read.on("error", e => {
-		if (isReadDisposed) return;
+		if (isResolved) return;
 		if (options.loose && e.code === "ENOENT") def.resolve(unlink(dest, { loose: true })(false));
 		else def.reject(e);
 	});
@@ -50,7 +50,7 @@ const copyFileWithMode = function (def, source, dest, options) {
 	}
 
 	write.on("error", e => {
-		isReadDisposed = true;
+		isResolved = true;
 		read.destroy();
 		if (e.code === "ENOENT" && options.intermediate) {
 			mkdir(dirname(resolve(dest)), { intermediate: true }).done(() => {
@@ -63,7 +63,10 @@ const copyFileWithMode = function (def, source, dest, options) {
 		def.reject(e);
 	});
 	read.pipe(write);
-	write.on("close", def.resolve.bind(def, true));
+	write.on("close", () => {
+		if (isResolved) return;
+		def.resolve(true);
+	});
 
 	return def.promise;
 };
