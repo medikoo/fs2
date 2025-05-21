@@ -56,7 +56,7 @@ const copyFileWithMode = function (def, source, dest, options) {
 			mkdir(dirname(resolve(dest)), { intermediate: true }).done(() => {
 				options = normalizeOptions(options);
 				delete options.intermediate;
-				return copyFileWithMode(def, source, dest, options);
+				copyFileWithMode(def, source, dest, options);
 			}, def.reject);
 			return;
 		}
